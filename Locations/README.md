@@ -10,5 +10,7 @@ This is a checklist to be sure you have all the material and information you nee
 
 - Slides to let run in loop while the attendees are arriving.
   - one slide of each speaker, with a photo and some contacts
-  - slide with the agenda
-  
+  - the agenda
+  - useful link
+  - reminder to get ready install prerequisites
+  - (optional) picture from previous years

@@ -1,14 +1,19 @@
 ![gablogo][gablogo]
 
-# Goal
+# Lab 3 - Tests
+
+## Goal
 
 For this part of the bootcamp, we'll welcome and present an introduction of what to expect during the day.
 
-# Let's code!
+## Let's code!
 
-# Reference
+[Enter here a step by step tutorial]
 
-# End
+
+## Reference
+
+## End
 [Previous Lab](../Lab2/README.md)
 [Next Lab](../Lab4/README.md)
 
