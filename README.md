@@ -32,7 +32,9 @@ The team has been assigned a couple of days to find tools & put new processes in
 
 | Time |   Tittle   | Description  |
 | :----: | :-------   | :----------- |
-| 08h30-9h00  | [Arrival/ Coffee](./Locations/README.md)    | Get your coffee, install your laptop...
+| <img width=150/>
+08h30-9h00  | <img width=200/>
+[Arrival/ Coffee](./Locations/README.md)    | Get your coffee, install your laptop...
 | 09h00-9h15  | Intro                                       | Explication about the day
 | 09h15-10h00 | [Lab 1 - CI/CD ](./Lab1/README.md)          | Create an .Net Core App, put it in GitHub/ or Azure DevVops. Create a continuous integration and continuous deployment solution (CI/CD).
 | 10h00-10h45 | [Lab 2 - ARM template](./Lab2/README.md)    | Create an ARM template , also add a SQL Database to the mix, deploy it.
