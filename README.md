@@ -30,21 +30,19 @@ The team has been assigned a couple of days to find tools & put new processes in
 ### [Lab 0 - What you will need before the bootcamp](./Lab0/README.md) 
 
 
-| Time |   Tittle   | Description  |
-| :----: | :-------   | :----------- |
-| <img width=150/>
-08h30-9h00  | <img width=200/>
-[Arrival/ Coffee](./Locations/README.md)    | Get your coffee, install your laptop...
-| 09h00-9h15  | Intro                                       | Explication about the day
-| 09h15-10h00 | [Lab 1 - CI/CD ](./Lab1/README.md)          | Create an .Net Core App, put it in GitHub/ or Azure DevVops. Create a continuous integration and continuous deployment solution (CI/CD).
-| 10h00-10h45 | [Lab 2 - ARM template](./Lab2/README.md)    | Create an ARM template , also add a SQL Database to the mix, deploy it.
-| 10h45-11h30 | [Lab 3 - Security](./Lab3/README.md)        | Let's add a certificate so our website will be https 
-| 11h30-12h15 | [Lab 4 - Containers](./Lab4/README.md)      | Deployed the same App that was Pre-package but using Docker Container this time
-| 12h15-13h00 | Lunch                                       | Lunch
-| 13h00-13h45 | [Lab 5 - AI](./Lab5/README.md)              | Add a cognitive Services to the application (sentiment, image analysis)
-| 13h45-14h30 | [Lab 6 - Serverless](./Lab7/readme.md)      | Use the Azure Functions to process all images from a folder 
-| 14h30-15h15 | [Lab 7 - Tests](./Lab7/README.md)           | Unit test?, Load testing, Smoke test, Disaster Recovery? Ping test?
-| 15h15-15h30 | Endind                                      | Questions/ Networking/ Giveaway
+Time        | Tittle                                      | Description  
+:----:      | :-------                                    | :----------- 
+08h30-9h00  | [Arrival/ Coffee](./Locations/README.md)    | Get your coffee, install your laptop...
+09h00-9h15  | Intro                                       | Explication about the day
+09h15-10h00 | [Lab 1 - CI/CD ](./Lab1/README.md)          | Create an .Net Core App, put it in GitHub/ or Azure DevVops. Create a continuous integration and continuous deployment solution (CI/CD).
+10h00-10h45 | [Lab 2 - ARM template](./Lab2/README.md)    | Create an ARM template , also add a SQL Database to the mix, deploy it.
+10h45-11h30 | [Lab 3 - Security](./Lab3/README.md)        | Let's add a certificate so our website will be https 
+11h30-12h15 | [Lab 4 - Containers](./Lab4/README.md)      | Deployed the same App that was Pre-package but using Docker Container this time
+12h15-13h00 | Lunch                                       | Lunch
+13h00-13h45 | [Lab 5 - AI](./Lab5/README.md)              | Add a cognitive Services to the application (sentiment, image analysis)
+13h45-14h30 | [Lab 6 - Serverless](./Lab7/readme.md)      | Use the Azure Functions to process all images from a folder 
+14h30-15h15 | [Lab 7 - Tests](./Lab7/README.md)           | Unit test?, Load testing, Smoke test, Disaster Recovery? Ping test?
+15h15-15h30 | Endind                                      | Questions/ Networking/ Giveaway
 
 ## Technology Stack required for the Global Azure Bootcamp 2019
 
