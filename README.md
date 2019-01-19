@@ -10,7 +10,7 @@ In this repository you will find included all materials used during the demos so
 
 
 ## Scenario 2019
-Life has been going very well at *Contoso* it's been a while since they start their journey on Azure. Things have been so well that today *Contoso* has many developers across the many different locations and using different platforms. 
+Life has been going very well at *Contoso* it's been a while since they start their journey on Azure. Things have been so well that today *Contoso* has many developers across the many different locations and using different platforms.  They want to build an new application that could be secure and accessible from everywhere to manage their images. THey would also like to have the application to do be easy to maintain and follow the best practices.
 
 In an effort to improve their efficiency and the quality of their application they decided to agree on the following:
 
