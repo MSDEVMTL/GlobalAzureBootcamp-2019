@@ -189,5 +189,5 @@ Once the deployment is done, refresh your web browser where the web page was sho
 [ReleasePipeline]: medias/ReleasePipeline.png
 [SetupReleaseDetails]: medias/SetupReleaseDetails.png
 [TriggerRelease]: medias/TriggerRelease.png
-[git-pull]: medais/git-pull.png
+[git-pull]: medias/git-pull.png
 [resourceGroup]: medias/resourceGroup.png
