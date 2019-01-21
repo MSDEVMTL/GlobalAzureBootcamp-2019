@@ -6,7 +6,7 @@
 
 In this lab you will create an Azure Resource Manager template to provision your Azure resources and configure them automatically.
 
-## Azure Resource Manager (ARM) template ?
+## What is Azure Resource Manager (ARM) template ?
 
 Azure Resource Manager allows you to provision your applications using a declarative template. In a single template, you can deploy multiple services along with their dependencies. You use the same template to repeatedly deploy your application during every stage of the application lifecycle.
 
@@ -18,9 +18,6 @@ Resource Manager provides several benefits:
 * You can **repeatedly** deploy your solution throughout the development lifecycle and **have confidence** your resources are deployed in a consistent state.
 * You can manage your infrastructure through declarative templates rather than scripts.
 * You can define the dependencies between resources so they're deployed in the correct order.
-* You can apply access control to all services in your resource group because Role-Based Access Control (RBAC) is natively integrated into the management platform.
-* You can apply tags to resources to logically organize all the resources in your subscription.
-* You can clarify your organization's billing by viewing costs for a group of resources sharing the same tag.
 * You can see your template as a documentation of your infrastructure.  ( [Infrastructure as a code](https://docs.microsoft.com/en-us/azure/devops/learn/what-is-infrastructure-as-code) )
 
 # Template format 
@@ -36,7 +33,26 @@ Resource Manager provides several benefits:
     "outputs": {  }
 }
 ```
+
+| Element name | Required | Description |
+|:--- |:--- |:--- |
+| $schema |Yes |Location of the JSON schema file that describes the version of the template language.<br><br> For resource group deployments, use `https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#`.<br><br>For subscription deployments, use `https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#` |
+| contentVersion |Yes |Version of the template (such as 1.0.0.0). You can provide any value for this element. Use this value to document significant changes in your template. When deploying resources using the template, this value can be used to make sure that the right template is being used. |
+| parameters |No |Values that are provided when deployment is executed to customize resource deployment. |
+| variables |No |Values that are used as JSON fragments in the template to simplify template language expressions. |
+| functions |No |User-defined functions that are available within the template. |
+| resources |Yes |Resource types that are deployed or updated in a resource group. |
+| outputs |No |Values that are returned after deployment. |
+
+[reference](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authoring-templates)
+
 ## Let's code!
+
+To host our solution, we will need to provision multiple Azure resources: 
+
+* A new [App Service Plan](https://docs.microsoft.com/en-us/azure/app-service/overview-hosting-plans) 
+* A new [Azure Web App](https://azure.microsoft.com/en-us/services/app-service/web/)
+* A new [Azure Storage](https://docs.microsoft.com/en-us/azure/storage/common/storage-introduction)
 
 ### Adding a service plan
 
@@ -110,7 +126,9 @@ Resource Manager provides several benefits:
   ]
 }
 ```
-### Adding a website 
+### Adding a Web App 
+
+> We need to add a new parameter "appName"
 
 ```json
   "appName": {
@@ -120,10 +138,12 @@ Resource Manager provides several benefits:
       }
     }
 ```
+> We need to add a new resource type "Microsoft.Web/sites"
 
 ```json
 {
   "apiVersion": "2018-02-01",
+  "type": "Microsoft.Web/sites",
   "dependsOn": [
     "[resourceId('Microsoft.Web/serverfarms', parameters('appSvcPlanName'))]"
   ],
@@ -131,8 +151,10 @@ Resource Manager provides several benefits:
   "location": "[parameters('location')]",
   "name": "[parameters('appName')]",
   "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appSvcPlanName'))]",
-},
+}
 ```
+### Now lets configure our Web App Automatically
+
 
 
 ## Reference
