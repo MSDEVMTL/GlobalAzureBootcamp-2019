@@ -32,7 +32,7 @@ Resource Manager provides several benefits:
 If you want to know more on the syntax or the advanatge of using Azure Resource Manager please visit the following:
 
 * [What is Azure Resource Manager](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview)
-* [Best practices using Azure Resource Manager (ARM) Templates]
+* [Best practices using Azure Resource Manager (ARM) Templates](https://www.youtube.com/watch?v=myYTGsONrn0)
 * [Azure Resource Manager](https://azure.microsoft.com/en-us/resources/templates/)
 * [A library of example](https://github.com/Azure/azure-quickstart-templates)
 * [Exploring three way to deploy your ARM templates](http://techgenix.com/deploy-arm-templates/)
