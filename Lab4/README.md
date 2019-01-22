@@ -1,10 +1,10 @@
 ![gablogo][gablogo]
 
-# Lab 4 - Containers
+# Lab 4 - Docker Container part 2
 
 ## Goal
 
-For this part of the bootcamp, we'll welcome and present an introduction of what to expect during the day.
+We are doing a major refactoring to our CI/CD to build our container, upload the image to Azure Container Repository (ACR), and deploy it to a WebApp with container.
 
 ## Let's code!
 

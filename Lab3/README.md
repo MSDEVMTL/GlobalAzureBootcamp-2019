@@ -1,10 +1,10 @@
 ![gablogo][gablogo]
 
-# Lab 3 - Tests
+# Lab 3 - Docker Container part 1
 
 ## Goal
 
-For this part of the bootcamp, we'll welcome and present an introduction of what to expect during the day.
+We will package the Application in a Docker container. Run it locally. Deploy manualy to Azure using Azure CLI
 
 ## Let's code!
 

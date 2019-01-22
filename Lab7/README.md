@@ -1,10 +1,10 @@
 ![gablogo][gablogo]
 
-# Lab 7 - TBD 
+# Lab 7 - Security - KeyVault 
 
 ## Goal
 
-For this part of the bootcamp, we'll welcome and present an introduction of what to expect during the day.
+Add a KeyVault to the ARM tempalte. migrate the API and storage keys to the keyvauls. Use the keyvault instead of the keys  in the ARM template and application.
 
 ## Let's code!
 

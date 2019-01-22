@@ -2,9 +2,26 @@
 
 # Goal
 
-For this part of the bootcamp, we'll welcome and present an introduction of what to expect during the day.
+This is the part that need to be done BEFORE getting to the Bootcamp.
+Install the prerequisites 
 
-# Let's code!
+## Let's get started
+
+* [Visual Studio Code](https://code.visualstudio.com/?wt.mc_id=vscom_downloads)
+* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+* [Git](https://git-scm.com/downloads)
+
+## Need help?
+
+Contact our volountaire:
+
+- Frank Boucher : Twitter @fboucheros
+- 
+
+## Check list
+
+- 
+- 
 
 # Reference
 

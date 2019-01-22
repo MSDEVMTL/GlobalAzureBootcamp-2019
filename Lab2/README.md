@@ -4,7 +4,7 @@
 
 ## Goal
 
-For this part of the bootcamp, we'll welcome and present an introduction of what to expect during the day.
+In the previous lab we deploy the web application with a partial CI/CD. Let's now apply a fully automated process and package our application in an ARM template. We will also add a storage account to our resources (for later purpuses), and update the CI/CD to deployusing the new ARM template.
 
 ## Let's code!
 

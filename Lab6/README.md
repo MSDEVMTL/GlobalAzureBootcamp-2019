@@ -1,10 +1,10 @@
 ![gablogo][gablogo]
 
-# Lab 6 - TBD
+# Lab 6 - Serverless - Azure Function
 
 ## Goal
 
-For this part of the bootcamp, we'll welcome and present an introduction of what to expect during the day.
+Create an Azure Functions (blob trigger) to process all new images into a blob storage. The Function will use the Vision API to keep only the dogs pictures.
 
 ## Let's code!
 

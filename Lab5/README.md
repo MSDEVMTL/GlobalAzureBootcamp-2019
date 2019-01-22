@@ -4,7 +4,7 @@
 
 ## Goal
 
-For this part of the bootcamp, we'll welcome and present an introduction of what to expect during the day.
+We will add a Azure Cognitive Services Vision to our ARM template. Modify the code of the web application to read one image (provided) from a Azure blob storage, and display the information returned by the Vision API. The image ( a dog or a cat) will be uploaded to the Blob storage using the Azure POrtal or the Azure Storage Explorer.
 
 ## Let's code!
 
