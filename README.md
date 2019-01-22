@@ -4,7 +4,7 @@
 
 All around the world user groups and communities want to learn about Azure and Cloud Computing!
 
-On **April 21, 2019**, all communities will come together once again in the sixth great [Global Azure Bootcamp](https://global.azurebootcamp.net/) event! 
+On **April 27, 2019**, all communities will come together once again in the sixth great [Global Azure Bootcamp](https://global.azurebootcamp.net/) event! 
 
 In this repository you will find included all materials used during the demos so you can try them at home.
 
