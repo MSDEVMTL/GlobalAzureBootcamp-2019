@@ -12,7 +12,7 @@ In this lab you will create an application in .Net Core, push it to a remote rep
 
 Let's create a new web application using the .Net Core. Open a terminal, and navigate to a "dev" folder (ex: C:\Dev).
 
-    cd C:\dev
+    cd C:\dev\GABDemo
 
 Let's scafold an application named GABCDemo using the following command:
 
