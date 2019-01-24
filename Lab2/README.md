@@ -22,6 +22,8 @@ Resource Manager provides several benefits:
 
 # Template format 
 
+A Resource manager template is simply a JSON file using this structure
+
 ```json
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
@@ -53,6 +55,14 @@ To host our solution, we will need to provision multiple Azure resources:
 * A new [App Service Plan](https://docs.microsoft.com/en-us/azure/app-service/overview-hosting-plans) 
 * A new [Azure Web App](https://azure.microsoft.com/en-us/services/app-service/web/)
 * A new [Azure Storage](https://docs.microsoft.com/en-us/azure/storage/common/storage-introduction)
+
+Let's start by creating our template file. Open a terminal, and navigate to your "dev" folder (ex: C:\Dev).
+
+    cd C:\dev
+
+Now, Create an empty folder 
+
+    MD Deployment
 
 ### Adding a service plan
 
