@@ -10,13 +10,13 @@ It's very important that you do this Lab **BEFORE** the day of the bootcamp.
 
 ![code][code]
 
-You don't need Visual Studio Code to be able to do anything on Azure. However all the explanation will asumed you have it installed. It's a really great text editor with tons of extensions that can improve so much your development experience.  To install it, navigate to [code.visualstudio.com](https://code.visualstudio.com/?wt.mc_id=vscom_downloads), and select you platform. 
+You don't need Visual Studio Code to be able to do anything on Azure. However, all the explanation will assume you have it installed. It's a really great text editor with tons of extensions that can improve so much your development experience.  To install it, navigate to [code.visualstudio.com](https://code.visualstudio.com/?wt.mc_id=vscom_downloads), and select your platform. 
 
 ![code-select][code-select]
 
 #### Extension
 
-One of the strengh of Visual Studio Code is all his extensions.  During the following Labs you will need so of the extensions. Installing an extension is very simple and it's done directly from VSCode.
+One of the strengths of Visual Studio Code is all his extensions.  During the following Labs, you will need so of the extensions. Installing an extension is very simple and it's done directly from VSCode.
 
 Open VSCode and from the left menu, select the Extensions (Ctrl+Shift+X). Then enter `Azure resource manager` into the search bar at the top of the Extensions Marketplace panel that just open. Click on the little *Install* green button on the side of the extension to install it.
 
@@ -27,9 +27,18 @@ Open VSCode and from the left menu, select the Extensions (Ctrl+Shift+X). Then e
 
 Once all the extensions are installed, click the *Refresh* button to restart VS Code.
 
+
 ### Azure CLI
 
-[Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+The Azure CLI is a command-line tool providing a great experience for managing Azure resources. The CLI is designed to make scripting easy, query data, support long-running operations, and more. Ton install it just follow the instruction based on your platform on the site: [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
+
+![azurecli][azurecli]
+
+To validate that you have it type the following commend in a terminal/ console
+
+    az --version
+
+THe result should be `azure-cli (2.0.55)` or newest.
 
 ### Git
 
@@ -58,3 +67,4 @@ Contact our volountaire:
 [code]: medias/code-screenshot.png "Visual Studio Code screenshot"
 [code-select]: medias/code-select.jpg
 [code-extensions]: medias/code-extensions.jpg
+[azurecli]: medias/azurecli.jpg
