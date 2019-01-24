@@ -42,25 +42,37 @@ THe result should be `azure-cli (2.0.55)` or newest.
 
 ### Git
 
-[Git](https://git-scm.com/downloads)
+The Git is a decentralized source control manager, that stand apart from nearly every other SCM out there is its branching model.
+
+Git allows and encourages you to have multiple local branches that can be entirely independent of each other. The creation, merging, and deletion of those lines of development takes seconds.
+
+To install this great tool go to the official web page [Git](https://git-scm.com/downloads) and download the version matching your current platform. 
+
+![gitdownload][gitdownload]
+
+THis will install the console version of git. This is good enough to be fonctional. However if you are more visual or if you prefer graphical tool GitKraken is an excellent choice. You can download it from here: [Git Kraken](https://www.gitkraken.com/invite/saVBBaq4)
+
+![gitkraken][gitkraken]
+
+
+## Accounts
+
+### Azure Subscription
+
+### Azure DevOps
+
+### GitHub (optional)
 
 
 
-## Need help?
+# Need help?
 
 Contact our volountaire:
 
-- Frank Boucher : Twitter @fboucheros
+- Frank Boucher : Twitter [@fboucheros](https://twitter.com/fboucheros)
 - 
 
-## Check list
 
-- 
-- 
-
-# Reference
-
-# End
 [Next Lab](../Lab1/README.md)
 
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
@@ -68,3 +80,5 @@ Contact our volountaire:
 [code-select]: medias/code-select.jpg
 [code-extensions]: medias/code-extensions.jpg
 [azurecli]: medias/azurecli.jpg
+[gitdownload]: medias/gitdownload.jpg
+[gitkraken]: medias/gk-merge-edit.gif
