@@ -28,12 +28,6 @@ Under the resources array, add the following:
 }
 ```
 
-### Download Azure Storage Explorer
-
-If you are not using the Azure Portal, you can download the Azure Storage Explorer [here](https://azure.microsoft.com/en-ca/features/storage-explorer/). 
-
-Once you have Azure Storage Explorer, add your account and you should be able to see all the storage in your (selected) subscription(s)
-
 ### Getting the API keys for the API
 
 Once your ARM templated has successfully been deployed, go in the Azure Portal and search for your computer vision resource name in the search bar. Once in the computer vision resource blade, go in the keys section and copy the KEY 1 into a text editor. We will be using it in the next sections.
@@ -86,7 +80,7 @@ Select Blob (anonymous read access for blobs only) as the public access level
 [Next Lab](../Lab6/README.md)
 
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
-[computer-vision-keys]: medias/lab5-keys.png "Computer Vision API Keys"
+[computer-vision-keys]: medias/lab5-keys.PNG "Computer Vision API Keys"
 [blob-connectionstring]: medias/portal-connectionstring-blob.png "Storage Account connection string"
 [public-access-blob-se]: medias/public-access-blob-se.png "Public access blob through storage explorer"
 [public-access-blob-portal]: medias/public-access-blob-portal.png "Public access blob through the azure portal"
