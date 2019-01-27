@@ -1,0 +1,63 @@
+﻿@model Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models.ImageAnalysis
+
+<h1>Categories</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Score</th>
+            <th scope="col">Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model.Categories)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td>@category.Score</td>
+                <td>
+                    @if (category.Detail != null)
+                    {
+                        if (category.Detail.Celebrities != null && category.Detail.Celebrities.Any())
+                        {
+                            foreach (var celebrity in category.Detail.Celebrities)
+                            {
+                                @celebrity<br />
+                            }
+                        }
+
+                        if (category.Detail.Landmarks != null && category.Detail.Landmarks.Any())
+                        {
+                            foreach (var landmark in category.Detail.Landmarks)
+                            {
+                                @landmark<br />
+                            }
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h1>Description</h1>
+<h2>Captions</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Text</th>
+            <th scope="col">Confidence</th>
+        </tr>
+    </thead>
+    @foreach (var caption in Model.Description.Captions)
+    {
+        <tr>
+            <td>@caption.Text</td>
+            <td>@caption.Confidence</td>
+        </tr>
+    }
+</table>
+
+<h2>Tags</h2>
+@string.Join(", ", Model.Description.Tags)
+
