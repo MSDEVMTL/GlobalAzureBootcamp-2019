@@ -31,22 +31,26 @@ Select **Azure Repos Git** and the team project you created earlier.
 ![03][03]
 
 
-Select the **Docker Container template**.
+Select the **Docker Container template**.  This template has 2 steps that needs to be configured: Build and Push.
 
 ![04][04]
 
 
-Select your **subscription** and your **Azure Container Registry**.  
+### Configure the Build step
+
+Let's configure the Build step.  Select your **subscription** and your **Azure Container Registry**.  
 
 ![05][05]
 
 
-Locate the **Dockerfile**.
+Locate the **Dockerfile** in your project.
 
 ![06][06]
 
 
-Click on the **Push an Image** step.
+### Configure the Push step
+
+Let's now configure the Push step that will push the container to ACR.  Click on the **Push an Image** step.
 
 ![07][07]
 
@@ -61,15 +65,19 @@ Click on **Save**.  You’ll be prompted for a location in your repo, accept the
 ![09][09]
 
 
+### Enable continuous integration
+
 Click on the **Triggers** tab and check **Enable continuous integration**.
 
 ![10][10]
+
 
 ### Create a Webhook
 
 Create a **Webhook** from you Web App to your container following the steps you already did in the previous lab.
 
 **>>>>TODO: REFERENCE THE LAB 3 STEPS**
+
 
 ### Commit a change
 
