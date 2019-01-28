@@ -30,7 +30,7 @@ Once all the extensions are installed, click the *Refresh* button to restart VS 
 
 ### Azure CLI
 
-The Azure CLI is a command-line tool providing a great experience for managing Azure resources. The CLI is designed to make scripting easy, query data, support long-running operations, and more. Ton install it just follow the instruction based on your platform on the site: [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
+The Azure CLI is a command-line tool providing a great experience for managing Azure resources. The CLI is designed to make scripting easy, query data, support long-running operations, and more. To install it just follow the instruction based on your platform on the site: [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
 
 ![azurecli][azurecli]
 
