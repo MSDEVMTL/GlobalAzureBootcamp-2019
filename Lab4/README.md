@@ -14,6 +14,8 @@ Magical! To do so, let's start by creating a new pipeline.
 
 ## Let's code!
 
+### Create a new pipeline
+
 Head to dev.azure.com, click on the **Pipelines** menu and the **New Pipeline** button.
 
 ![01][01]
@@ -63,16 +65,20 @@ Click on the **Triggers** tab and check **Enable continuous integration**.
 
 ![10][10]
 
+### Create a Webhook
 
 Create a **Webhook** from you Web App to your container following the steps you already did in the previous lab.
 
 **>>>>TODO: REFERENCE THE LAB 3 STEPS**
 
+### Commit a change
 
 Back in **Code**, , make a simple change to a page, commit and push the change.  The pipeline will pick the change, build the code, create a container and deploy it to ACR.  The Web App will pick the change using the Webhook and pull the new container.
 
 
 ## Reference
+
+[Deploy to an Azure Web App for Containers](https://docs.microsoft.com/en-us/azure/devops/pipelines/apps/cd/deploy-docker-webapp?view=azdevops)
 
 ## End
 [Previous Lab](../Lab3/README.md)
