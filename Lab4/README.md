@@ -4,7 +4,12 @@
 
 ## Goal
 
-In the previous lab, you deployed the container manually but it would be awesome if we could automate the process so each time you'd checkin a code update, Azure DevOps would compile the code, deploy it to a container and push it to Azure Container Registry (ACR) automatically.  Like in the previous lab, the Web App will be updated using a Webhook to our container in ACR. Magical! To do so, we'll create a new pipeline.
+In the previous lab, you deployed the container manually but it would be awesome if we could automate the process so each time you'd checkin a code update, Azure DevOps would compile the code, deploy it to a container and push it to Azure Container Registry (ACR) automatically.  Like in the previous lab, the Web App will be updated using a Webhook. 
+
+Magical! To do so, let's start by creating a new pipeline.
+
+**>>>>TODO: CHECK IF YOU NEED TO DISABLE OR DELETE THE PREVIOUS PIPELINE**
+**>>>>TODO: CHECK IF YOU NEED TO CREATE A NEW WEB APP FOR CONTAINERS**
 
 ## Let's code!
 
@@ -60,8 +65,11 @@ Click on the **Triggers** tab and check **Enable continuous integration**.
 
 Create a **Webhook** from you Web App to your container following the steps you already did in the previous lab.
 
+**>>>>TODO: REFERENCE THE LAB 3 STEPS**
+
 
 Back in **Code**, , make a simple change to a page, commit and push the change.  The pipeline will pick the change, build the code, create a container and deploy it to ACR.  The Web App will pick the change using the Webhook and pull the new container.
+
 
 ## Reference
 
