@@ -55,6 +55,23 @@ THis will install the console version of git. This is good enough to be fonction
 ![gitkraken][gitkraken]
 
 
+### Azure Storage Explorer (optional)
+
+In Lab 5 and Lab 6 we will be uploading files to Azure Storage Explorer. You can definitely do that directly from the Azure portal. However, great tools that provide much more flexibility and ease is the Azure Storage Explorer. 
+
+![azureexplorer][azureexplorer]
+
+Upload, download, and manage blobs, files, queues, tables, and Cosmos DB entities. Gain easy access to manage your virtual machine disks. Work with either Azure Resource Manager or classic storage accounts, plus manage and configure cross-origin resource sharing (CORS) rules. In short, a great tool to have on your machine.
+
+It can be download from [here](https://azure.microsoft.com/en-ca/features/storage-explorer) and it's compatible with MacOS, Windows, and Linux.
+
+Once Azure Storage Explorer is installed, you will need to add your account. The first time Azure Storage Explorer opens it will ask you to sign-in. (To add more account click on the plug icon in the left menubar)
+
+![azexplorer-AddAccount][azexplorer-AddAccount]
+
+You are now ready for the Labs.
+
+
 ## Accounts
 
 ### Azure Subscription
@@ -82,3 +99,5 @@ Contact our volountaire:
 [azurecli]: medias/azurecli.jpg
 [gitdownload]: medias/gitdownload.jpg
 [gitkraken]: medias/gk-merge-edit.gif
+[azureexplorer]: medias/AzureBlobStorage.png
+[azexplorer-AddAccount]: medias/azexplorer-AddAccount.png
