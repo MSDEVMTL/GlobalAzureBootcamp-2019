@@ -14,17 +14,17 @@ Under the resources array, add the following:
 
 ```json
 {
-"type": "Microsoft.CognitiveServices/accounts",
-"sku": {
-    "name": "F0"
-},
-"kind": "ComputerVision",
-"name": "[parameters('accounts_cs_vision_name')]",
-"apiVersion": "2016-02-01-preview",
-"location": "eastus",
-"scale": null,
-"properties": {},
-"dependsOn": []
+    "type": "Microsoft.CognitiveServices/accounts",
+    "sku": {
+        "name": "F0"
+    },
+    "kind": "ComputerVision",
+    "name": "[parameters('accounts_cs_vision_name')]",
+    "apiVersion": "2016-02-01-preview",
+    "location": "eastus",
+    "scale": null,
+    "properties": {},
+    "dependsOn": []
 }
 ```
 
