@@ -234,8 +234,8 @@ To stop the container using Docker Explorer, you can:
 To deploy our application and run it in the Cloud, we will use both Docker and the Azure CLI (version 2.0.55 or later recommended).
 What we will do is:
 
-1. Create an Azure Resource Group to create our resources into. It helps keep our stuff organized and it is easier to cleanup this way.
-1. Create a private image registry (we could have used Docker Hub as well but the event is named Azure Bootcamp; and our images will be closer to our running containers, helping with latency in a real world scenario).
+1. Create an Azure Resource Group to create our resources into. It helps keep our stuff organized, and it is easier to clean up this way.
+1. Create a private image registry (we could have used Docker Hub as well, but the event is named Azure Bootcamp; and our images will be closer to our running containers, helping with latency in a real-world scenario).
 1. Push our Docker image in our private registry
 1. Deploy a container, based on our Docker image, to an Azure Container Instance.
 
@@ -259,7 +259,7 @@ To do that:
 
     > Take note of `loginServer` in the output, which is the fully qualified registry name (all lowercase). Throughout the rest of this quickstart `<acrLoginServer>` is a placeholder for the container registry name.
     >
-    > Take note of `name` in the output, which is theregistry name. Throughout the rest of this quickstart `<acrName>` is a placeholder for the container registry name.
+    > Take note of `name` in the output, which is the registry name. Throughout the rest of this quickstart `<acrName>` is a placeholder for the container registry name.
 
 1. From there we need one of the admin password generated for us by Azure. To get those we must:
 
