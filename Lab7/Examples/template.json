@@ -17,6 +17,9 @@
         "serverFarmName": {
             "defaultValue": "mig-server-farm",
             "type": "string"
+        },
+        "applicationObjectId": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -102,7 +105,18 @@
             "apiVersion": "2016-10-01",
             "location": "[resourceGroup().location]",
             "properties": {
-                "accessPolicies": [],
+                "accessPolicies": [
+                    {
+                        "tenantId" : "[subscription().tenantId]",
+                        "objectId": "[parameters('applicationObjectId')]",
+                        "permissions": {
+                            "secrets": [
+                                "get",
+                                "list"
+                            ]
+                        }
+                }
+                ],
                 "enabledForDiskEncryption": false,
                 "sku": {
                     "name": "standard",
