@@ -141,7 +141,16 @@ public IEnumerable<IListBlobItem> GetFiles(string containerName)
 }
 ```
 
-The method ```GetFiles``` will be used to list all the files in your blob container (in our cases we will use the _images_ container created earlier)
+The method ```GetFiles``` will be used to list all the files in your blob container (in our cases we will use the _images_ container created earlier).
+
+The namespaces for this class should have:
+
+```csharp
+using System;
+using System.Collections.Generic;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+```
 
 ##### ImageAnalyzer
 
@@ -178,6 +187,16 @@ public async Task<ImageAnalysis> AnalyzeAsync(string imageUrl)
 
 As you can see, we are asking the API to return use the Categories of the image, its description, the image type information, the image tags and the image faces collection. You can also ask it to return the Color information (by adding ```VisualFeatureTypes.Color```) and Objects information (by adding ```VisualFeatureTypes.Objects```).
 
+The namespaces for this class should have:
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
+```
+
 ##### Wiring all this into the Startup
 
 In your ```Startup``` class, under the ```ConfigureServices``` method, add the following:
@@ -198,7 +217,7 @@ services.Configure<KeysOptions>(Configuration.GetSection("Keys"))
 });
 ```
 
-This will tell ASP.NET Core to map our appsettings structure to an object structure
+This will tell ASP.NET Core to map our appsettings structure to an object structure.
 
 #### Creating the controller and view
 
@@ -235,6 +254,16 @@ public async Task<IActionResult> Analyze(string imageUrl)
  ```
 
  The ```Index``` method will list all the images from our _images_ container and the ```Analyze``` method will take the url of our image in our container and analyze it with the computer vision api.
+
+ The namespaces in this class should include:
+
+ ```csharp
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using GABDemo.Services;
+using Microsoft.Extensions.Options;
+ ```
 
  In the Views folder, create a new folder called Analyzer. In that folder add 2 Razor Views called ```Index``` and ```Results```. 
 
