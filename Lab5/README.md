@@ -12,7 +12,7 @@ We will add a Azure Cognitive Services Vision to our ARM template. Modify the co
 
 Under the resources array, add the following:
 
-```
+```json
 {
 "type": "Microsoft.CognitiveServices/accounts",
 "sku": {
@@ -25,6 +25,17 @@ Under the resources array, add the following:
 "scale": null,
 "properties": {},
 "dependsOn": []
+}
+```
+
+in the parameters section, add the following:
+
+```json
+"accounts_cs_vision_name": {
+    "type": "string",
+    "metadata": {
+        "description": "The resource name of the computer vision api"
+    }
 }
 ```
 
