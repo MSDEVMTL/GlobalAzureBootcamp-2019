@@ -86,9 +86,28 @@ You are now ready for the Labs.
 
 ### Azure Subscription
 
+Having an Azure subscription is manatory to be able to do the Global Azure Bootcamp. If you don't own an Azure subscription already, you can create your **free** account today. It comes with 200$ credit, so you can experience almost everything without spending a dime. 
+
+Make sure to have your account up and ready before the bootcamp.
+
+[Create your free Azure account today](https://azure.microsoft.com/en-us/free/)
+
+![freeAzure][freeAzure]
+
 ### Azure DevOps
 
+For the GLobal Azure Bootcamp, you will need an Azure DevOps account. It's free! Get 10 free parallel jobs and unlimited minutes for your open source projects with Pipelines.
+
+[Create your free Azure DevOps account today!](https://azure.microsoft.com/en-ca/services/devops/)
+
+![azureDevOps][azureDevOps]
+
 ### GitHub (optional)
+
+GitHub is a development platform inspired by the way you work. From open source to business, you can host and review code, manage projects, and build software.  During the Global Azure Bottcamp you could host your code in a GitHub Repository if you prefer it to Azure DevOps. 
+
+[Create your free account today](https://github.com/)
+
 
 # Need help?
 
@@ -109,3 +128,5 @@ Contact our volountaire:
 [azureexplorer]: medias/AzureBlobStorage.png
 [azexplorer-AddAccount]: medias/azexplorer-AddAccount.png
 [installdockerextension]: medias/installdockerextension.png
+[freeAzure]: medias/freeAzure.png
+[azureDevOps]: medias/azureDevOps.png
