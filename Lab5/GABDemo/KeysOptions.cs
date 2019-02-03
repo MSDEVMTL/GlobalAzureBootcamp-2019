@@ -1,6 +1,6 @@
 ﻿namespace GABDemo
 {
-    public class ApiKeysOptions
+    public class KeysOptions
     {
         public ComputerVisionOptions ComputerVision { get; set; }
         public StorageAccountOptions Storage { get; set; }

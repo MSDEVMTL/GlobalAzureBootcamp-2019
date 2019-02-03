@@ -31,8 +31,8 @@ namespace GABDemo
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.Configure<ApiKeysOptions>(Configuration.GetSection("ApiKeys"))
-                    .PostConfigure<ApiKeysOptions>(options =>
+            services.Configure<KeysOptions>(Configuration.GetSection("Keys"))
+                    .PostConfigure<KeysOptions>(options =>
             {
                 if (string.IsNullOrEmpty(options.ComputerVision.ApiKey))
                 {

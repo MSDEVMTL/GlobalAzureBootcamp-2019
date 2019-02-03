@@ -10,7 +10,6 @@ namespace GABDemo.Services
     {
         private readonly ComputerVisionClient _computerVision;
 
-        // Specify the features to return
         private static readonly List<VisualFeatureTypes> Features =
             new List<VisualFeatureTypes>
             {

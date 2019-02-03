@@ -61,3 +61,63 @@
 <h2>Tags</h2>
 @string.Join(", ", Model.Description.Tags)
 
+@if (Model.Adult != null)
+{
+    <h2>Adult content</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Adult score</th>
+                <th scope="col">Is adult content?</th>
+                <th scope="col">Is racy content?</th>
+                <th scope="col">Racy score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Adult.AdultScore</td>
+                <td>@Model.Adult.IsAdultContent</td>
+                <td>@Model.Adult.IsRacyContent</td>
+                <td>@Model.Adult.RacyScore</td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+<h2>Image Type</h2>
+Clipart confidence level: @Model.ImageType.ClipArtType<br />
+Line drawing confidence level: @Model.ImageType.LineDrawingType<br />
+
+@if (Model.Faces != null && Model.Faces.Count > 0)
+{
+    <h2>Faces</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Age</th>
+                <th scope="col">Gender (if applicable)</th>
+                <th scope="col">Face rectangle</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var faceDescription in @Model.Faces)
+            {
+                <tr>
+                    <td>@faceDescription.Age</td>
+                    <td>@(faceDescription.Gender != null ? faceDescription.Gender.Value.ToString() : "N/A")</td>
+                    <td>
+                        Height: @faceDescription.FaceRectangle.Height<br />
+                        Width: @faceDescription.FaceRectangle.Width<br />
+                        Left: @faceDescription.FaceRectangle.Left<br />
+                        Top: @faceDescription.FaceRectangle.Width<br />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<h2>Image Metadata</h2>
+Width: @Model.Metadata.Width<br />
+Height: @Model.Metadata.Height<br />
+Format: @Model.Metadata.Format<br />

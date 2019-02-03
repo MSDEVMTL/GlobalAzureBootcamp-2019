@@ -8,16 +8,16 @@ namespace GABDemo.Controllers
 {
     public class AnalyzerController : Controller
     {
-        private readonly ApiKeysOptions _apiKeys;
+        private readonly KeysOptions _keys;
 
-        public AnalyzerController(IOptions<ApiKeysOptions> apiKeysOptions)
+        public AnalyzerController(IOptions<KeysOptions> apiKeysOptions)
         {
-            _apiKeys = apiKeysOptions.Value;
+            _keys = apiKeysOptions.Value;
         }
 
         public IActionResult Index()
         {
-            var manager = new BlobStorageManager(_apiKeys.Storage.ConnectionString);
+            var manager = new BlobStorageManager(_keys.Storage.ConnectionString);
             var files = manager.GetFiles("images").Select(_ => _.Uri).ToList();
 
             ViewBag.Files = files;
@@ -27,8 +27,9 @@ namespace GABDemo.Controllers
 
         public async Task<IActionResult> Analyze(string imageUrl)
         {
-            var imageAnalyzer = new ImageAnalyzer(_apiKeys.ComputerVision.ApiKey, _apiKeys.ComputerVision.ApiEndPoint);
+            var imageAnalyzer = new ImageAnalyzer(_keys.ComputerVision.ApiKey, _keys.ComputerVision.ApiEndPoint);
             var results = await imageAnalyzer.AnalyzeAsync(imageUrl);
+            ViewData["Title"] = "Image analysis results";
 
             return View("Results",results);
         }
