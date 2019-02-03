@@ -24,6 +24,10 @@ Open VSCode and from the left menu, select the Extensions (Ctrl+Shift+X). Then e
 
 - **Azure Resource Manager Snippets**: This extension adds snippets to Visual Studio Code for creating Azure Resource Manager Templates. 
 - **Azure Functions**: Create, debug, manage, and deploy Azure Functions directly from VS Code.
+- **Docker**: Adds syntax highlighting, commands, hover tips, and linting for Dockerfile and docker-compose files.
+- **Docker Explorer**: Manage Docker Containers, Docker Images, Docker Hub and Azure Container Registry
+
+![installdockerextension][installdockerextension]
 
 Once all the extensions are installed, click the *Refresh* button to restart VS Code.
 
@@ -101,3 +105,4 @@ Contact our volountaire:
 [gitkraken]: medias/gk-merge-edit.gif
 [azureexplorer]: medias/AzureBlobStorage.png
 [azexplorer-AddAccount]: medias/azexplorer-AddAccount.png
+[installdockerextension]: medias/installdockerextension.png
