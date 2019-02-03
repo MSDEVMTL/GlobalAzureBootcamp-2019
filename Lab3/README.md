@@ -15,6 +15,7 @@ In this lab, we will execute the following steps:
 1. Run our dockerized application locally
 1. Learn how to stop our running container
 1. Deploy our dockerized application to Azure
+1. Cleaning up resources
 
 ### Make our project ready for docker
 
@@ -230,9 +231,107 @@ To stop the container using Docker Explorer, you can:
 
 ### Deploy our dockerized application to Azure
 
-TODO: ...
+To deploy our application and run it in the Cloud, we will use both Docker and the Azure CLI (version 2.0.55 or later recommended).
+What we will do is:
+
+1. Create an Azure Resource Group to create our resources into. It helps keep our stuff organized and it is easier to cleanup this way.
+1. Create a private image registry (we could have used Docker Hub as well but the event is named Azure Bootcamp; and our images will be closer to our running containers, helping with latency in a real world scenario).
+1. Push our Docker image in our private registry
+1. Deploy a container, based on our Docker image, to an Azure Container Instance.
+
+To do that:
+
+1. Open a terminal
+1. Create a resource group:
+
+    ```bash
+    # Create a resource group in Toronto
+    az group create --name GAB2019Group --location canadacentral
+    # Create a resource group in Québec
+    az group create --name GAB2019Group --location canadaeast
+    ```
+
+1. Create a container registry (to push our Docker image into):
+
+    ```bash
+    az acr create --resource-group GAB2019Group --name GAB2019ContainerRegistry --sku Basic --admin-enabled true
+    ```
+
+    > Take note of `loginServer` in the output, which is the fully qualified registry name (all lowercase). Throughout the rest of this quickstart `<acrLoginServer>` is a placeholder for the container registry name.
+    >
+    > Take note of `name` in the output, which is theregistry name. Throughout the rest of this quickstart `<acrName>` is a placeholder for the container registry name.
+
+1. From there we need one of the admin password generated for us by Azure. To get those we must:
+
+    1. Log in to the [Azure Portal](https://portal.azure.com)
+    1. Navigate to our container registry: `GAB2019ContainerRegistry`
+    1. Navigate to `Access keys`
+    1. Copy the Username (which should be the same as the registry name) and one of the two passwords.
+
+    > Instead of using this admin password, it would be possible to save credentials into Azure Key Vault.
+    > That would be more secure for a production scenario; for a demo, this way is easier and faster.
+
+1. Log in the Docker CLI to the registry:
+
+    ```bash
+    az acr login --name <acrName>
+    ```
+
+1. Tag our Docker image with our private Docker repository name
+
+    ```bash
+    docker tag gabdemo <acrLoginServer>/gabdemo:v1
+    ```
+
+1. Push our Docker image into our private container registry:
+
+    ```bash
+    docker push <acrLoginServer>/gabdemo:v1
+    ```
+
+1. Create a container in Azure
+
+    ```bash
+    az container create --resource-group GAB2019Group --name gab2019container --image <acrLoginServer>/gabdemo:v1 --dns-name-label gab-2019-container-demo --ports 80
+    # Enter your admin Azure Container Registry username and password (copied a few steps ago).
+    ```
+
+1. From there, we can list our running containers:
+
+    ```bash
+    az container show --resource-group GAB2019Group --name gab2019container --query "{FQDN:ipAddress.fqdn,ProvisioningState:provisioningState}" --out table
+    ```
+
+1. Copy the FQDN (that should look like `gab-2019-container-demo.canadacentral.azurecontainer.io`).
+1. Using a browser, navigate to that URI, ex.: `http://gab-2019-container-demo.canadacentral.azurecontainer.io/` and you should see your container running in the Cloud!
+
+### Cleaning up resources
+
+Once you are done, you can delete everything by deleting your resource group:
+
+```bash
+az group delete --name GAB2019Group
+# Enter 'y' to confirm
+```
+
+Or if you prefer to keep you other resources but only want to delete your running container, you can:
+
+```bash
+az container delete --resource-group GAB2019Group --name gab2019container
+# Enter 'y' to confirm
+```
+
+Then you can list the running containers to make sure it has been deleted:
+
+```bash
+az container list --resource-group GAB2019Group --output table
+```
 
 ## Reference
+
+-   [Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+-   [Quickstart: Create a private container registry using the Azure CLI](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-azure-cli)
+-   [Quickstart: Run a container application in Azure Container Instances with the Azure CLI](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-quickstart)
 
 ## End
 
