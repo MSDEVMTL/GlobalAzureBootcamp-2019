@@ -251,20 +251,20 @@ To do that:
     az group create --name GAB2019Group --location canadaeast
     ```
 
-1. Create a container registry (to push our Docker image into):
+1. Create a container registry (to push our Docker image into). The `<acrName>` must be unique Azure-wide (not just your account). For example, I named mine `GAB2019ContainerRegistry`.
 
     ```bash
-    az acr create --resource-group GAB2019Group --name GAB2019ContainerRegistry --sku Basic --admin-enabled true
+    az acr create --resource-group GAB2019Group --name <acrName> --sku Basic --admin-enabled true
     ```
 
-    > Take note of `loginServer` in the output, which is the fully qualified registry name (all lowercase). Throughout the rest of this quickstart `<acrLoginServer>` is a placeholder for the container registry name.
+    > Take note of the registry `name` you entered here. Throughout the rest of this quickstart `<acrName>` is a placeholder for the container registry name.
     >
-    > Take note of `name` in the output, which is the registry name. Throughout the rest of this quickstart `<acrName>` is a placeholder for the container registry name.
+    > Take note of `loginServer` in the output, which is the fully qualified registry name (all lowercase). Throughout the rest of this quickstart `<acrLoginServer>` is a placeholder for the container registry name.
 
 1. From there we need one of the admin password generated for us by Azure. To get those we must:
 
     1. Log in to the [Azure Portal](https://portal.azure.com)
-    1. Navigate to our container registry: `GAB2019ContainerRegistry`
+    1. Navigate to our container registry: `<acrName>`
     1. Navigate to `Access keys`
     1. Copy the Username (which should be the same as the registry name) and one of the two passwords.
 
@@ -289,10 +289,10 @@ To do that:
     docker push <acrLoginServer>/gabdemo:v1
     ```
 
-1. Create a container in Azure
+1. Create a container in Azure. The `dns-name-label` must be unique Azure-wide. For example, I named mine: `gab-2019-container-demo`.
 
     ```bash
-    az container create --resource-group GAB2019Group --name gab2019container --image <acrLoginServer>/gabdemo:v1 --dns-name-label gab-2019-container-demo --ports 80
+    az container create --resource-group GAB2019Group --name gab2019container --image <acrLoginServer>/gabdemo:v1 --dns-name-label <dns-name-label> --ports 80
     # Enter your admin Azure Container Registry username and password (copied a few steps ago).
     ```
 
