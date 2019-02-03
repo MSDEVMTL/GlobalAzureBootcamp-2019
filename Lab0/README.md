@@ -111,7 +111,7 @@ GitHub is a development platform inspired by the way you work. From open source 
 
 # Need help?
 
-Contact our volountaire:
+Contact our volunteers:
 
 - Frank Boucher : Twitter [@fboucheros](https://twitter.com/fboucheros)
 - Alain Vezina : Twitter [@avezina](https://twitter.com/avezina)
