@@ -8,19 +8,37 @@ Add a KeyVault to the ARM tempalte. migrate the API and storage keys to the keyv
 
 ## Let's code!
 
+1. [Create an identity for the App](#1-Create-an-identity-for-the-App)
+1. [Create a KeyVault to store secrets](#2-Create-a-keyVault-to-store-secrets)
+1. [Give the app access to the KeyVault's secrets](#3-Give-the-app-access-to-the-KeyVault's-secrets)
+1. [Move storage account key to KeyVault](#4-Move-storage-account-key-to-KeyVault)
+1. [Modify the app to get the Storage Account Keys from KeyVault](#5-Modify-the-app-to-get-the-Storage-Account-Keys-from-KeyVault)
+#. [Reference](#Reference)
+
 ## 1. Create an identity for the App
 
 In order to access different azure services our app will need an identity.
 
 1. Login to the [azure portal](https://portal.azure.com)
-1. Use the search bar to get to the "Active Directory" service
-   [pic here]
-1. On the left side select "App registrations" then click on "New application registration [pic here]
-1. Select a name and assign a Sign-on URL (can be anything and doesn't need to point to a valid website)
-   [pic here]
-1. Create a key for you app, click on settings, then keys, then add a new key and click save
-1. Now copy the Application ID, object Id and the newly create key value in a notepad, we'll need them later
-   [pic]
+2. Use the search bar to get to the "Active Directory" service
+
+![](medias/search-active-directory.png)
+
+3. On the left side select "App registrations" then click on "New application registration
+
+![](medias/select-app-registration.png)
+
+4. Select a name and assign a Sign-on URL (can be anything and doesn't need to point to a valid website)
+
+![](medias/create-form.png)
+
+5. Create a key for you app, click on settings, then keys, then add a new key and click save
+
+![](medias/create-key.png)
+
+6. Now copy the Application ID, object Id and the newly create key value in a notepad, we'll need them later
+
+![](medias/app-values.png)
 
 ## 2. Create a KeyVault to store secrets
 
