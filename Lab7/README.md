@@ -66,7 +66,7 @@ In order to access different azure services our app will need an identity.
     "dependsOn": []
 }
 ```
-> TIP: note that we are using template expressions like `[resourceGroup().location]` and `[subscription().tenantId]` to fill out automatically some values
+> TIP: note that we are using template expressions like `[resourceGroup().location]` and `[subscription().tenantId]` to fill out automatically some values relative to the location where the resource will be deployed.
 3. Add a new parameter named `keyVaultName` and select a default value
 
 ```json
@@ -94,7 +94,7 @@ In order to retrieve a secret from KeyVault you need to give explicit permission
     }
 }]
 ```
-3. Add a new parameter named `applicationObjectId` and set the default value to the `ObjectId` we got from Step 1
+3. Add a new parameter named `applicationObjectId` and set the default value to the `ObjectId` we got from [Step 1.6](#1-Create-an-identity-for-the-App)
 
 ```json
 "applicationObjectId": {
