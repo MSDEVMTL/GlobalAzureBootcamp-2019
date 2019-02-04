@@ -9,22 +9,23 @@ We will add a Azure Cognitive Services Vision to our ARM template. Modify the co
 # Let's code!
 
 - [Add Azure components](#add-azure-components)
-  - [Modify the ARM template to add the Computer Vision service](#modify-the-arm-template-to-add-the-computer-vision-service)
-  - [Modify the ARM template to add the Blob Storage](#modify-the-arm-template-to-add-the-blob-storage)
-  - [Deploy the ARM templates to Azure ??](#deploy-the-arm-templates-to-azure---)
-  - [Getting the API keys for the API](#getting-the-api-keys-for-the-api)
-  - [Getting the blob storage connection string](#getting-the-blob-storage-connection-string)
+  * [Modify the ARM template to add the Computer Vision service](#modify-the-arm-template-to-add-the-computer-vision-service)
+  * [Modify the ARM template to add the Blob Storage](#modify-the-arm-template-to-add-the-blob-storage)
+  * [Deploy the ARM templates to Azure ??](#deploy-the-arm-templates-to-azure---)
+  * [Getting the API keys for the API](#getting-the-api-keys-for-the-api)
+  * [Getting the blob storage connection string](#getting-the-blob-storage-connection-string)
 - [Upload the dog image into your storage account](#upload-the-dog-image-into-your-storage-account)
 - [Let's add computer vision to our web application](#let-s-add-computer-vision-to-our-web-application)
-  - [Adding Computer Vision API to the application](#adding-computer-vision-api-to-the-application)
-  - [Adding Blob storage library to the application](#adding-blob-storage-library-to-the-application)
-  - [Using the API in code](#using-the-api-in-code)
-    - [Setting up the resources keys](#setting-up-the-resources-keys)
-    - [Creating classes to consume the storage and computer vision api](#creating-classes-to-consume-the-storage-and-computer-vision-api)
+  * [Adding the Computer Vision API library to the application](#adding-the-computer-vision-api-library-to-the-application)
+  * [Adding the Blob storage library to the application](#adding-the-blob-storage-library-to-the-application)
+  * [Using the API in code](#using-the-api-in-code)
+    + [Setting up the resources keys](#setting-up-the-resources-keys)
+    + [Add code to make use of the resource keys](#add-code-to-make-use-of-the-resource-keys)
+    + [Creating classes to consume the storage and computer vision api](#creating-classes-to-consume-the-storage-and-computer-vision-api)
       - [BlobStorageManager](#blobstoragemanager)
       - [ImageAnalyzer](#imageanalyzer)
       - [Wiring all this into the Startup](#wiring-all-this-into-the-startup)
-    - [Creating the controller and view](#creating-the-controller-and-view)
+  * [Creating the controller and view](#creating-the-controller-and-view)
 - [Reference](#reference)
 
 # Add Azure components
@@ -144,13 +145,23 @@ To do the same in the Azure Portal;
 
 Azure components are now deployed abd test data is ready. It s now time to add Computer Vision functionality to the web appication.
 
-## Adding Computer Vision API to the application
+## Adding the Computer Vision API library to the application
 
-Install the Computer Vision client library NuGet package. To do so, open the terminal in your Visual Studio Code (```ctrl+` ```) and type ```dotnet add package Microsoft.Azure.CognitiveServices.Vision.ComputerVision```
+We need to install the Computer Vision client library NuGet package. 
 
-## Adding Blob storage library to the application
+To do so; 
 
-Install the Blob storage library Nuget Package. To do so, again in your terminal type ```dotnet add package Microsoft.Azure.Storage.Blob```
+- open the terminal in your Visual Studio Code (```ctrl+` ```) 
+- type ```dotnet add package Microsoft.Azure.CognitiveServices.Vision.ComputerVision```
+
+## Adding the Blob storage library to the application
+
+We need to install the Blob storage library Nuget Package. 
+
+To do so; 
+
+- again in your terminal 
+- type ```dotnet add package Microsoft.Azure.Storage.Blob```
 
 
 
@@ -160,9 +171,13 @@ Install the Blob storage library Nuget Package. To do so, again in your terminal
 
 ### Setting up the resources keys
 
-To use the computer vision api, first copy the api key you copied earlier into the file appsettings.json, under the ```Keys:ComputerVision:ApiKey``` section. In the ```Keys:ComputerVision:ApiEndPoint``` section, enter the computer vision api endpoint. It should like like this: ```https://eastus.api.cognitive.microsoft.com```, where ```eastus``` is the region into which you created your computer vision api resource into.
+To use the computer vision api, first copy the api key you copied earlier into the file appsettings.json, under the ```Keys:ComputerVision:ApiKey``` section. 
+
+In the ```Keys:ComputerVision:ApiEndPoint``` section, enter the computer vision api endpoint. It should like like this: ```https://eastus.api.cognitive.microsoft.com```, where ```eastus``` is the region into which you created your computer vision api resource into.
 
 Now for the storage connection string, copy the connection string you copied earlier into the section ```Keys:Storage:ConnectionString```.
+
+### Add code to make use of the resource keys
 
 To be able to use these keys into our application, create a class in the application named ```KeysOptions```. We will be using the Options pattern available in ASP.NET Core. In that class, you will need to copy the structure of your appsettings into code. It should look like the following:
 
@@ -193,6 +208,8 @@ public class ComputerVisionOptions
  ```
 
  Note that we have also created classes for the sub-sections.
+
+
 
 ### Creating classes to consume the storage and computer vision api
 
@@ -306,7 +323,7 @@ services.Configure<KeysOptions>(Configuration.GetSection("Keys"))
 
 This will tell ASP.NET Core to map our appsettings structure to an object structure.
 
-### Creating the controller and view
+## Creating the controller and view
 
  In the controller folder, create a class named ```AnalyzerController```. This is the controller that will be called by our application to deal with the image analysis.
 
