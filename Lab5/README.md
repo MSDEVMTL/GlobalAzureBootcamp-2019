@@ -2,17 +2,36 @@
 
 # Lab 5 - Azure Cognitive Services
 
-## Goal
+# Goal
 
 We will add a Azure Cognitive Services Vision to our ARM template. Modify the code of the web application to read one image (provided) from a Azure blob storage, and display the information returned by the Vision API. The image ( a dog or a cat ) will be uploaded to the Blob storage using the Azure Portal or the Azure Storage Explorer.
 
-## Let's code!
+# Let's code!
 
-### Add Azure components
+- [Add Azure components](#add-azure-components)
+  - [Modify the ARM template to add the Computer Vision service](#modify-the-arm-template-to-add-the-computer-vision-service)
+  - [Modify the ARM template to add the Blob Storage](#modify-the-arm-template-to-add-the-blob-storage)
+  - [Deploy the ARM templates to Azure ??](#deploy-the-arm-templates-to-azure---)
+  - [Getting the API keys for the API](#getting-the-api-keys-for-the-api)
+  - [Getting the blob storage connection string](#getting-the-blob-storage-connection-string)
+- [Upload the dog image into your storage account](#upload-the-dog-image-into-your-storage-account)
+- [Let's add computer vision to our web application](#let-s-add-computer-vision-to-our-web-application)
+  - [Adding Computer Vision API to the application](#adding-computer-vision-api-to-the-application)
+  - [Adding Blob storage library to the application](#adding-blob-storage-library-to-the-application)
+  - [Using the API in code](#using-the-api-in-code)
+    - [Setting up the resources keys](#setting-up-the-resources-keys)
+    - [Creating classes to consume the storage and computer vision api](#creating-classes-to-consume-the-storage-and-computer-vision-api)
+      - [BlobStorageManager](#blobstoragemanager)
+      - [ImageAnalyzer](#imageanalyzer)
+      - [Wiring all this into the Startup](#wiring-all-this-into-the-startup)
+    - [Creating the controller and view](#creating-the-controller-and-view)
+- [Reference](#reference)
+
+# Add Azure components
 
 Let's add the Cognitive Services to our deployment to be able to make use of it.
 
-#### Modify the ARM template to add the Computer Vision service
+## Modify the ARM template to add the Computer Vision service
 
 DO WE HAVE A "STARTING" ARM TEMPLATE?
 IF SO, LETS SHOW WHERE TO OPEN AND LOCATE WHERE TO ADD THE BELOW
@@ -39,7 +58,7 @@ Under the resources array, add the following:
 
 This will tell Azure that we want an nstance of Cognitive Services.
 
-Nos ... in the parameters section, add the following:
+Now ... in the parameters section, add the following:
 
 ```json
 "accounts_cs_vision_name": {
@@ -54,15 +73,15 @@ This will tell Azure to add a meaningful description to the newly created resour
 
 At this point the ARM template should look like the one here (LINK TO FINIsHED LAB05_ARM_TEMPLATE_FINAL)
 
-#### Modify the ARM template to add the Blob Storage
+## Modify the ARM template to add the Blob Storage
 
 NOT SURE IF WE ALREADY HAVE BLOC STORAGE AVAILABLE AT THIS POINT
 
-#### Deploy the ARM templates to Azure ??
+## Deploy the ARM templates to Azure ??
 
 NEED TO ADD STEPS TO DEPLOY THE ARM TEMPLATE AND GET FUncTIONING COGNITIVE SERVICES
 
-#### Getting the API keys for the API
+## Getting the API keys for the API
 
 Once your ARM template has successfully been deployed, its time to get the keys to use the services.
 
@@ -78,7 +97,7 @@ Copy this value into a text editor, we will be using it in the next sections.
 
 ![computer-vision-keys][computer-vision-keys]
 
-#### Getting the blob storage connection string
+## Getting the blob storage connection string
 
 To get your storage key; 
 
@@ -94,7 +113,7 @@ Copy this value into a text editor, we will be using it in the next sections.
 
 ![blob-connectionstring][blob-connectionstring]
 
-### Upload the dog image into your storage account
+# Upload the dog image into your storage account
 
 We will upload an image to blob storage to serve as test data.
 
@@ -121,15 +140,15 @@ To do the same in the Azure Portal;
 
 ![public-access-blob-portal][public-access-blob-portal]
 
-### Let's add computer vision to our web application
+# Let's add computer vision to our web application
 
 Azure components are now deployed abd test data is ready. It s now time to add Computer Vision functionality to the web appication.
 
-#### Adding Computer Vision API to the application
+## Adding Computer Vision API to the application
 
 Install the Computer Vision client library NuGet package. To do so, open the terminal in your Visual Studio Code (```ctrl+` ```) and type ```dotnet add package Microsoft.Azure.CognitiveServices.Vision.ComputerVision```
 
-#### Adding Blob storage library to the application
+## Adding Blob storage library to the application
 
 Install the Blob storage library Nuget Package. To do so, again in your terminal type ```dotnet add package Microsoft.Azure.Storage.Blob```
 
@@ -137,9 +156,9 @@ Install the Blob storage library Nuget Package. To do so, again in your terminal
 
 
 
-### Using the API in code
+## Using the API in code
 
-#### Setting up the resources keys
+### Setting up the resources keys
 
 To use the computer vision api, first copy the api key you copied earlier into the file appsettings.json, under the ```Keys:ComputerVision:ApiKey``` section. In the ```Keys:ComputerVision:ApiEndPoint``` section, enter the computer vision api endpoint. It should like like this: ```https://eastus.api.cognitive.microsoft.com```, where ```eastus``` is the region into which you created your computer vision api resource into.
 
@@ -175,13 +194,13 @@ public class ComputerVisionOptions
 
  Note that we have also created classes for the sub-sections.
 
-#### Creating classes to consume the storage and computer vision api
+### Creating classes to consume the storage and computer vision api
 
 Under the root of your application, create a folder called ```Services``` and create 2 classes (2 classes): ```BlobStorageManager``` and ```ImageAnalyzer```
 
 The ```BlobStorageManager``` is used to consume the blob storage and the ```ImageAnalyzer``` is used to consume the computer vision api.
 
-##### BlobStorageManager
+#### BlobStorageManager
 
 In order to consume the blob storage, copy the following code into the class ```BlobStorageManager```
 
@@ -220,7 +239,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 ```
 
-##### ImageAnalyzer
+#### ImageAnalyzer
 
 To consume the computer vision api, copy the following code into the class ```ImageAnalyzer```
 
@@ -265,7 +284,7 @@ using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 ```
 
-##### Wiring all this into the Startup
+#### Wiring all this into the Startup
 
 In your ```Startup``` class, under the ```ConfigureServices``` method, add the following:
 
@@ -287,7 +306,7 @@ services.Configure<KeysOptions>(Configuration.GetSection("Keys"))
 
 This will tell ASP.NET Core to map our appsettings structure to an object structure.
 
-#### Creating the controller and view
+### Creating the controller and view
 
  In the controller folder, create a class named ```AnalyzerController```. This is the controller that will be called by our application to deal with the image analysis.
 
@@ -500,7 +519,7 @@ Height: @Model.Metadata.Height<br />
 Format: @Model.Metadata.Format<br />
 ```
 
-## Reference
+# Reference
 
 [Quickstart: Analyze an image using the Computer Vision SDK and C#](https://docs.microsoft.com/en-us/azure/cognitive-services/Computer-vision/quickstarts-sdk/csharp-analyze-sdk)
 
@@ -508,7 +527,7 @@ Format: @Model.Metadata.Format<br />
 
 [Options pattern in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-2.2)
 
-## End
+# End
 [Previous Lab](../Lab4/README.md)
 [Next Lab](../Lab6/README.md)
 
