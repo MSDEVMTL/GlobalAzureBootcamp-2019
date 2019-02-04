@@ -8,7 +8,16 @@ We will add a Azure Cognitive Services Vision to our ARM template. Modify the co
 
 ## Let's code!
 
-### Modify the ARM template to add the computer vision
+### Add Azure components
+
+Let's add the Cognitive Services to our deployment to be able to make use of it.
+
+#### Modify the ARM template to add the Computer Vision service
+
+DO WE HAVE A "STARTING" ARM TEMPLATE?
+IF SO, LETS SHOW WHERE TO OPEN AND LOCATE WHERE TO ADD THE BELOW
+
+Open the existing ARM template located here (LINK TO FINIsHED LAB05_ARM_TEMPLATE_INITIAL).
 
 Under the resources array, add the following:
 
@@ -28,7 +37,9 @@ Under the resources array, add the following:
 }
 ```
 
-in the parameters section, add the following:
+This will tell Azure that we want an nstance of Cognitive Services.
+
+Nos ... in the parameters section, add the following:
 
 ```json
 "accounts_cs_vision_name": {
@@ -39,46 +50,92 @@ in the parameters section, add the following:
 }
 ```
 
-### Getting the API keys for the API
+This will tell Azure to add a meaningful description to the newly created resource.
 
-Once your ARM templated has successfully been deployed, go in the Azure Portal and search for your computer vision resource name in the search bar. Once in the computer vision resource blade, go in the keys section and copy the KEY 1 into a text editor. We will be using it in the next sections.
+At this point the ARM template should look like the one here (LINK TO FINIsHED LAB05_ARM_TEMPLATE_FINAL)
+
+#### Modify the ARM template to add the Blob Storage
+
+NOT SURE IF WE ALREADY HAVE BLOC STORAGE AVAILABLE AT THIS POINT
+
+#### Deploy the ARM templates to Azure ??
+
+NEED TO ADD STEPS TO DEPLOY THE ARM TEMPLATE AND GET FUncTIONING COGNITIVE SERVICES
+
+#### Getting the API keys for the API
+
+Once your ARM template has successfully been deployed, its time to get the keys to use the services.
+
+To get your computer vision keys;
+
+- navigate to the Azure portal
+- locate your computer vision resource
+- go into the keys section
+  - find the key value under key1
+  - click the Copy button to copy the key
+
+Copy this value into a text editor, we will be using it in the next sections.
 
 ![computer-vision-keys][computer-vision-keys]
 
-### Getting the blob storage connection string
+#### Getting the blob storage connection string
 
-To get your storage key, navigate to the Azure portal, then locate your storage account.
+To get your storage key; 
 
-In the Settings section of the storage account overview, select Access keys. Here, you can view your account access keys and the complete connection string for each key.
+- navigate to the Azure portal
+- locate your storage account
+- in the Settings section of the storage account overview
+  - select Access keys
+    - here you can view your account access keys and the complete connection string for each key
+  - find the Connection string value under key1
+  - click the Copy button to copy the connection string
 
-Find the Connection string value under key1, and select the Copy button to copy the connection string.
-
-Copy this value into a text editor. We will be using it in the next sections.
+Copy this value into a text editor, we will be using it in the next sections.
 
 ![blob-connectionstring][blob-connectionstring]
 
-### Adding Computer Vision API to the application
-
-Install the Computer Vision client library NuGet package. To do so, open the terminal in your Visual Studio Code (```ctrl+` ```) and type ```dotnet add package Microsoft.Azure.CognitiveServices.Vision.ComputerVision```
-
-### Adding Blob storage library to the application
-
-Install the Blob storage library Nuget Package. To do so, again in your terminal type ```dotnet add package Microsoft.Azure.Storage.Blob```
-
 ### Upload the dog image into your storage account
 
-Create a container in your storage blob called ```images```, then upload the dog image found in the data directory into this container. Use either the portal or the storage explorer application.
+We will upload an image to blob storage to serve as test data.
+
+- create a container in your storage blob called ```images```
+- upload the dog image found in the data directory into this container
+  - Use either the portal or the storage explorer application (LINK TO STORAGE EXPLORER)
 
 **Make sure to set the access level to public so the computer vision can read from it**
 
-To do that in Azure Storage Explorer, right click on your container and select Set Public Access Level
+To do that in Azure Storage Explorer;  
+
+- right click on your container
+- select Set Public Access Level
 
 ![public-access-blob-se][public-access-blob-se]
 
-To do the same in the Azure Portal, navigate to your storage account, then click on the Blobs under Blob service. Select your blob (in our case images), then click on Access policy.
-Select Blob (anonymous read access for blobs only) as the public access level
+To do the same in the Azure Portal; 
+
+- navigate to your storage account
+- click on the Blobs under Blob service
+- select your blob (in our case images)
+- click on Access policy
+- Select Blob (anonymous read access for blobs only) as the public access level
 
 ![public-access-blob-portal][public-access-blob-portal]
+
+### Let's add computer vision to our web application
+
+Azure components are now deployed abd test data is ready. It s now time to add Computer Vision functionality to the web appication.
+
+#### Adding Computer Vision API to the application
+
+Install the Computer Vision client library NuGet package. To do so, open the terminal in your Visual Studio Code (```ctrl+` ```) and type ```dotnet add package Microsoft.Azure.CognitiveServices.Vision.ComputerVision```
+
+#### Adding Blob storage library to the application
+
+Install the Blob storage library Nuget Package. To do so, again in your terminal type ```dotnet add package Microsoft.Azure.Storage.Blob```
+
+
+
+
 
 ### Using the API in code
 
