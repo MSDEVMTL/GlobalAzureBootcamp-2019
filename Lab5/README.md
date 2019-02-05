@@ -26,6 +26,7 @@ We will add a Azure Cognitive Services Vision to our ARM template. Modify the co
       - [ImageAnalyzer](#imageanalyzer)
       - [Wiring all this into the Startup](#wiring-all-this-into-the-startup)
   * [Creating the controller and view](#creating-the-controller-and-view)
+  * [Folder structure](#folder-structure)
 - [Reference](#reference)
 
 # Add Azure components
@@ -162,10 +163,6 @@ To do so;
 
 - again in your terminal 
 - type ```dotnet add package Microsoft.Azure.Storage.Blob```
-
-
-
-
 
 ## Using the API in code
 
@@ -536,6 +533,12 @@ Height: @Model.Metadata.Height<br />
 Format: @Model.Metadata.Format<br />
 ```
 
+## Folder structure
+
+If you followed the steps above, your folder structure should look like this
+
+![folder-structure][folder-structure]
+
 # Reference
 
 [Quickstart: Analyze an image using the Computer Vision SDK and C#](https://docs.microsoft.com/en-us/azure/cognitive-services/Computer-vision/quickstarts-sdk/csharp-analyze-sdk)
@@ -553,3 +556,4 @@ Format: @Model.Metadata.Format<br />
 [blob-connectionstring]: medias/portal-connectionstring-blob.png "Storage Account connection string"
 [public-access-blob-se]: medias/public-access-blob-se.png "Public access blob through storage explorer"
 [public-access-blob-portal]: medias/public-access-blob-portal.png "Public access blob through the azure portal"
+[folder-structure]: medias/folder-structure.png "Folder structure"
