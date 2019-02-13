@@ -10,9 +10,9 @@ In this lab you will create an application in .Net Core, push it to a remote rep
 
 ### Build The Application
 
-Let's create a new web application using the .Net Core. Open a terminal, and navigate to a "dev" folder (ex: C:\Dev).
+First, create a folder named `gab2019`. This will be the root folder for today's solution, all subscequent labs during the day will add content and sub-folder to this one. Then let's create a new web application using the .Net Core. Open a terminal, and navigate to your new root folder "gab2019" folder (ex: C:\Dev\gab2019\).
 
-    cd C:\dev\GABDemo
+    cd C:\dev\gab2019\
 
 Let's scafold an application named GABCDemo using the following command:
 
@@ -30,13 +30,13 @@ Open the solution into Visual Studio Code with:
 
 To create a Git repository you can from Visual Studio Code open a terminal (Ctrl + \`) or return to the terminal windows already open. You should be in the folder `C:\Dev\GABCDemo`. Type
 
-    git Init
+    git init
 
 This command will initialize a local repository. Now let's add alll the code files to the repo.
 
-    git add -A -m "initil commit"
+    git add -A -m "initial commit"
 
-Now Git will track the evolution of our code. Git is a decentralized code repository system, therefore there is usually many repository where you can push and pull. However, before we can push our code to a remote repository we have other task to do. Will come back to it later.
+Now, Git will track the evolution of our code. Git is a decentralized code repository system, therefore there is usually many repository where you can push and pull. However, before we can push our code to a remote repository we have other task to do. Will come back to it later.
 
 
 ### Creat The Azure WebApp
@@ -59,7 +59,7 @@ In the top section of the blade you will found the URL of the web site, click on
 
 ### Create an Azure DevOps project 
 
-Navigate to [Dev.Azure.com](http://Dev.Azure.com) and if you don't already have an account create one it's free! Once you are logged-in, create a new project by clicking the New project blue button in the top right corner.
+Navigate to [Dev.Azure.com](http://Dev.Azure.com) and if you don't already have an account [create one it's free!](../Lab0/README.md#anchors-azure-devops) Once you are logged-in, create a new project by clicking the New project blue button in the top right corner.
 
 ![createNewProject][createNewProject]
 
@@ -73,11 +73,21 @@ Here you have two options you can use the repository provided in the Azure DevOp
 
 On Azure DevOps portal, from the left menu select *Repos*. Copy the command under the `or push an existing repository from command line`.
 
-[ADD AN IMAGE]
+![gitremoteadd][gitremoteadd]
 
 #### Option 2: Using GitHub
 
-[SOON]
+Azure Pipeline support many different repository. One that is very popular is Github. If you don't already have an account [create one it's free!](../Lab0/README.md#github-optional) Once you are logged-in, create a new repository by expending the "+" in the top right corner, then clicking the **New repository** button.
+
+![NewGitHubRepoHere][NewGitHubRepoHere]
+
+Enter the name of your project (ex: Gab2019), and click the **Create repository** green button.
+
+![GithubRepoDetails][GithubRepoDetails]
+
+Now from this page grab the code under `…or push an existing repository from the command line`
+
+![AddGitHubRemote][AddGitHubRemote]
 
 ### Add a Remote Repository
 
@@ -191,3 +201,7 @@ Once the deployment is done, refresh your web browser where the web page was sho
 [TriggerRelease]: medias/TriggerRelease.png
 [git-pull]: medias/git-pull.png
 [resourceGroup]: medias/resourceGroup.png
+[gitremoteadd]: medias/gitremoteadd.png
+[NewGitHubRepoHere]: medias/NewGitHubRepoHere.png
+[GithubRepoDetails]: medias/GithubRepoDetails.png
+[AddGitHubRemote]: medias/AddGitHubRemote.png
