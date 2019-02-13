@@ -4,7 +4,7 @@
 
 ## Goal
 
-Add a KeyVault to the ARM tempalte. migrate the API and storage keys to the keyvauls. Use the keyvault instead of the keys  in the ARM template and application.
+Add a KeyVault to the ARM tempalte. migrate the API and storage keys to the keyvault. Use the keyvault instead of the keys  in the ARM template and application.
 
 ## Let's code!
 

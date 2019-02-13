@@ -2,7 +2,7 @@
 
 # Lab 0 - What you will need before the bootcamp
 
-It's very important that you do this Lab **BEFORE** the day of the bootcamp.
+To get the best of the Global Azure bootcamp 2019, we **strongly** suggest that you prepare your station with all the required software. Nothing complicated and all the tools that we are going to use during the bootcamp supports macOS, Linux, and Windows - so you can hit the ground running, no matter the platform.
 
 ## The Tools
 
@@ -10,28 +10,39 @@ It's very important that you do this Lab **BEFORE** the day of the bootcamp.
 
 ![code][code]
 
-You don't need Visual Studio Code to be able to do anything on Azure. However, all the explanation will assume you have it installed. It's a really great text editor with tons of extensions that can improve so much your development experience. To install it, navigate to [code.visualstudio.com](https://code.visualstudio.com/?wt.mc_id=vscom_downloads), and select your platform.
+Visual Studio Code is a lightweight source code editor developed by Microsoft for Windows, Linux and macOS. It includes support for debugging, embedded Git control, syntax highlighting, intelligent code completion, snippets, and code refactoring.
+
+It's not a requirement but all labs will assume that you have it installed. To install Visual Studio Code, navigate to [code.visualstudio.com](https://code.visualstudio.com/?wt.mc_id=vscom_downloads), and select your platform.
 
 ![code-select][code-select]
 
 #### Extension
 
-One of the strengths of Visual Studio Code is all his extensions. During the following Labs, you will need so of the extensions. Installing an extension is very simple and it's done directly from VSCode.
+One of the strengths of Visual Studio Code is all its extensions.  During the following Labs, we will use some of them to make things easier.
 
-Open VSCode and from the left menu, select the Extensions (Ctrl+Shift+X). Then enter `Azure resource manager` into the search bar at the top of the Extensions Marketplace panel that just open. Click on the little _Install_ green button on the side of the extension to install it.
+Installing an extension is very simple and it's done directly from VSCode. Follow these instruction:
+
+* Open VSCode and from the left menu and select the Extensions (Ctrl+Shift+X).
+* Type `Azure Resource Manager Snippets` into the search bar at the top of the Extensions Marketplace panel that just openned.
+* From the search result, select `Azure Resource Manager Snippets`.
+* Click on the little *Install* green button on the side of the extension to proceed with installation.
+
+You just installed your first extension.  Now, make sure to install at least these:
 
 ![code-extensions][code-extensions]
 
--   **Azure Resource Manager Snippets**: This extension adds snippets to Visual Studio Code for creating Azure Resource Manager Templates.
--   **Azure Functions**: Create, debug, manage, and deploy Azure Functions directly from VS Code.
--   **Docker**: Install the [Docker](https://marketplace.visualstudio.com/items?itemName=PeterJausovec.vscode-docker) extension, see [Working with Docker](https://code.visualstudio.com/docs/azure/docker) for more information.
--   **Docker Explorer**: Install the [Docker Explorer](https://marketplace.visualstudio.com/items?itemName=formulahendry.docker-explorer) extension.
+- **Azure Resource Manager Snippets**: This extension adds snippets to Visual Studio Code for creating Azure Resource Manager Templates.
+- **Azure Functions**: Create, debug, manage, and deploy Azure Functions directly from VS Code.
+- **Docker**: Adds syntax highlighting, commands, hover tips, and linting for Dockerfile and docker-compose files.
+- **Docker Explorer**: Manage Docker Containers, Docker Images, Docker Hub and Azure Container Registry
 
-Once all the extensions are installed, click the _Refresh_ button to restart VS Code.
+![installdockerextension][installdockerextension]
+
+Once all the extensions are installed, click the *Refresh* button to restart VS Code.
 
 ### Azure CLI
 
-The Azure CLI is a command-line tool providing a great experience for managing Azure resources. The CLI is designed to make scripting easy, query data, support long-running operations, and more. Ton install it just follow the instruction based on your platform on the site: [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
+The Azure CLI is a command-line tool providing a great experience for managing Azure resources. The CLI is designed to make scripting easy, query data, support long-running operations, and more. To install it just follow the instruction based on your platform on the site: [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
 
 ![azurecli][azurecli]
 
@@ -51,31 +62,71 @@ To install this great tool go to the official web page [Git](https://git-scm.com
 
 ![gitdownload][gitdownload]
 
-THis will install the console version of git. This is good enough to be fonctional. However if you are more visual or if you prefer graphical tool GitKraken is an excellent choice. You can download it from here: [Git Kraken](https://www.gitkraken.com/invite/saVBBaq4)
+This will install the console version of git. This is good enough to be fonctional. However if you are more visual or if you prefer graphical tool GitKraken is an excellent choice. You can download it from here: [Git Kraken](https://www.gitkraken.com/invite/saVBBaq4)
 
 ![gitkraken][gitkraken]
+
+### Azure Storage Explorer (optional)
+
+In Lab 5 and Lab 6 we will be uploading files to Azure Storage Explorer. You can definitely do that directly from the Azure portal. However, great tools that provide much more flexibility and ease is the Azure Storage Explorer.
+
+![azureexplorer][azureexplorer]
+
+Upload, download, and manage blobs, files, queues, tables, and Cosmos DB entities. Gain easy access to manage your virtual machine disks. Work with either Azure Resource Manager or classic storage accounts, plus manage and configure cross-origin resource sharing (CORS) rules. In short, a great tool to have on your machine.
+
+It can be download from [here](https://azure.microsoft.com/en-ca/features/storage-explorer) and it's compatible with MacOS, Windows, and Linux.
+
+Once Azure Storage Explorer is installed, you will need to add your account. The first time Azure Storage Explorer opens it will ask you to sign-in. (To add more account click on the plug icon in the left menubar)
+
+![azexplorer-AddAccount][azexplorer-AddAccount]
+
+You are now ready for the Labs.
 
 ## Accounts
 
 ### Azure Subscription
 
-### Azure DevOps
+Having an Azure subscription is manatory to be able to do the Global Azure Bootcamp. If you don't own an Azure subscription already, you can create your **free** account today. It comes with 200$ credit, so you can experience almost everything without spending a dime. 
+
+Make sure to have your account up and ready before the bootcamp.
+
+[Create your free Azure account today](https://azure.microsoft.com/en-us/free/)
+
+![freeAzure][freeAzure]
+
+### [Azure DevOps]
+
+For the GLobal Azure Bootcamp, you will need an Azure DevOps account. It's free! Get 10 free parallel jobs and unlimited minutes for your open source projects with Pipelines.
+
+[Create your free Azure DevOps account today!](https://azure.microsoft.com/en-ca/services/devops/)
+
+![azureDevOps][azureDevOps]
 
 ### GitHub (optional)
 
+GitHub is a development platform inspired by the way you work. From open source to business, you can host and review code, manage projects, and build software.  During the Global Azure Bottcamp you could host your code in a GitHub Repository if you prefer it to Azure DevOps. 
+
+[Create your free account today](https://github.com/)
+
+
 # Need help?
 
-Contact our volountaire:
+Contact our volunteers:
 
--   Frank Boucher : Twitter [@fboucheros](https://twitter.com/fboucheros)
--
+- Frank Boucher : Twitter [@fboucheros](https://twitter.com/fboucheros)
+- Alain Vezina : Twitter [@avezina](https://twitter.com/avezina)
 
 [Next Lab](../Lab1/README.md)
 
-[gablogo]: ../medias/GlobalAzureBootcamp2019.png 'Global Azure Bootcamp 2019'
-[code]: medias/code-screenshot.png 'Visual Studio Code screenshot'
+[gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
+[code]: medias/code-screenshot.png "Visual Studio Code screenshot"
 [code-select]: medias/code-select.jpg
 [code-extensions]: medias/code-extensions.jpg
 [azurecli]: medias/azurecli.jpg
 [gitdownload]: medias/gitdownload.jpg
 [gitkraken]: medias/gk-merge-edit.gif
+[azureexplorer]: medias/AzureBlobStorage.png
+[azexplorer-AddAccount]: medias/azexplorer-AddAccount.png
+[installdockerextension]: medias/installdockerextension.png
+[freeAzure]: medias/freeAzure.png
+[azureDevOps]: medias/azureDevOps.png

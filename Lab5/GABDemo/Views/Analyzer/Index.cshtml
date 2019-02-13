@@ -1,0 +1,26 @@
+﻿<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Image</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.Files != null)
+        {
+            int count = 1;
+            foreach (Uri file in ViewBag.Files)
+            {
+                <tr>
+                    <th scope="row">@count</th>
+                    <td>@file</td>
+                    <td>
+                        <a asp-action="Analyze" asp-route-imageUrl="@file.AbsoluteUri">Analyze</a>
+                    </td>
+                </tr>
+                count++;
+            }
+        }
+    </tbody>
+</table>
