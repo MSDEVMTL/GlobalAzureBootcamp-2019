@@ -59,7 +59,7 @@ In the top section of the blade you will found the URL of the web site, click on
 
 ### Create an Azure DevOps project 
 
-Navigate to [Dev.Azure.com](http://Dev.Azure.com) and if you don't already have an account [create one it's free!](../Lab0/README.md#anchors-azure-devops) Once you are logged-in, create a new project by clicking the New project blue button in the top right corner.
+Navigate to [Dev.Azure.com](http://Dev.Azure.com) and if you don't already have an account [create one it's free!](../Lab0/README.md#azure-devops) Once you are logged-in, create a new project by clicking the New project blue button in the top right corner.
 
 ![createNewProject][createNewProject]
 
@@ -98,11 +98,11 @@ Return to the Terminal/ Console and paste the command.
 
 THe first line is to add the remote repository and name it "origin". The second line is to push (upload) the content of the local repository to origin (the remote one). You will need to enter your credential.
 
-> Note: You may need to add some creds from the Setting in Azure DevOps [NEED TO TEST AND DOCUMENT THIS]
-
 ### Continuous Integration
 
-The goal is to have the code to get to compile at every commit. From the Azure DevOps' left menubar, select *Pipelines*, and click the create new button. The first step is to identify where our code is, as you can see Azure DevOps is flexible and accept code from diffrent sources. Select the source you use at the present step.
+The goal is to have the code to get to compile at every commit. From the Azure DevOps' left menubar, select *Pipelines*, and click the create new button. The first step is to identify where our code is, as you can see Azure DevOps is flexible and accept code from diffrent sources. Select the source you use at the precedant step (option 1: Azure Repos or option 2: GitHub).
+
+> **Note:** If you are using GitHub you will need to Authorize Azure DevOps to your Github repository by clicking the Authorize button.
 
 ![NewPipeline_step1][NewPipeline_step1]
 
