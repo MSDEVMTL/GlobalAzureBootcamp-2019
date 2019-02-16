@@ -1,26 +1,55 @@
 ![gablogo][gablogo]
 
-# Lab 2 - Azure Resource Manager (ARM) template 
+# Lab 2 - Azure Resource Manager (ARM) template
 
 ## Goal
 
 In this lab you will create an Azure Resource Manager template to provision your Azure resources and configure them automatically.
 
-## What is Azure Resource Manager (ARM) template ?
+## What is Azure Resource Manager (ARM) template
 
-Azure Resource Manager allows you to provision your applications using a declarative template. In a single template, you can deploy multiple services along with their dependencies. You use the same template to repeatedly deploy your application during every stage of the application lifecycle.
+Azure Resource Manager allows you to provision your applications using a declarative template. In a single template, you can deploy multiple services along with their dependencies. You use the same template to repeatedly deploy your application during every stage of the application life cycle.
 
 ## The benefits of using Azure Resource Manager (ARM) template
 
 Resource Manager provides several benefits:
 
 * You can deploy, manage, and monitor all the resources for your solution as a group, rather than handling these resources individually.
-* You can **repeatedly** deploy your solution throughout the development lifecycle and **have confidence** your resources are deployed in a consistent state.
+* You can **repeatedly** deploy your solution throughout the development life cycle and **have confidence** your resources are deployed in a consistent state.
 * You can manage your infrastructure through declarative templates rather than scripts.
 * You can define the dependencies between resources so they're deployed in the correct order.
 * You can see your template as a documentation of your infrastructure.  ( [Infrastructure as a code](https://docs.microsoft.com/en-us/azure/devops/learn/what-is-infrastructure-as-code) )
 
-# Template format 
+ARM template are pretty simple.  They are just json files that describe the infrastructure of your project. You define your structure in a template and then use it with a parameter file.
+
+```txt
+myproject.json
+myproject.parameters.json
+```
+
+The two together can be deploy on different environment.  You will change your parameter file depending on which environment you are deploying.
+
+We could want to deploy a VM or a Web application.  Let's say that your development environment could required a smaller resource than your production environment. With ARM, it will be the same structure, the same code, except your parameter file will change the size of your VM or Web application.
+
+Also, when you deploying resources on Azure, ARM will parallelize you deployment.  It's really the fastest way to deploy.
+
+# Deployment using ARM templates
+
+You can deploy them using 3 ways.
+
+1) Using Visual Studio
+
+![VisualStudio_ARM](http://techgenix.com/tgwordpress/wp-content/uploads/2018/06/1050-05-04-1-1024x399.png)
+
+2) Using the Azure Portal
+
+![Portal_ARM](http://techgenix.com/tgwordpress/wp-content/uploads/2018/06/1050-05-07.png)
+
+3) Using powershell
+
+![Powershell_arm](http://techgenix.com/tgwordpress/wp-content/uploads/2018/06/1050-05-08-1024x390.png)
+
+# Template format
 
 A Resource manager template is simply a JSON file using this structure
 
@@ -48,136 +77,89 @@ A Resource manager template is simply a JSON file using this structure
 
 [reference](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authoring-templates)
 
-## Let's code!
+# Let's code!
 
-To host our solution, we will need to provision multiple Azure resources: 
+Now that we know a bit more on these ARM templates, let see how we can use them in our project.
 
-* A new [App Service Plan](https://docs.microsoft.com/en-us/azure/app-service/overview-hosting-plans) 
-* A new [Azure Web App](https://azure.microsoft.com/en-us/services/app-service/web/)
-* A new [Azure Storage](https://docs.microsoft.com/en-us/azure/storage/common/storage-introduction)
+In the previous lab, we deployed our web app on an Azure Web App.  This Azure Web App itself require an App Service Plan to run.
 
-Let's start by creating our template file. Open a terminal, and navigate to your "dev" folder (ex: C:\Dev).
+| Resource | Link
+|-----|-----|
+| App Service Plan | [Reference Link](https://docs.microsoft.com/en-us/azure/app-service/overview-hosting-plans)|
+| Azure Web App | [Reference Link](https://azure.microsoft.com/en-us/services/app-service/web/)|
 
-    cd C:\dev
+## Part 1 - Create our first ARM template
 
-Now, Create an empty folder 
+1) Now, create your Deployment folder
 
-    MD Deployment
+Under your solution folder, add a new folder `Deployment`.  This is where all your deployment scripts will be located.
 
-### Adding a service plan
+    C:\dev\gab2019\deployment
 
-```json
-{
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "appSvcPlanName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the App Service Plan that will host the Web App."
-      }
-    },
-    "svcPlanSize": {
-      "type": "string",
-      "allowedValues": [
-        "F1",
-        "D1",
-        "B1",
-        "B2",
-        "B3",
-        "S1",
-        "S2",
-        "S3",
-        "P1",
-        "P2",
-        "P3",
-        "P4"
-      ],
-      "defaultValue": "F1",
-      "metadata": {
-        "description": "The instance size of the App Service Plan."
-      }
-    },
-    "svcPlanSku": {
-      "type": "string",
-      "allowedValues": [
-        "Free",
-        "Shared",
-        "Basic",
-        "Standard",
-        "Premium"
-      ],
-      "defaultValue": "Free",
-      "metadata": {
-        "description": "The pricing tier of the App Service plan."
-      }
-    },
-    "location": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().location]",
-      "metadata": {
-        "description": "Location for all resources."
-      }
-    }
-  },
-  "variables": {},
-  "resources": [
-    {
-      "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2015-08-01",
-      "name": "[parameters('appSvcPlanName')]",
-      "location": "[parameters('location')]",
-      "sku": {
-        "name": "[parameters('svcPlanSize')]",
-        "tier": "[parameters('svcPlanSku')]",
-        "capacity": 1
-      }
-    }
-  ]
-}
-```
-### Adding a Web App 
+2) Under this new folder, create two new empty files. A ARM template and its parameter file.
 
-> We need to add a new parameter "appName"
+   C:\dev\gab2019\deployment\gab2019.json
+   C:\dev\gab2019\deployment\gab2019.parameters.json
 
-```json
-  "appName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of your App Service instance."
-      }
-    }
-```
-> We need to add a new resource type "Microsoft.Web/sites"
+3) Open Visual Studio code, if its not already open, and locate your two newly added files.
+
+4) Open your empty template file gab2019.json
+
+5) Insert an ARM Template Skeleton
+
+If you have install the extension, you can do it easily if you type `arm!` at the beginning of the file or copy this snippet directly.
+
+![Insert_ARM_Template_Skeleton](https://raw.githubusercontent.com/sam-cogan/arm-snippets-vscode/master/Extension/images/skeleton.gif)
 
 ```json
 {
-  "apiVersion": "2018-02-01",
-  "type": "Microsoft.Web/sites",
-  "dependsOn": [
-    "[resourceId('Microsoft.Web/serverfarms', parameters('appSvcPlanName'))]"
-  ],
-  "kind": "app",
-  "location": "[parameters('location')]",
-  "name": "[parameters('appName')]",
-  "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appSvcPlanName'))]",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {},
+    "resources": [],
+    "outputs": {}
 }
+
 ```
-### Now lets configure our Web App Automatically
+
+6) Insert an Azure Service Plan
+
+Move your cursor between the bracket `"resources": []` and still with the extension type `app
+
+```json
+
+```
+
+7) Insert an Azure Web App
+
+## Part 2 - Add an Azure Storage to the mix
 
 
+```json
+
+```
+
+## Part 3 - Configure our Web App Automatically
+
+
+```json
+
+```
 
 ## Reference
 
-If you want to know more on the syntax or the advanatge of using Azure Resource Manager please visit the following:
+If you want to know more on the syntax or the advantage of using Azure Resource Manager please visit the following:
 
 * [What is Azure Resource Manager](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview)
+* [Understanding the structure and syntax of Azure Resource Manager templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authoring-templates)
 * [Best practices using Azure Resource Manager (ARM) Templates](https://www.youtube.com/watch?v=myYTGsONrn0)
 * [Azure Resource Manager](https://azure.microsoft.com/en-us/resources/templates/)
-* [A library of example](https://github.com/Azure/azure-quickstart-templates)
+* [A library of examples](https://github.com/Azure/azure-quickstart-templates)
 * [Exploring three way to deploy your ARM templates](http://techgenix.com/deploy-arm-templates/)
 
 ## End
+
 [Previous Lab](../Lab1/README.md)
 [Next Lab](../Lab3/README.md)
 
