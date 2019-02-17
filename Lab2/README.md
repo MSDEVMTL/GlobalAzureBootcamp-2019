@@ -90,7 +90,7 @@ In the previous lab, we deployed our web app on an Azure Web App.  This Azure We
 
 ## Part 1 - Create our first ARM template
 
-1) Now, create your Deployment folder
+1) Now, create your deployment folder.
 
 Under your solution folder, add a new folder `Deployment`.  This is where all your deployment scripts will be located.
 
@@ -125,23 +125,170 @@ If you have install the extension, you can do it easily if you type `arm!` at th
 
 6) Insert an Azure Service Plan
 
-Move your cursor between the bracket `"resources": []` and still with the extension type `app
+Move your cursor between the bracket `"resources": []` and copy this code snippet
+
+```json
+ {
+    "type": "Microsoft.Web/serverfarms",
+    "apiVersion": "2015-08-01",
+    "name": "APP_SERVICE_PLAN_NAME",
+    "location": "[resourceGroup().location]",
+    "sku": {
+      "name": "F1",
+      "tier": "Free",
+      "capacity": 1
+    }
+  }
+```
+
+7) Right after, insert an Azure Web App.  Remember to add a comma between element since its a json array.
+
+```json
+{
+  "type": "Microsoft.Web/sites",
+  "apiVersion": "2018-02-01",
+  "name": "WEB_APP_NAME",
+  "location": "[resourceGroup().location]",
+  "dependsOn": [
+    "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"  
+  ],
+  "properties": {
+      "name": "WEB_APP_NAME",
+      "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"
+  }
+}
+
+```
+
+That should look like this
+
+```json
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {},
+    "resources": [
+      {
+          "type": "Microsoft.Web/sites",
+          "apiVersion": "2018-02-01",
+          "name": "WEB_APP_NAME",
+          "location": "[resourceGroup().location]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"  
+          ],
+          "properties": {
+              "name": "WEB_APP_NAME",
+              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"
+          }
+      },
+      {
+        "type": "Microsoft.Web/serverfarms",
+        "apiVersion": "2015-08-01",
+        "name": "APP_SERVICE_PLAN_NAME",
+        "location": "[resourceGroup().location]",
+        "sku": {
+          "name": "F1",
+          "tier": "Free",
+          "capacity": 1
+        }
+      }
+    ],
+    "outputs": {}
+}
+```
+
+8) Use parameters and variables
+
+We now need to replace the place holder with parameters. This way, we will be able to customize our template.
+
+* APP_SERVICE_PLAN_NAME
+* WEB_APP_NAME
+
+```json
+
+ "parameters": {
+      "appSvcPlanName": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of the App Service Plan that will host your Web App."
+        }
+      },
+      "webAppName": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of your Web App."
+        }
+      }
+    }
+
+```
+
+And use the parameter this syntax
+
+```json
+...[parameters('webAppName')]... 
+
+```
+
+That should now look like this
+
+```json
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "appSvcPlanName": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of the App Service Plan that will host your Web App."
+        }
+      },
+      "webAppName": {
+        "type": "string",
+        "metadata": {
+          "description": "The name of your Web App."
+        }
+      }
+    },
+    "variables": {},
+    "resources": [
+      {
+         "type": "Microsoft.Web/sites",
+          "apiVersion": "2018-02-01",
+          "name": "[parameters('webAppName')]",
+          "location": "[resourceGroup().location]",
+         "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"  
+          ],
+          "properties": {
+              "name": "[parameters('webAppName')]",
+              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+          }
+      },
+      {
+        "type": "Microsoft.Web/serverfarms",
+        "apiVersion": "2015-08-01",
+        "name": "[parameters('appSvcPlanName')]",
+        "location": "[resourceGroup().location]",
+        "sku": {
+          "name": "F1",
+          "tier": "Free",
+          "capacity": 1
+        }
+      }
+    ],
+    "outputs": {}
+}
+```
+
+## Part 4 - Add an Azure Storage to the mix
 
 ```json
 
 ```
 
-7) Insert an Azure Web App
-
-## Part 2 - Add an Azure Storage to the mix
-
-
-```json
-
-```
-
-## Part 3 - Configure our Web App Automatically
-
+## Part 5 - Configure our Web App Automatically
 
 ```json
 
