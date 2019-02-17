@@ -166,7 +166,7 @@
         },
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
-            "name": "[concat(parameters('keyVaultName'), '/StorageAccount--ConnectionString')]",
+            "name": "[concat(parameters('keyVaultName'), '/Keys-Storage-ConnectionString')]",
             "apiVersion": "2016-10-01",
             "location": "[resourceGroup().location]",
             "properties": {

@@ -125,13 +125,19 @@ This resource will create a new secret in key vault by retrieving automatically 
 ## 5. Modify the app to get the Storage Account Keys from KeyVault
 Alright now that everything is provisionned correctly in azure, it's time to modify the web application and get the secret from KeyVault instead of using an hardcoded value.
 
-1. 
+We need to install the `Microsoft.Extensions.Configuration.AzureKeyVault` NuGet package.
+
+To do so;
+- open the terminal in your Visual Studio Code (ctrl+` )
+- type `dotnet add package Microsoft.Extensions.Configuration.AzureKeyVault`
+
+Now, 
 
 ## Reference
 
-// TODO [listKeys]
-// TODO keyvault
-// ASP .net configuration KeyVault Provider
+- [[listkeys()] function](https://docs.microsoft.com/en-us/rest/api/storagerp/storageaccounts/listkeys)
+- [KeyVault](https://azure.microsoft.com/en-ca/services/key-vault/)
+- [Azure Key Vault Configuration Provider in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/security/key-vault-configuration?view=aspnetcore-2.2)
 
 ## End
 
