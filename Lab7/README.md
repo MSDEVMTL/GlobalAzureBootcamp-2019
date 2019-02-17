@@ -36,7 +36,7 @@ In order to access different azure services our app will need an identity.
 
 ![](medias/create-key.png)
 
-6. Now copy the Application ID, object Id and the newly create key value in a notepad, we'll need them later
+6. Copy the Application ID, object Id and the newly created key value in a notepad, we'll need them later
 
 ![](medias/app-values.png)
 
@@ -60,7 +60,8 @@ In order to access different azure services our app will need an identity.
         },
         "enabledForTemplateDeployment": true,
         "tenantId": "[subscription().tenantId]",
-        "enabledForDeployment": true
+        "enabledForDeployment": true,
+        "accessPolicies": []
     },
     "resources": [],
     "dependsOn": []
@@ -109,7 +110,7 @@ Wouldn't it be great if the ARM template could provision the Storage Account and
 ```json
 {
     "type": "Microsoft.KeyVault/vaults/secrets",
-    "name": "[concat(parameters('keyVaultName'), '/StorageAccount--ConnectionString')]",
+    "name": "[concat(parameters('keyVaultName'), '/Keys-Storage-ConnectionString')]",
     "apiVersion": "2016-10-01",
     "location": "[resourceGroup().location]",
     "properties": {
@@ -120,18 +121,14 @@ Wouldn't it be great if the ARM template could provision the Storage Account and
 }
 ```
 
-This resource will create a new secret in key vault by retrieving automatically the value from the storage account, once it's provisionned
+This resource will create a new secret in key vault by retrieving automatically the value from the storage account once it's provisionned
 
 ## 5. Modify the app to get the Storage Account Keys from KeyVault
 Alright now that everything is provisionned correctly in azure, it's time to modify the web application and get the secret from KeyVault instead of using an hardcoded value.
 
-We need to install the `Microsoft.Extensions.Configuration.AzureKeyVault` NuGet package.
+5.1 install the Azure key vault package with `dotnet add package Microsoft.Extensions.Configuration.AzureKeyVault`
 
-To do so;
-- open the terminal in your Visual Studio Code (ctrl+` )
-- type `dotnet add package Microsoft.Extensions.Configuration.AzureKeyVault`
-
-Open `program.cs` and modify the `CreateWebHostBuilder` method to
+5.2 Open `program.cs` and modify the `CreateWebHostBuilder` method to
 ```csharp
 public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
     WebHost.CreateDefaultBuilder(args)
@@ -147,7 +144,7 @@ public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
         .UseStartup<Startup>();
 ```
 
-Open `appsettings.json` and remove `Keys:Storage:ConnectionString` as it will not be loaded from your key vault.
+5.3 Open `appsettings.json` and remove `Keys:Storage:ConnectionString` as it will not be loaded from your key vault.
 While you're there add the following keys to your `appsetting.json`
 
 
@@ -165,7 +162,10 @@ While you're there add the following keys to your `appsetting.json`
 ```
 
 
-Run the application and make sure everything still work
+5.4 Run the application and make sure everything still work
+
+
+## 6. Optional: try to do the same thing with the ComputerVision API key 
 
 
 ## Reference
