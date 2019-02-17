@@ -13,7 +13,7 @@ Add a KeyVault to the ARM tempalte. migrate the API and storage keys to the keyv
 1. [Give the app access to the KeyVault's secrets](#3-Give-the-app-access-to-the-KeyVault's-secrets)
 1. [Move storage account key to KeyVault](#4-Move-storage-account-key-to-KeyVault)
 1. [Modify the app to get the Storage Account Keys from KeyVault](#5-Modify-the-app-to-get-the-Storage-Account-Keys-from-KeyVault)
-#. [Reference](#Reference)
+1. [Reference](#Reference)
 
 ## 1. Create an identity for the App
 
@@ -131,7 +131,42 @@ To do so;
 - open the terminal in your Visual Studio Code (ctrl+` )
 - type `dotnet add package Microsoft.Extensions.Configuration.AzureKeyVault`
 
-Now, 
+Open `program.cs` and modify the `CreateWebHostBuilder` method to
+```csharp
+public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+    WebHost.CreateDefaultBuilder(args)
+        .ConfigureAppConfiguration((context, config) =>
+        {
+            var builtConfig = config.Build();
+
+            config.AddAzureKeyVault(
+                $"https://{builtConfig["Keys:KeyVault:Name"]}.vault.azure.net/",
+                builtConfig["Keys:KeyVault:AzureADApplicationId"],
+                builtConfig["Keys:KeyVault:AzureADPassword"]);
+        })
+        .UseStartup<Startup>();
+```
+
+Open `appsettings.json` and remove `Keys:Storage:ConnectionString` as it will not be loaded from your key vault.
+While you're there add the following keys to your `appsetting.json`
+
+
+
+```json
+{
+  "Keys": {
+      "KeyVault":{
+        "Name": "<YOUR KEYVAULT NAME HERE>",
+        "AzureADApplicationId": "<YOUR KEYVAULT AzureADApplicationId HERE>",
+        "AzureADPassword": "<YOUR KEYVAULT AzureADPassword HERE>"
+    }
+  }
+}
+```
+
+
+Run the application and make sure everything still work
+
 
 ## Reference
 
