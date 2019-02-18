@@ -27,9 +27,9 @@ myproject.json
 myproject.parameters.json
 ```
 
-The two together can be deploy on different environment.  You will change your parameter file depending on which environment you are deploying.
+The two together can be deploy multiple environments.  You will change your parameter file depending on which environment you are deploying.
 
-We could want to deploy a VM or a Web application.  Let's say that your development environment could required a smaller resource than your production environment. With ARM, it will be the same structure, the same code, except your parameter file will change the size of your VM or Web application.
+We could want to deploy a VM or a Web application.  Let's say, in that case that your development environment could required a smaller resource than your production environment. With ARM, it will be the same structure, the same code, except your parameter file will change the size of your VM or Web application.
 
 Also, when you deploying resources on Azure, ARM will parallelize you deployment.  It's really the fastest way to deploy.
 
@@ -81,31 +81,26 @@ A Resource manager template is simply a JSON file using this structure
 
 Now that we know a bit more on these ARM templates, let see how we can use them in our project.
 
-In the previous lab, we deployed our web app on an Azure Web App.  This Azure Web App itself require an App Service Plan to run.
-
-| Resource | Link
-|-----|-----|
-| App Service Plan | [Reference Link](https://docs.microsoft.com/en-us/azure/app-service/overview-hosting-plans)|
-| Azure Web App | [Reference Link](https://azure.microsoft.com/en-us/services/app-service/web/)|
-
 ## Part 1 - Create our first ARM template
 
-1) Now, create your deployment folder.
+1. Under your solution folder, add a new folder `Deployment`.  This is where all your deployment scripts will be located.
 
-Under your solution folder, add a new folder `Deployment`.  This is where all your deployment scripts will be located.
+```txt
+  C:\dev\gab2019\deployment
+```
 
-    C:\dev\gab2019\deployment
+2. Under this new folder, create two empty files. A ARM template and its parameter file.
 
-2) Under this new folder, create two new empty files. A ARM template and its parameter file.
+```txt
+  C:\dev\gab2019\deployment\gab2019.json
+  C:\dev\gab2019\deployment\gab2019.parameters.json
+```
 
-   C:\dev\gab2019\deployment\gab2019.json
-   C:\dev\gab2019\deployment\gab2019.parameters.json
+3. Open Visual Studio code, if its not already open, and locate your two newly added files.
 
-3) Open Visual Studio code, if its not already open, and locate your two newly added files.
+4. Open your empty template file gab2019.json
 
-4) Open your empty template file gab2019.json
-
-5) Insert an ARM Template Skeleton
+5. Insert an ARM Template Skeleton
 
 If you have install the extension, you can do it easily if you type `arm!` at the beginning of the file or copy this snippet directly.
 
@@ -120,6 +115,73 @@ If you have install the extension, you can do it easily if you type `arm!` at th
     "resources": [],
     "outputs": {}
 }
+```
+
+6. Let's add our first Azure resource. Between the `"resources": []` brackets add a strorage Account.  To do so, you still can use the extension with the keyword `arm-stg` or copy the following snippet.
+
+```json
+    {
+        "type": "Microsoft.Storage/storageAccounts",
+        "apiVersion": "2018-07-01",
+        "name": "StorageAccount1",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "StorageAccount1"
+        },
+        "sku": {
+            "name": "Standard_LRS"
+        },
+        "kind": "StorageV2"
+    }
+```
+
+This template, will provision a new Azure Storage Account with the name `StorageAccount1`. Obviously, you want your storage name to be unique. One way to do so is to use a builtin function available with ARM.
+
+```json
+[concat('gab2019', uniquestring(resourceGroup().id))]
+```
+
+This will generate a unique name starting with `gab2019` and concaquenate with a unique string generate from your resource group id.
+
+Modify your template and add that function to your storage resource.
+
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {},
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2018-07-01",
+      "name": "[concat('gab2019', uniquestring(resourceGroup().id))]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "[concat('gab2019', uniquestring(resourceGroup().id))]"
+      },
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2"
+    }
+  ],
+  "outputs": {}
+}
+
+## Part 2 - Deploy automatically your first template
+
+---
+
+In the previous lab, we deployed our web app on an Azure Web App.  This Azure Web App itself require an App Service Plan to run.
+
+| Resource | Link
+|-----|-----|
+| App Service Plan | [Reference Link](https://docs.microsoft.com/en-us/azure/app-service/overview-hosting-plans)|
+| Azure Web App | [Reference Link](https://azure.microsoft.com/en-us/services/app-service/web/)|
+
+## Part 1 - Create our first ARM template
+
 
 ```
 
