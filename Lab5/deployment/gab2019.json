@@ -14,11 +14,11 @@
         "description": "The name of your Web App."
       }
     },
-    "accounts_cs_vision_name": {
+    "csVisionName": {
       "type": "string",
       "metadata": {
         "description": "The  name of the Computer Vision API"
-      }
+    }
   }
   },
   "variables": {
@@ -80,7 +80,7 @@
     {
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2016-02-01-preview",
-      "name": "[parameters('accounts_cs_vision_name')]",
+      "name": "[parameters('csVisionName')]",
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "F0"
