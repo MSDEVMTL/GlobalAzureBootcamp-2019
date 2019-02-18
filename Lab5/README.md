@@ -4,7 +4,9 @@
 
 # Goal
 
-We will add a Azure Cognitive Services Vision to our ARM template. Modify the code of the web application to read one image (provided) from a Azure blob storage, and display the information returned by the Vision API. The image ( a dog or a cat ) will be uploaded to the Blob storage using the Azure Portal or the Azure Storage Explorer.
+Our goal is to know if a picture has a dog or not.
+
+To do this, we will add Azure Cognitive Services (Vision) to our project. The web application will be modified to read one image (provided) from Azure blob storage and display the information returned by the Vision API. The image (a dog or a cat) will be uploaded to the Blob storage using the Azure Portal or the Azure Storage Explorer.
 
 # Let's code!
 
@@ -31,7 +33,7 @@ We will add a Azure Cognitive Services Vision to our ARM template. Modify the co
 
 # Add Azure components
 
-Let's add the Cognitive Services to our deployment to be able to make use of it.
+Let's add Cognitive Services to our deployment (ATM) template and deploy it.
 
 ## Modify the ARM template to add the Computer Vision service
 
