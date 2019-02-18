@@ -37,49 +37,53 @@ Let's add Cognitive Services to our deployment (ATM) template and deploy it.
 
 ## Modify the ARM template to add the Computer Vision service
 
-DO WE HAVE A "STARTING" ARM TEMPLATE?
-IF SO, LETS SHOW WHERE TO OPEN AND LOCATE WHERE TO ADD THE BELOW
+In LAB2 {LINK TO LAB2?} we created an ARM template to deploy the backbone of our application (app service plan, web app (mvc) and storage account).
 
-Open the existing ARM template located here (LINK TO FINIsHED LAB05_ARM_TEMPLATE_INITIAL).
+We will start from that template and add the Cognitive Services resource to it
+
+Open the existing ARM template located here [LINK TO LAB2 FINAL TEMPLATE].
 
 Under the resources array, add the following:
 
 ```json
 {
     "type": "Microsoft.CognitiveServices/accounts",
+    "apiVersion": "2016-02-01-preview",
+    "name": "[parameters('accounts_cs_vision_name')]",
+    "location": "[resourceGroup().location]",
     "sku": {
-        "name": "F0"
+    "name": "F0"
     },
     "kind": "ComputerVision",
-    "name": "[parameters('accounts_cs_vision_name')]",
-    "apiVersion": "2016-02-01-preview",
-    "location": "eastus",
-    "scale": null,
+    "dependsOn": [],
     "properties": {},
-    "dependsOn": []
+    "scale": null
 }
 ```
 
 This will tell Azure that we want an nstance of Cognitive Services.
 
-Now ... in the parameters section, add the following:
+Next ... in the parameters section, add the following:
 
 ```json
 "accounts_cs_vision_name": {
     "type": "string",
     "metadata": {
-        "description": "The resource name of the computer vision api"
-    }
+    "description": "The  name of the Computer Vision API"
 }
 ```
 
 This will tell Azure to add a meaningful description to the newly created resource.
 
-At this point the ARM template should look like the one here (LINK TO FINIsHED LAB05_ARM_TEMPLATE_FINAL)
+Next ... Add the Cognitive Services access keys in the web application configuration
 
-## Modify the ARM template to add the Blob Storage
+[ADD CHANGES TO AUTOMATICALLY INCLUDE THE COGNITIVE SERVICES KEYS IN THE WEB APP CONFIG]
 
-NOT SURE IF WE ALREADY HAVE BLOC STORAGE AVAILABLE AT THIS POINT
+This will set the keys to access Cognitive Services into our MVC Web App (just like we do with the storage account)
+
+At this point the ARM template for lab 5 is ready.
+* [ARM template](deployment/gab2019.json)
+* [ARM template parameters](deployment/gab2019.parameters.json)
 
 ## Deploy the ARM templates to Azure ??
 
