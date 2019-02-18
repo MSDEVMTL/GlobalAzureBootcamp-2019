@@ -43,7 +43,7 @@ We will start from that template and add the Cognitive Services resource to it
 
 Open the existing [ARM template](../Lab2/deployment/gab2019.json) and [ARM template parameters](../Lab2/deployment/gab2019.parameters.json) from lab2 [COMMIT LAB2 FINAL FILES].
 
-First ... under the resources array in the ARM template (gab2019.json), **add the Cognitive Services resource:**
+1 - First ... under the resources array in the ARM template (gab2019.json), **add the Cognitive Services resource:**
 
 ```json
 {
@@ -63,7 +63,7 @@ First ... under the resources array in the ARM template (gab2019.json), **add th
 
 This will tell Azure that we want an nstance of Cognitive Services.
 
-Next ... in the parameters section of the ARM template, **add the parameter information for Cognitive Services**
+2 - Next ... in the parameters section of the ARM template, **add the parameter information for Cognitive Services**
 
 ```json
 "csVisionName": {
@@ -75,13 +75,13 @@ Next ... in the parameters section of the ARM template, **add the parameter info
 
 This will tell Azure to add a meaningful description to the newly created resource.
 
-Next ... in the web app resource section of the ARM template (gab2019.json), **Add the Cognitive Services access keys in the web application configuration**
+3 - Next ... in the web app resource section of the ARM template (gab2019.json), **Add the Cognitive Services access keys in the web application configuration**
 
 [ADD CHANGES TO AUTOMATICALLY INCLUDE THE COGNITIVE SERVICES KEYS IN THE WEB APP CONFIG]
 
 This will set the keys to access Cognitive Services into our MVC Web App (just like we do with the storage account)
 
-Next ... in the parameters array of the ARM templte parameter file (gab2019.parameters.json),  **Add the parameter value for Cognitive Services**
+4 - Next ... in the parameters array of the ARM templte parameter file (gab2019.parameters.json),  **Add the parameter value for Cognitive Services**
 
 ```json
 "csVisionName": {
@@ -97,12 +97,30 @@ At this point the ARM template for lab 5 is ready.
 
 ## Deploy the ARM templates to Azure
 
-Now that we have an ARM template that includes Cognitive Services, we need to deploy the changes.
+Now that we have an ARM template that includes Cognitive Services, we wwant to deploy it.
 
-[DEPLOY INCREMENTALLY WITH AZURE CLI]]
+In Lab2 we saw a few methods to deploy the initial components of the ARM template.
 
+Now, we need to deploy the changes.
 
+### Azure CLI - incremental mode
 
+Azure CLI allows for two different deployment modes; "Complete" and "Incremental".
+
+The Incremental mode tells Azure to add the missing components whilke leaving the existing ones alone (tcomponents that exist in Azure but not in the template will also be kept).
+
+The script below will deploy the ARM template resources.
+
+```azurecli
+az group deployment create \
+--name Gab2019Deployment1 \
+--mode Incremental \
+--resource-group GAB2019RG \
+--template-file gab2019.json \
+--parameters GAB2019.parameters.json
+```
+
+Once done, the Cognitive Services resource would be deployed and the keys should be configured in the web application.
 
 ## Getting the API keys for the API
 
