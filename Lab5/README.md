@@ -33,17 +33,17 @@ To do this, we will add Azure Cognitive Services (Vision) to our project. The we
 
 # Add Azure components
 
-Let's add Cognitive Services to our deployment (ATM) template and deploy it.
+Let's add Cognitive Services to our deployment (ARM) template and deploy it.
 
 ## Modify the ARM template to add the Computer Vision service
 
-In LAB2 {LINK TO LAB2?} we created an ARM template to deploy the backbone of our application (app service plan, web app (mvc) and storage account).
+In [Lab 2](../Lab2/README.md) we created an ARM template to deploy the backbone of our application (app service plan, web app (mvc) and storage account).
 
 We will start from that template and add the Cognitive Services resource to it
 
-Open the existing ARM template located here [LINK TO LAB2 FINAL TEMPLATE].
+Open the existing [ARM template](../Lab2/deployment/gab2019.json) and [ARM template parameters](../Lab2/deployment/gab2019.parameters.json) from lab2 [COMMIT LAB2 FINAL FILES].
 
-Under the resources array, add the following:
+Under the resources array in the ARM template (gab2019.json), add the following:
 
 ```json
 {
