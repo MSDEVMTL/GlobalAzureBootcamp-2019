@@ -12,8 +12,8 @@ To do this, we will add Azure Cognitive Services (Vision) to our project. The we
 
 - [Add Azure components](#add-azure-components)
   * [Modify the ARM template to add the Computer Vision service](#modify-the-arm-template-to-add-the-computer-vision-service)
-  * [Modify the ARM template to add the Blob Storage](#modify-the-arm-template-to-add-the-blob-storage)
-  * [Deploy the ARM templates to Azure ??](#deploy-the-arm-templates-to-azure---)
+  * [Deploy the ARM templates to Azure](#deploy-the-arm-templates-to-azure)
+    * [Azure CLI - incremental mode](#Azure-CLI---incremental-mode)
   * [Getting the API keys for the API](#getting-the-api-keys-for-the-api)
   * [Getting the blob storage connection string](#getting-the-blob-storage-connection-string)
 - [Upload the dog image into your storage account](#upload-the-dog-image-into-your-storage-account)
@@ -43,7 +43,9 @@ We will start from that template and add the Cognitive Services resource to it
 
 Open the existing [ARM template](../Lab2/deployment/gab2019.json) and [ARM template parameters](../Lab2/deployment/gab2019.parameters.json) from lab2 [COMMIT LAB2 FINAL FILES].
 
-1 - First ... under the resources array in the ARM template (gab2019.json), **add the Cognitive Services resource:**
+1 - **Add the Cognitive Services resource:**
+
+First ... under the resources array in the ARM template (gab2019.json).
 
 ```json
 {
@@ -63,7 +65,9 @@ Open the existing [ARM template](../Lab2/deployment/gab2019.json) and [ARM templ
 
 This will tell Azure that we want an nstance of Cognitive Services.
 
-2 - Next ... in the parameters section of the ARM template, **add the parameter information for Cognitive Services**
+2 - **add the parameter information for Cognitive Services**
+
+Next ... in the parameters section of the ARM template,.
 
 ```json
 "csVisionName": {
@@ -75,13 +79,17 @@ This will tell Azure that we want an nstance of Cognitive Services.
 
 This will tell Azure to add a meaningful description to the newly created resource.
 
-3 - Next ... in the web app resource section of the ARM template (gab2019.json), **Add the Cognitive Services access keys in the web application configuration**
+3 - **Add the Cognitive Services access keys in the web application configuration**
+
+Next ... in the web app resource section of the ARM template (gab2019.json).
 
 [ADD CHANGES TO AUTOMATICALLY INCLUDE THE COGNITIVE SERVICES KEYS IN THE WEB APP CONFIG]
 
 This will set the keys to access Cognitive Services into our MVC Web App (just like we do with the storage account)
 
-4 - Next ... in the parameters array of the ARM templte parameter file (gab2019.parameters.json),  **Add the parameter value for Cognitive Services**
+4 - **Add the parameter value for Cognitive Services**
+
+Next ... in the parameters array of the ARM templte parameter file (gab2019.parameters.json).
 
 ```json
 "csVisionName": {
@@ -111,7 +119,7 @@ The Incremental mode tells Azure to add the missing components whilke leaving th
 
 The script below will deploy the ARM template resources.
 
-```azurecli
+```powershell
 az group deployment create \
 --name Gab2019Deployment1 \
 --mode Incremental \
@@ -125,6 +133,8 @@ Once done, the Cognitive Services resource would be deployed and the keys should
 ## Getting the API keys for the API
 
 Once your ARM template has successfully been deployed, its time to get the keys to use the services.
+
+This will be needed for us to use the cloud services while running our application locally.
 
 To get your computer vision keys;
 
