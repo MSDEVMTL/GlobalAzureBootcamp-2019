@@ -667,6 +667,7 @@ If you followed the steps above, your folder structure should look like this
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
 [computer-vision-keys]: medias/lab5-keys.PNG "Computer Vision API Keys"
 [blob-connectionstring]: medias/portal-connectionstring-blob.png "Storage Account connection string"
+[deployment-output]: medias/lab5-deployment-output.PNG "ARM template deployment outputs"
 [public-access-blob-se]: medias/public-access-blob-se.png "Public access blob through storage explorer"
 [public-access-blob-portal]: medias/public-access-blob-portal.png "Public access blob through the azure portal"
 [folder-structure]: medias/folder-structure.png "Folder structure"
