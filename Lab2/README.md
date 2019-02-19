@@ -39,15 +39,23 @@ You can deploy them using 3 ways.
 
 1) Using Visual Studio
 
-![VisualStudio_ARM](http://techgenix.com/tgwordpress/wp-content/uploads/2018/06/1050-05-04-1-1024x399.png)
+![VisualStudio_ARM](https://docs.microsoft.com/en-us/azure/azure-resource-manager/media/vs-azure-tools-resource-groups-deployment-projects-create-deploy/deploy.png)
+
+To learn more on how to deploy an ARM template with Visual Studio, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/vs-azure-tools-resource-groups-deployment-projects-create-deploy)
 
 2) Using the Azure Portal
 
-![Portal_ARM](http://techgenix.com/tgwordpress/wp-content/uploads/2018/06/1050-05-07.png)
+![Portal_ARM](https://docs.microsoft.com/en-us/azure/azure-resource-manager/media/resource-group-template-deploy-portal/search-template.png)
 
-3) Using powershell
+To learn more on how to deploy an ARM template with Azure Portal, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-portal)
+
+3) Using Azure PowerShell or CLI
 
 ![Powershell_arm](http://techgenix.com/tgwordpress/wp-content/uploads/2018/06/1050-05-08-1024x390.png)
+
+To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy)
+
+To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli)
 
 # Template format
 
@@ -117,7 +125,7 @@ If you have install the extension, you can do it easily if you type `arm!` at th
 }
 ```
 
-6. Let's add our first Azure resource. Between the `"resources": []` brackets add a strorage Account.  To do so, you still can use the extension with the keyword `arm-stg` or copy the following snippet.
+6. Let's add our first Azure resource. Between the `"resources": []` brackets add a storage Account.  To do so, you still can use the extension with the keyword `arm-stg` or copy the following snippet.
 
 ```json
     {
@@ -135,15 +143,15 @@ If you have install the extension, you can do it easily if you type `arm!` at th
     }
 ```
 
-This template, will provision a new Azure Storage Account with the name `StorageAccount1`. Obviously, you want your storage name to be unique. One way to do so is to use a builtin function available with ARM.
+This template, will provision a new Azure Storage Account with the name `StorageAccount1`. Obviously, you want your storage name to be unique. One way to do so is to use a built-in function with the following ARM syntax.
 
 ```json
 [uniqueString(resourceGroup().id, resourceGroup().location)]
 ```
 
-This will generate a unique string using your resource group id and location.
+This will generate a unique string using your resource group id and location as seed.
 
-You can create a variable and use it anyware in you template.
+7) Add a variable 'suffix' with your unique name as value.
 
 ```json
 "variables": {
@@ -151,16 +159,10 @@ You can create a variable and use it anyware in you template.
   }
 ```
 
-To use a variable, you simply add this.
+8) Let use that new variable to name your storage
 
 ```json
-variables('suffix')
-```
-
-In our case, we want to name our storage like this: `gab2019<uniquestring>`.  Use the built-in function `concat` to build your storage name.
-
-```json
- "[concat('gab2019',variables('suffix'))]"
+ "[concat('stg',variables('suffix'))]"
 ```
 
 Your template should now look like this:
@@ -177,10 +179,10 @@ Your template should now look like this:
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2018-07-01",
-      "name": "[concat('storage',variables('suffix'))]",
+      "name": "[concat('stg',variables('suffix'))]",
       "location": "[resourceGroup().location]",
       "tags": {
-        "displayName": "[concat('storage',variables('suffix'))]"
+        "displayName": "[concat('stg',variables('suffix'))]"
       },
       "sku": {
         "name": "Standard_LRS"
@@ -202,9 +204,9 @@ Your template should now look like this:
   git push
 ```
 
-2. Browse to...
+2. Browse to your Azure DevOps project
 
-3. Edit your pipeline
+3. Edit your Release pipeline
 
 4. Add a new task Azure Resource ...
 
@@ -214,96 +216,123 @@ Your template should now look like this:
 
 You should now see a new resource in your resource group.
 
-## Part 3 - Add to our template existing resources
+## Part 3 - Add existing resources to our template
 
-In the previous lab, we created an Azure Web app and Azure App Service Plan.
+In the previous lab, we created an Azure Web app and Azure App Service Plan to host our Web Application. It is possible to include an existing resource to your ARM template. You just need to specify the same unique name of yor resource.
 
-| Resource | Link
-|-----|-----|
-| App Service Plan | [Reference Link](https://docs.microsoft.com/en-us/azure/app-service/overview-hosting-plans)|
-| Azure Web App | [Reference Link](https://azure.microsoft.com/en-us/services/app-service/web/)|
 
----
-Move your cursor between the bracket `"resources": []` and copy this code snippet.  
+1) Add a Web App to your template. Type `arm-webapp` or copy the following snippet to your template resources.
 
 ```json
  {
+    "type": "Microsoft.Web/sites",
+    "apiVersion": "2018-02-01",
+    "name": "WEB_APP_NAME",
+    "location": "[resourceGroup().location]",
+    "tags": {
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/APP_SERVICE_PLAN_NAME')]": "Resource",
+        "displayName": "WEB_APP_NAME"
+    },
+    "dependsOn": [
+        "Microsoft.Web/serverfarms/APP_SERVICE_PLAN_NAME"
+    ],
+    "properties": {
+        "name": "WEB_APP_NAME",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"
+    }
+}
+```
+
+2) Add an Azure Service Plan to your template. Type `arm-plan` or copy the following snippet to your template resources.
+
+```json
+{
     "type": "Microsoft.Web/serverfarms",
-    "apiVersion": "2015-08-01",
-    "name": "APP_SERVICE_PLAN_NAME",
+    "apiVersion": "2016-09-01",
+    "name": "AppServicePlan1",
     "location": "[resourceGroup().location]",
     "sku": {
-      "name": "F1",
-      "tier": "Free",
-      "capacity": 1
+        "name": "F1",
+        "capacity": 1
+    },
+    "tags": {
+        "displayName": "AppServicePlan1"
+    },
+    "properties": {
+        "name": "AppServicePlan1"
     }
-  }
-```
-
-## Part 3 - Insert an Azure Web App
-
-Remember to add a comma between element since its a json array*
-
-```json
-{
-  "type": "Microsoft.Web/sites",
-  "apiVersion": "2018-02-01",
-  "name": "WEB_APP_NAME",
-  "location": "[resourceGroup().location]",
-  "dependsOn": [
-    "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"  
-  ],
-  "properties": {
-      "name": "WEB_APP_NAME",
-      "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"
-  }
 }
 
 ```
 
-That should look like this now
+Your template should now look like this:
 
 ```json
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {},
-    "variables": {},
-    "resources": [
-      {
-          "type": "Microsoft.Web/sites",
-          "apiVersion": "2018-02-01",
-          "name": "WEB_APP_NAME",
-          "location": "[resourceGroup().location]",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"  
-          ],
-          "properties": {
-              "name": "WEB_APP_NAME",
-              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"
-          }
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {},
+  "variables": {
+    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2018-07-01",
+      "name": "[concat('stg',variables('suffix'))]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "[concat('stg',variables('suffix'))]"
       },
-      {
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2"
+    },
+    {
+        "type": "Microsoft.Web/sites",
+        "apiVersion": "2018-02-01",
+        "name": "WEB_APP_NAME",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/APP_SERVICE_PLAN_NAME')]": "Resource",
+            "displayName": "WEB_APP_NAME"
+        },
+        "dependsOn": [
+            "Microsoft.Web/serverfarms/APP_SERVICE_PLAN_NAME"
+        ],
+        "properties": {
+            "name": "WEB_APP_NAME",
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"
+        }
+    },
+    {
         "type": "Microsoft.Web/serverfarms",
-        "apiVersion": "2015-08-01",
-        "name": "APP_SERVICE_PLAN_NAME",
+        "apiVersion": "2016-09-01",
+        "name": "AppServicePlan1",
         "location": "[resourceGroup().location]",
         "sku": {
-          "name": "F1",
-          "tier": "Free",
-          "capacity": 1
+            "name": "F1",
+            "capacity": 1
+        },
+        "tags": {
+            "displayName": "AppServicePlan1"
+        },
+        "properties": {
+            "name": "AppServicePlan1"
         }
-      }
-    ],
-    "outputs": {}
+    }
+  ],
+  "outputs": {}
 }
+
 ```
 
-## Part 3 - Use parameters and variables
+## Part 4 - Add parameters to your template
 
-We now need to replace all place holders with parameters. This way, we will be able to customize our template.
+We now need to replace all place holders with parameters. This way, we will be able to customize our template and reuse our existing feature
 
-Let's change `APP_SERVICE_PLAN_NAME` and `WEB_APP_NAME`
+Replace your node `parameters with the following snippet:
 
 ```json
 
@@ -324,93 +353,7 @@ Let's change `APP_SERVICE_PLAN_NAME` and `WEB_APP_NAME`
 
 ```
 
-And use the parameter this syntax
-
-```json
-...[parameters('webAppName')]... 
-
-```
-
-That should now look like this
-
-```json
-{
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "appSvcPlanName": {
-        "type": "string",
-        "metadata": {
-          "description": "The name of the App Service Plan that will host your Web App."
-        }
-      },
-      "webAppName": {
-        "type": "string",
-        "metadata": {
-          "description": "The name of your Web App."
-        }
-      }
-    },
-    "variables": {},
-    "resources": [
-      {
-         "type": "Microsoft.Web/sites",
-          "apiVersion": "2018-02-01",
-          "name": "[parameters('webAppName')]",
-          "location": "[resourceGroup().location]",
-         "dependsOn": [
-            "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"  
-          ],
-          "properties": {
-              "name": "[parameters('webAppName')]",
-              "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
-          }
-      },
-      {
-        "type": "Microsoft.Web/serverfarms",
-        "apiVersion": "2015-08-01",
-        "name": "[parameters('appSvcPlanName')]",
-        "location": "[resourceGroup().location]",
-        "sku": {
-          "name": "F1",
-          "tier": "Free",
-          "capacity": 1
-        }
-      }
-    ],
-    "outputs": {}
-}
-```
-
-## Part 4 - Add an Azure Storage to the mix
-
-Add a new variable `storageAccountName`
-
-```json
-
-  "variables": {
-    "storageAccountName": "[concat('gab2019', uniquestring(resourceGroup().id))]"
-  }
-
-```
-
-Add a new Azure Storage Account
-
-```json
-{
-  "type": "Microsoft.Storage/storageAccounts",
-  "name": "[variables('storageAccountName')]",
-  "location": "[resourceGroup().location]",
-  "apiVersion": "2018-07-01",
-  "sku": {
-    "name": "Standard_LRS"
-  },
-  "kind": "StorageV2",
-  "properties": {}
-}
-```
-
-That should now look like this
+Now use these parameters in your template.  Your template should now look like this:
 
 ```json
 {
@@ -431,14 +374,31 @@ That should now look like this
     }
   },
   "variables": {
-    "storageAccountName": "[concat('gab2019', uniquestring(resourceGroup().id))]"
+    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
   },
   "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2018-07-01",
+      "name": "[concat('stg',variables('suffix'))]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "[concat('stg',variables('suffix'))]"
+      },
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2"
+    },
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2018-02-01",
       "name": "[parameters('webAppName')]",
       "location": "[resourceGroup().location]",
+      "tags": {
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]": "Resource",
+        "displayName": "[parameters('webAppName')]"
+      },
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
       ],
@@ -449,25 +409,19 @@ That should now look like this
     },
     {
       "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2015-08-01",
+      "apiVersion": "2016-09-01",
       "name": "[parameters('appSvcPlanName')]",
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "F1",
-        "tier": "Free",
         "capacity": 1
-      }
-    },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('storageAccountName')]",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2018-07-01",
-      "sku": {
-        "name": "Standard_LRS"
       },
-      "kind": "StorageV2",
-      "properties": {}
+      "tags": {
+        "displayName": "[parameters('appSvcPlanName')]"
+      },
+      "properties": {
+        "name": "[parameters('appSvcPlanName')]"
+      }
     }
   ],
   "outputs": {}
@@ -502,87 +456,9 @@ That should now look like this
 
 ```json
 
-{
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "appSvcPlanName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the App Service Plan that will host your Web App."
-      }
-    },
-    "webAppName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of your Web App."
-      }
-    }
-  },
-  "variables": {
-    "storageAccountName": "[concat('gab2019', uniquestring(resourceGroup().id))]"
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Web/sites",
-      "apiVersion": "2018-02-01",
-      "name": "[parameters('webAppName')]",
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
-      ],
-      "properties": {
-        "name": "[parameters('webAppName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
-      },
-      "resources": [
-        {
-          "apiVersion": "2018-02-01",
-          "type": "config",
-          "name": "connectionstrings",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-          ],
-          "properties": {
-
-            "ApplicationStorage": {
-              "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-              "type": "Custom"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2015-08-01",
-      "name": "[parameters('appSvcPlanName')]",
-      "location": "[resourceGroup().location]",
-      "sku": {
-        "name": "F1",
-        "tier": "Free",
-        "capacity": 1
-      }
-    },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('storageAccountName')]",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2018-07-01",
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "StorageV2",
-      "properties": {}
-    }
-  ],
-  "outputs": {}
-}
-
 ```
 
-## Part 6 - Parameters file
+## Part 6 - Final deployment
 
 ```json
 {
@@ -597,6 +473,15 @@ That should now look like this
     }
   }
 }
+
+```
+
+1. Commit your change to the git repository using the following command.
+
+```txt
+  git add .
+  git commit -m "Add my first ARM template"
+  git push
 ```
 
 ## Reference
