@@ -4,88 +4,184 @@
 
 # Goal
 
-We will add a Azure Cognitive Services Vision to our ARM template. Modify the code of the web application to read one image (provided) from a Azure blob storage, and display the information returned by the Vision API. The image ( a dog or a cat ) will be uploaded to the Blob storage using the Azure Portal or the Azure Storage Explorer.
+Our goal is to know if a picture has a dog or not.
+
+To do this, we will add Azure Cognitive Services (Vision) to our project. The web application will be modified to read one image (provided) from Azure blob storage and display the information returned by the Vision API. The image (a dog or a cat) will be uploaded to the Blob storage using the Azure Portal or the Azure Storage Explorer.
 
 # Let's code!
 
 - [Add Azure components](#add-azure-components)
-  * [Modify the ARM template to add the Computer Vision service](#modify-the-arm-template-to-add-the-computer-vision-service)
-  * [Modify the ARM template to add the Blob Storage](#modify-the-arm-template-to-add-the-blob-storage)
-  * [Deploy the ARM templates to Azure ??](#deploy-the-arm-templates-to-azure---)
-  * [Getting the API keys for the API](#getting-the-api-keys-for-the-api)
-  * [Getting the blob storage connection string](#getting-the-blob-storage-connection-string)
+  - [Modify the ARM template to add the Computer Vision service](#modify-the-arm-template-to-add-the-computer-vision-service)
+  - [Deploy the ARM templates to Azure](#deploy-the-arm-templates-to-azure)
+    - [Azure CLI - incremental mode](#Azure-CLI---incremental-mode)
+  - [Getting config info for the web app](#getting-config-info-for-the-web-app)  
+    - [Getting the API keys for the API](#getting-the-api-keys-for-the-api)
+    - [Getting the blob storage connection string](#getting-the-blob-storage-connection-string)
+    - [Getting config info from deployment](#getting-config-info-from-deployment)
 - [Upload the dog image into your storage account](#upload-the-dog-image-into-your-storage-account)
 - [Let's add computer vision to our web application](#let-s-add-computer-vision-to-our-web-application)
-  * [Adding the Computer Vision API library to the application](#adding-the-computer-vision-api-library-to-the-application)
-  * [Adding the Blob storage library to the application](#adding-the-blob-storage-library-to-the-application)
-  * [Using the API in code](#using-the-api-in-code)
-    + [Setting up the resources keys](#setting-up-the-resources-keys)
-    + [Add code to make use of the resource keys](#add-code-to-make-use-of-the-resource-keys)
-    + [Creating classes to consume the storage and computer vision api](#creating-classes-to-consume-the-storage-and-computer-vision-api)
+  - [Adding the Computer Vision API library to the application](#adding-the-computer-vision-api-library-to-the-application)
+  - [Adding the Blob storage library to the application](#adding-the-blob-storage-library-to-the-application)
+  - [Using the API in code](#using-the-api-in-code)
+    - [Setting up the resources keys](#setting-up-the-resources-keys)
+    - [Add code to make use of the resource keys](#add-code-to-make-use-of-the-resource-keys)
+    - [Creating classes to consume the storage and computer vision api](#creating-classes-to-consume-the-storage-and-computer-vision-api)
       - [BlobStorageManager](#blobstoragemanager)
       - [ImageAnalyzer](#imageanalyzer)
       - [Wiring all this into the Startup](#wiring-all-this-into-the-startup)
-  * [Creating the controller and view](#creating-the-controller-and-view)
-  * [Folder structure](#folder-structure)
+  - [Creating the controller and view](#creating-the-controller-and-view)
+  - [Folder structure](#folder-structure)
 - [Reference](#reference)
 
 # Add Azure components
 
-Let's add the Cognitive Services to our deployment to be able to make use of it.
+Let's add Cognitive Services to our deployment (ARM) template and deploy it.
 
 ## Modify the ARM template to add the Computer Vision service
 
-DO WE HAVE A "STARTING" ARM TEMPLATE?
-IF SO, LETS SHOW WHERE TO OPEN AND LOCATE WHERE TO ADD THE BELOW
+In [Lab 2](../Lab2/README.md) we created an ARM template to deploy the backbone of our application (app service plan, web app (mvc) and storage account).
 
-Open the existing ARM template located here (LINK TO FINIsHED LAB05_ARM_TEMPLATE_INITIAL).
+We will start from that template and add the Cognitive Services resource to it
 
-Under the resources array, add the following:
+Open the existing [ARM template](../Lab2/deployment/gab2019.json) and [ARM template parameters](../Lab2/deployment/gab2019.parameters.json) from lab2 [COMMIT LAB2 FINAL FILES].
+
+**1 - Add the Cognitive Services resource:**
+
+First ... under the resources array in the ARM template (gab2019.json).
 
 ```json
 {
     "type": "Microsoft.CognitiveServices/accounts",
+    "apiVersion": "2016-02-01-preview",
+    "name": "[parameters('csVisionName')]",
+    "location": "[resourceGroup().location]",
     "sku": {
-        "name": "F0"
+    "name": "F0"
     },
     "kind": "ComputerVision",
-    "name": "[parameters('accounts_cs_vision_name')]",
-    "apiVersion": "2016-02-01-preview",
-    "location": "eastus",
-    "scale": null,
+    "dependsOn": [],
     "properties": {},
-    "dependsOn": []
+    "scale": null
 }
 ```
 
 This will tell Azure that we want an nstance of Cognitive Services.
 
-Now ... in the parameters section, add the following:
+**2 - Add the parameter information for Cognitive Services**
+
+Next ... in the parameters section of the ARM template,.
 
 ```json
-"accounts_cs_vision_name": {
+"csVisionName": {
     "type": "string",
     "metadata": {
-        "description": "The resource name of the computer vision api"
-    }
+    "description": "The  name of the Computer Vision API"
 }
 ```
 
 This will tell Azure to add a meaningful description to the newly created resource.
 
-At this point the ARM template should look like the one here (LINK TO FINIsHED LAB05_ARM_TEMPLATE_FINAL)
+**3 - Add the Cognitive Services access keys in the web application configuration**
 
-## Modify the ARM template to add the Blob Storage
+Next ... in the web app resource / parameters section of the ARM template (gab2019.json).
 
-NOT SURE IF WE ALREADY HAVE BLOC STORAGE AVAILABLE AT THIS POINT
+```json
+"properties": {
+    "name": "[parameters('webAppName')]",
+    "siteConfig": {
+        "appSettings": [
+        {
+        "name": "CognitiveServices-endpoint",
+        "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+        },
+        {
+        "name": "CognitiveServices-key1",
+        "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+        }]
+    },
+    "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+},
+```
 
-## Deploy the ARM templates to Azure ??
+The site config will add app settings to the web application in azure
 
-NEED TO ADD STEPS TO DEPLOY THE ARM TEMPLATE AND GET FUncTIONING COGNITIVE SERVICES
+Cognitive Services endpoint and key will be set into our MVC Web App (just like we do with the storage account)
 
-## Getting the API keys for the API
+**4 - Add output variables**
+
+Next ... in the output section of the template, we will add outputs to make it easier to get the keys and connection strings we will need to run our app locally
+
+```json
+"outputs": {
+    "CognitiveServices-endpoint": {
+        "type": "string",
+        "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+    },
+    "CognitiveServices-key1": {
+        "type": "string",
+        "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+    },
+    "Storage-connectionString": {
+        "type": "string",
+        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+    }
+}
+```
+
+This will add output variables to the resource group deployment.
+
+**5 - Add the parameter value for Cognitive Services**
+
+Next ... in the parameters array of the ARM templte parameter file (gab2019.parameters.json).
+
+```json
+"csVisionName": {
+    "value": "gab2019-vision"
+}
+```
+
+This will specify the name of the Cognitive Service resource
+
+At this point the ARM template for lab 5 is ready.
+- [ARM template](deployment/gab2019.json)
+- [ARM template parameters](deployment/gab2019.parameters.json)
+
+## Deploy the ARM templates to Azure
+
+Now that we have an ARM template that includes Cognitive Services, we want to deploy it.
+
+In [Lab 2](../Lab2/README.md) we saw a few methods to deploy the initial components of the ARM template, we will revisit the Azure CLI for this lab.
+
+### Azure CLI - incremental mode
+
+Azure CLI allows for two different deployment modes; "Complete" and "Incremental".
+
+The Incremental mode tells Azure to add the missing components whilke leaving the existing ones alone (tcomponents that exist in Azure but not in the template will also be kept).
+
+The script below will deploy the ARM template resources.
+
+```powershell
+az group deployment create \
+--name Gab2019Deployment1 \
+--mode Incremental \
+--resource-group GAB2019RG \
+--template-file gab2019.json \
+--parameters GAB2019.parameters.json
+```
+
+Once done, the Cognitive Services resource would be deployed and the keys should be configured in the web application.
+
+## Getting config info for the web app
+
+The ARM template deployment takes care of setting the config infomration in the web app, so there is no need to deploy the values in the app settings (or to commit these values to git).
+
+We will need the config info to run the web application locally.
+
+### Getting the API keys for the API
 
 Once your ARM template has successfully been deployed, its time to get the keys to use the services.
+
+This will be needed for us to use the cloud services while running our application locally.
 
 To get your computer vision keys;
 
@@ -99,7 +195,7 @@ Copy this value into a text editor, we will be using it in the next sections.
 
 ![computer-vision-keys][computer-vision-keys]
 
-## Getting the blob storage connection string
+### Getting the blob storage connection string
 
 To get your storage key; 
 
@@ -115,13 +211,28 @@ Copy this value into a text editor, we will be using it in the next sections.
 
 ![blob-connectionstring][blob-connectionstring]
 
+### Getting config info from deployment
+
+Since we added output variables to the ARM template, this can make it easier to get the info for Cognitive Services and Azure Storage.
+
+To reach the output values;
+
+- navigate to the Azure portal
+- locate your resource group
+- in the deployments section
+  - click on the latest deployment
+    - click on the outputs section
+    - the output variable values will be tehre ready to be used (all in one place!)
+
+![deployment-output][deployment-output]
+
 # Upload the dog image into your storage account
 
 We will upload an image to blob storage to serve as test data.
 
 - create a container in your storage blob called ```images```
 - upload the dog image found in the data directory into this container
-  - Use either the portal or the storage explorer application (LINK TO STORAGE EXPLORER)
+  - Use either the portal or the storage explorer application (see [Lab 0](../Lab0/README.md) for details)
 
 **Make sure to set the access level to public so the computer vision can read from it**
 
@@ -167,6 +278,8 @@ To do so;
 ## Using the API in code
 
 ### Setting up the resources keys
+
+[WILL NEED TO CHANGE APPSETTINGS / CODE TO MAKE USE OF THE VALUES SET BY THE ARM TEMPLATE IN THE AZURE WEb APP]
 
 To use the computer vision api, first copy the api key you copied earlier into the file appsettings.json, under the ```Keys:ComputerVision:ApiKey``` section. 
 
@@ -554,6 +667,7 @@ If you followed the steps above, your folder structure should look like this
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
 [computer-vision-keys]: medias/lab5-keys.PNG "Computer Vision API Keys"
 [blob-connectionstring]: medias/portal-connectionstring-blob.png "Storage Account connection string"
+[deployment-output]: medias/lab5-deployment-output.png "ARM template deployment outputs"
 [public-access-blob-se]: medias/public-access-blob-se.png "Public access blob through storage explorer"
 [public-access-blob-portal]: medias/public-access-blob-portal.png "Public access blob through the azure portal"
 [folder-structure]: medias/folder-structure.png "Folder structure"

@@ -1,0 +1,119 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appSvcPlanName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the App Service Plan that will host your Web App."
+      }
+    },
+    "webAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of your Web App."
+      }
+    },
+    "csVisionName": {
+      "type": "string",
+      "metadata": {
+        "description": "The  name of the Computer Vision API"
+    }
+  }
+  },
+  "variables": {
+    "storageAccountName": "[concat('gab2019', uniquestring(resourceGroup().id))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-02-01",
+      "name": "[parameters('webAppName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+      ],
+      "properties": {
+        "name": "[parameters('webAppName')]",
+        "siteConfig": {
+          "appSettings": [
+          {
+            "name": "CognitiveServices-endpoint",
+            "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+          },
+          {
+            "name": "CognitiveServices-key1",
+            "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+          }]
+        },
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+      },
+      "resources": [
+        {
+          "apiVersion": "2018-02-01",
+          "type": "config",
+          "name": "connectionstrings",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+          ],
+          "properties": {
+            "ApplicationStorage": {
+              "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+              "type": "Custom"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2015-08-01",
+      "name": "[parameters('appSvcPlanName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "F1",
+        "tier": "Free",
+        "capacity": 1
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageAccountName')]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2018-07-01",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "apiVersion": "2016-02-01-preview",
+      "name": "[parameters('csVisionName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "F0"
+      },
+      "kind": "ComputerVision",
+      "dependsOn": [],
+      "properties": {},
+      "scale": null
+  }
+  ],
+  "outputs": {
+    "CognitiveServices-endpoint": {
+      "type": "string",
+      "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+    },
+    "CognitiveServices-key1": {
+      "type": "string",
+      "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+    },
+    "Storage-connectionString": {
+      "type": "string",
+      "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+    }
+  }
+}
