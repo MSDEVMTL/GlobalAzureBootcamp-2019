@@ -35,6 +35,17 @@
       ],
       "properties": {
         "name": "[parameters('webAppName')]",
+        "siteConfig": {
+          "appSettings": [
+          {
+            "name": "CognitiveServices-endpoint",
+            "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+          },
+          {
+            "name": "CognitiveServices-key1",
+            "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+          }]
+        },
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
       },
       "resources": [
@@ -91,5 +102,18 @@
       "scale": null
   }
   ],
-  "outputs": {}
+  "outputs": {
+    "CognitiveServices-endpoint": {
+      "type": "string",
+      "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+    },
+    "CognitiveServices-key1": {
+      "type": "string",
+      "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+    },
+    "Storage-connectionString": {
+      "type": "string",
+      "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+    }
+  }
 }

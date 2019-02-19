@@ -65,7 +65,7 @@ First ... under the resources array in the ARM template (gab2019.json).
 
 This will tell Azure that we want an nstance of Cognitive Services.
 
-2 - **add the parameter information for Cognitive Services**
+2 - **Add the parameter information for Cognitive Services**
 
 Next ... in the parameters section of the ARM template,.
 
@@ -81,13 +81,54 @@ This will tell Azure to add a meaningful description to the newly created resour
 
 3 - **Add the Cognitive Services access keys in the web application configuration**
 
-Next ... in the web app resource section of the ARM template (gab2019.json).
+Next ... in the web app resource / parameters section of the ARM template (gab2019.json).
 
-[ADD CHANGES TO AUTOMATICALLY INCLUDE THE COGNITIVE SERVICES KEYS IN THE WEB APP CONFIG]
+```json
+"properties": {
+"name": "[parameters('webAppName')]",
+"siteConfig": {
+    "appSettings": [
+    {
+    "name": "CognitiveServices-endpoint",
+    "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+    },
+    {
+    "name": "CognitiveServices-key1",
+    "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+    }]
+},
+"serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+},
+```
 
-This will set the keys to access Cognitive Services into our MVC Web App (just like we do with the storage account)
+The site config will add app settings to the web application in azure
 
-4 - **Add the parameter value for Cognitive Services**
+Cognitive Services endpoint and key will be set into our MVC Web App (just like we do with the storage account)
+
+4 - **Add output variables**
+
+Next ... in the output section of the template, we will add outputs to make it easier to get the keys and connection strings we will need to run our app locally
+
+```json
+"outputs": {
+"CognitiveServices-endpoint": {
+    "type": "string",
+    "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+},
+"CognitiveServices-key1": {
+    "type": "string",
+    "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+},
+"Storage-connectionString": {
+    "type": "string",
+    "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+}
+}
+```
+
+This will add output variables to the resource group deployment.
+
+5 - **Add the parameter value for Cognitive Services**
 
 Next ... in the parameters array of the ARM templte parameter file (gab2019.parameters.json).
 
@@ -105,11 +146,9 @@ At this point the ARM template for lab 5 is ready.
 
 ## Deploy the ARM templates to Azure
 
-Now that we have an ARM template that includes Cognitive Services, we wwant to deploy it.
+Now that we have an ARM template that includes Cognitive Services, we want to deploy it.
 
-In Lab2 we saw a few methods to deploy the initial components of the ARM template.
-
-Now, we need to deploy the changes.
+In [Lab 2](../Lab2/README.md) we saw a few methods to deploy the initial components of the ARM template, we will revisit the Azure CLI for this lab.
 
 ### Azure CLI - incremental mode
 
@@ -170,7 +209,7 @@ We will upload an image to blob storage to serve as test data.
 
 - create a container in your storage blob called ```images```
 - upload the dog image found in the data directory into this container
-  - Use either the portal or the storage explorer application (LINK TO STORAGE EXPLORER)
+  - Use either the portal or the storage explorer application (see [Lab 0](../Lab0/README.md) for details)
 
 **Make sure to set the access level to public so the computer vision can read from it**
 
