@@ -138,27 +138,49 @@ If you have install the extension, you can do it easily if you type `arm!` at th
 This template, will provision a new Azure Storage Account with the name `StorageAccount1`. Obviously, you want your storage name to be unique. One way to do so is to use a builtin function available with ARM.
 
 ```json
-[concat('gab2019', uniquestring(resourceGroup().id))]
+[uniqueString(resourceGroup().id, resourceGroup().location)]
 ```
 
-This will generate a unique name starting with `gab2019` and concaquenate with a unique string generate from your resource group id.
+This will generate a unique string using your resource group id and location.
 
-Modify your template and add that function to your storage resource.
+You can create a variable and use it anyware in you template.
+
+```json
+"variables": {
+    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
+  }
+```
+
+To use a variable, you simply add this.
+
+```json
+variables('suffix')
+```
+
+In our case, we want to name our storage like this: `gab2019<uniquestring>`.  Use the built-in function `concat` to build your storage name.
+
+```json
+ "[concat('gab2019',variables('suffix'))]"
+```
+
+Your template should now look like this:
 
 ```json
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {},
-  "variables": {},
+  "variables": {
+    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
+  },
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2018-07-01",
-      "name": "[concat('gab2019', uniquestring(resourceGroup().id))]",
+      "name": "[concat('storage',variables('suffix'))]",
       "location": "[resourceGroup().location]",
       "tags": {
-        "displayName": "[concat('gab2019', uniquestring(resourceGroup().id))]"
+        "displayName": "[concat('storage',variables('suffix'))]"
       },
       "sku": {
         "name": "Standard_LRS"
@@ -168,25 +190,40 @@ Modify your template and add that function to your storage resource.
   ],
   "outputs": {}
 }
+```
 
 ## Part 2 - Deploy automatically your first template
 
----
+1. Commit your change to the git repository using the following command.
 
-In the previous lab, we deployed our web app on an Azure Web App.  This Azure Web App itself require an App Service Plan to run.
+```txt
+  git add .
+  git commit -m "Add my first ARM template"
+  git push
+```
+
+2. Browse to...
+
+3. Edit your pipeline
+
+4. Add a new task Azure Resource ...
+
+5. Configure you task
+
+6. Save your task and create a new release
+
+You should now see a new resource in your resource group.
+
+## Part 3 - Add to our template existing resources
+
+In the previous lab, we created an Azure Web app and Azure App Service Plan.
 
 | Resource | Link
 |-----|-----|
 | App Service Plan | [Reference Link](https://docs.microsoft.com/en-us/azure/app-service/overview-hosting-plans)|
 | Azure Web App | [Reference Link](https://azure.microsoft.com/en-us/services/app-service/web/)|
 
-## Part 1 - Create our first ARM template
-
-
-```
-
-## Part 2 - Insert an Azure Service Plan
-
+---
 Move your cursor between the bracket `"resources": []` and copy this code snippet.  
 
 ```json
