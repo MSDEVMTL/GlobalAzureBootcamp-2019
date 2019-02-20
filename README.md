@@ -26,17 +26,17 @@ The team has been assigned a couple of days to find tools & put new processes in
 
 ## Overview of the day
 
-### [Lab 0 - What you will need before the bootcamp](./Lab0/README.md) 
+### [Lab 0 - What you need to install (must do >>before<< the bootcamp!)](./Lab0/README.md) 
 
 
 Time        | Duration | Tittle                                      | Description  
 :----:      | :------: | :-------                                    | :----------- 
-08h30-9h00  | 30 mins  | [Arrival/ Coffee](./Locations/README.md)    | Get your coffee, install your laptop...
-09h00-9h15  | 15 mins  | Intro                                       | Explication about the day
+08h30-9h00  | 30 mins  | [Arrival/ Coffee](./Locations/README.md)    | Grab a seat, get your coffee, install your laptop...
+09h00-9h15  | 15 mins  | Intro                                       | Intro, agenda
 09h15-10h15 | 60 mins  | [Lab 1 - CI/CD ](./Lab1/README.md)          | Create an .Net Core App, put it in GitHub/ or Azure DevVops Repo. Create an Azure DevOps CI/CD, and deploy a webapp.
 10h15-11h00 | 45 mins  | [Lab 2 - ARM template](./Lab2/README.md)    | Create an ARM template , also add a storage to the mix, modify the CICD to deploy.
-11h00-11h45 | 45 mins  | [Lab 3 - Container 1](./Lab3/README.md)     | Package the Application in a Docker container. Test it locally. Deploy manualy to Azure
-11h45-12h30 | 45 mins  | [Lab 4 - Containers 2](./Lab4/README.md)    | Update/ Modify the CICD to deploy the container in Azure 
+11h00-11h45 | 45 mins  | [Lab 3 - Container 1](./Lab3/README.md)     | Package the Application in a Docker container. Test it locally and deploy it manually to Azure Container Services.
+11h45-12h30 | 45 mins  | [Lab 4 - Containers 2](./Lab4/README.md)    | Create a new CI/CD pipeline to automate the container creation and deployment 
 12h30-13h15 | 45 mins  | Lunch                                       | Lunch
 13h15-14h00 | 45 mins  | [Lab 5 - AI](./Lab5/README.md)              | Add an Azure Cognitive Services Vision to the application to validate an image
 14h00-14h45 | 45 mins  | [Lab 6 - Serverless](./Lab7/readme.md)      | Create an Azure Functions (blob trigger) to process all images in a blob storage and use the Vision API for filtering
@@ -53,7 +53,7 @@ All Platforms (Windows, MacOS, Linux)
 
 ## What you will need before the bootcamp?
 
-Before the bootcamp, we encourage you to make sure you have all the requirement software so you can concentrate on learning and not running installations.  Make sure you get all the source code and install all the required software.
+Before the bootcamp, we encourage you to make sure you have all the requirement software so you can concentrate on learning and not running installations.  Make sure you get all the source code and install all the required software.  See Lab 0.
 
 ### Azure Subscription
 If you don't own an Azure subscription already, you can create your free account today. It comes with 200$ credit, so you can experience almost everything without spending a dime. 

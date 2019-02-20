@@ -1,18 +1,18 @@
 ![gablogo][gablogo]
 
-# Lab 1 - Continouus Integration and Continuous Deployment (CI/CD) 
+# Lab 1 - Continuous Integration and Continuous Deployment (CI/CD)
 
 ## Goal
 
-In this lab you will create an application in .Net Core, push it to a remote repository and create a Continouus Integration and Continuous Deployment (CI/CD) with the Azure DevOps Pipeline to deploy the website to Azure. 
+In this lab you will create an application in .Net Core, push it to a remote repository and create a Continuous Integration and Continuous Deployment (CI/CD) with the Azure DevOps Pipeline to deploy the website to Azure.
 
 ## Let's code!
 
 ### Build The Application
 
-Let's create a new web application using the .Net Core. Open a terminal, and navigate to a "dev" folder (ex: C:\Dev).
+First, create a folder named `gab2019`. This will be the root folder for today's solution, all subsequent labs during the day will add content and sub-folder to this one. Then let's create a new web application using the .Net Core. Open a terminal, and navigate to your new root folder "gab2019" folder (ex: C:\Dev\gab2019\).
 
-    cd C:\dev\GABDemo
+    cd C:\dev\gab2019\
 
 Let's scafold an application named GABCDemo using the following command:
 
@@ -28,18 +28,17 @@ Open the solution into Visual Studio Code with:
 
 ### Initialize Local Repository
 
-To create a Git repository you can from Visual Studio Code open a terminal (Ctrl + \`) or return to the terminal windows already open. You should be in the folder `C:\Dev\GABCDemo`. Type
+To create a Git repository you can from Visual Studio Code open a terminal (Ctrl + \`) or return to the terminal windows already open. Make sure your are in the folder `C:\dev\gab2019\` and the following command:
 
-    git Init
+    git init
 
-This command will initialize a local repository. Now let's add alll the code files to the repo.
+This command will initialize a local repository at the root of your solution folder. Now let's add all the code files to the repo.
 
-    git add -A -m "initil commit"
+    git add -A -m "initial commit"  (i dont think that this command works --> should be git add . or git add  -A than you can use git commit -m "initial commit")
 
-Now Git will track the evolution of our code. Git is a decentralized code repository system, therefore there is usually many repository where you can push and pull. However, before we can push our code to a remote repository we have other task to do. Will come back to it later.
+Now, Git will track the evolution of our code. Git is a decentralized code repository system, therefore there is usually many repository where you can push and pull. However, before we can push our code to a remote repository we have other task to do. Will come back to it later.
 
-
-### Creat The Azure WebApp
+### Create The Azure WebApp
 
 The next step is to create a placeholder for our website.  We will create an empty shell of a web application in Azure with these three Azure CLI commands. You can execute them locally or from the Cloud Shell. (Don't forget to validate that you are in the good subscription)
 
@@ -49,7 +48,9 @@ The next step is to create a placeholder for our website.  We will create an emp
 
     az webapp create --name gabcdemo --resource-group gabcdemogroup --plan gabcdemoplan
 
-The first command will create a Resource group. Then inside of this group we create a service plan, and finally we create a webapp to the mix. 
+    Note: You might experience an error if you webapp name is not unique. (Conflict: Website with given name <web app name> already exists.) Make sure to use a unique name. ex: gab2019<your_initial><2digits_random_number> gab2019AV47
+
+The first command will create a Resource group. Then inside of this group we create a service plan, and finally we create a webapp to the mix.
 
 To validate that everything has been created, open a internet browser and navigate to the Azure Portal (portal.azure.com). From the left menu select *Resource Groups*. Click on the group *gabcdemogroup* that we just created, then click on the web App *gabcdemo*
 
@@ -57,9 +58,9 @@ To validate that everything has been created, open a internet browser and naviga
 
 In the top section of the blade you will found the URL of the web site, click on it. You should see a meesage saying:"Your App Service app is up and running".  That perfect, our website shell is ready.
 
-### Create an Azure DevOps project 
+### Create an Azure DevOps project
 
-Navigate to [Dev.Azure.com](http://Dev.Azure.com) and if you don't already have an account create one it's free! Once you are logged-in, create a new project by clicking the New project blue button in the top right corner.
+Navigate to [Dev.Azure.com](http://Dev.Azure.com) and if you don't already have an account [create one it's free!](../Lab0/README.md#azure-devops) Once you are logged-in, create a new project by clicking the New project blue button in the top right corner.
 
 ![createNewProject][createNewProject]
 
@@ -73,26 +74,36 @@ Here you have two options you can use the repository provided in the Azure DevOp
 
 On Azure DevOps portal, from the left menu select *Repos*. Copy the command under the `or push an existing repository from command line`.
 
-[ADD AN IMAGE]
+![gitremoteadd][gitremoteadd]
 
 #### Option 2: Using GitHub
 
-[SOON]
+Azure Pipeline support many different repository. One that is very popular is Github. If you don't already have an account [create one it's free!](../Lab0/README.md#github-optional) Once you are logged-in, create a new repository by expending the "+" in the top right corner, then clicking the **New repository** button.
+
+![NewGitHubRepoHere][NewGitHubRepoHere]
+
+Enter the name of your project (ex: Gab2019), and click the **Create repository** green button.
+
+![GithubRepoDetails][GithubRepoDetails]
+
+Now from this page grab the code under `…or push an existing repository from the command line`
+
+![AddGitHubRemote][AddGitHubRemote]
 
 ### Add a Remote Repository
 
 Return to the Terminal/ Console and paste the command.
 
-    git remote add origin https:..... 
+    git remote add origin https:.....
     git push origin --all
 
 THe first line is to add the remote repository and name it "origin". The second line is to push (upload) the content of the local repository to origin (the remote one). You will need to enter your credential.
 
-> Note: You may need to add some creds from the Setting in Azure DevOps [NEED TO TEST AND DOCUMENT THIS]
-
 ### Continuous Integration
 
-The goal is to have the code to get to compile at every commit. From the Azure DevOps' left menubar, select *Pipelines*, and click the create new button. The first step is to identify where our code is, as you can see Azure DevOps is flexible and accept code from diffrent sources. Select the source you use at the present step.
+The goal is to have the code to get to compile at every commit. From the Azure DevOps' left menubar, select *Pipelines*, and click the create new button. The first step is to identify where our code is, as you can see Azure DevOps is flexible and accept code from different sources. Select the source you use at the precedent step (option 1: Azure Repos or option 2: GitHub).
+
+> **Note:** If you are using GitHub you will need to Authorize Azure DevOps to your Github repository by clicking the Authorize button.
 
 ![NewPipeline_step1][NewPipeline_step1]
 
@@ -108,9 +119,9 @@ The build pipeline is ready click the *Run* button to execute it for the first t
 
 ![buildSuccess][buildSuccess]
 
-### Continous Deployment
+### Continuous Deployment
 
-Great, our code gets to compile at every commit. It would be nice if the code could also be automatically deployed into our dev environment. To acheive that we need to create a *Release Pipeline*.
+Great, our code gets to compile at every commit. It would be nice if the code could also be automatically deployed into our dev environment. To achieve that we need to create a *Release Pipeline*.
 And our pipeline will need artifacts. We will edit the `azure-pipelines.yml` to add two new tasks. You can do this directly in the online repository or just from your local machine; remember the file is at the root.  Add these commands:
 
     - task: DotNetCoreCLI@2
@@ -126,7 +137,7 @@ And our pipeline will need artifacts. We will edit the `azure-pipelines.yml` to 
 
 Those two tasks are to publish our application (package it), and make it available in our Artifact folder. To learn more about the type of command available and see example have a look the  excellent documentation at: https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core.  Once you are done, save and commit (and push if it was local).
 
-From the left menubar, click on e the *Pipeles*,  select *Release*, and clienk the *New Release* blue button. Select the template that matches your application. For this post *Azure App Service deployment* is the one we need. 
+From the left menubar, click on e the *Pipelines*,  select *Release*, and client the *New Release* blue button. Select the template that matches your application. For this post *Azure App Service deployment* is the one we need. 
 
 ![New Release, select a template][NewRelease_step1]
 
@@ -144,36 +155,36 @@ To get our continuous deployment (CD) we need to enable that trigger by clicking
 
 The last step to configure the Release pipeline is to specify a destination.  By clicking on the "1 job, 1 task" in the middle of the screen (with the little red exclamation point in a circle), that will open the window where we will do that.
 
-Select the subscription you would like to use, and then click on the `Authaurize` button on the right. Once it's done go change the `App Service Name`. Click on it and wait 2-3 seconds you should see the app we created with our Azure CLI display.  Select it, and voila!
+Select the subscription you would like to use, and then click on the `Authorize` button on the right. Once it's done go change the `App Service Name`. Click on it and wait 2-3 seconds you should see the app we created with our Azure CLI display.  Select it, and voila!
 
 ![SetupReleaseDetails][SetupReleaseDetails]
 
 ### Testing time
 
-To test if our CI/CD works we will do a simple code change. First we need to get the latest version of the code. Remember that YAML file was added directly from the web so we don't have it locally. 
+To test if our CI/CD works we will do a simple code change. First we need to get the latest version of the code. Remember that YAML file was added directly from the web so we don't have it locally.
 
 #### Git pull
 
-To get the lastes version of the code we need to do a `git pull`. You can execute the command directly from the terminal. However, Visual Studio is also well integrated with Git so let's try that way.
+To get the latest version of the code we need to do a `git pull`. You can execute the command directly from the terminal. However, Visual Studio is also well integrated with Git so let's try that way.
 
 ![git-pull][git-pull]
 
-From the left menu, select the Source Control icon (third one from the top), that will open the source control tab.  Click on the elipse [...] button and select pull.
+From the left menu, select the Source Control icon (third one from the top), that will open the source control tab.  Click on the ellipsis [...] button and select pull.
 
 Now that you have the last version of the code, go in the Home controller and change one of the message. Don't forget to save your work.  
 
-The last steps you need to do is a git commit, and a git push. Once more you can do it dirrectly from the terminal or from visual studio.
+The last steps you need to do is a git commit, and a git push. Once more you can do it directly from the terminal or from visual studio.
 
 That last push should have trigger our build pipeline. go back into Azure DevOps to see if it's In progress. Once the build is done the Release pipeline should start the deployment.
 
-Once the deployment is done, refresh your web browser where the web page was showinf the "Your App Service app is up and running" mesage previously...
-
+Once the deployment is done, refresh your web browser where the web page was shown "Your App Service app is up and running" message previously...
 
 ## Reference
 
 - [Build, test, and deploy .NET Core apps in Azure Pipelines](https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core)
 
 ## End
+
 [Previous Lab](../Lab0/README.md)
 [Next Lab](../Lab2/README.md)
 
@@ -191,3 +202,7 @@ Once the deployment is done, refresh your web browser where the web page was sho
 [TriggerRelease]: medias/TriggerRelease.png
 [git-pull]: medias/git-pull.png
 [resourceGroup]: medias/resourceGroup.png
+[gitremoteadd]: medias/gitremoteadd.png
+[NewGitHubRepoHere]: medias/NewGitHubRepoHere.png
+[GithubRepoDetails]: medias/GithubRepoDetails.png
+[AddGitHubRemote]: medias/AddGitHubRemote.png
