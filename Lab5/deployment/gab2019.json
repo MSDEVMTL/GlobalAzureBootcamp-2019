@@ -38,11 +38,11 @@
         "siteConfig": {
           "appSettings": [
           {
-            "name": "CognitiveServices-endpoint",
+            "name": "ComputerVision:Endpoint",
             "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
           },
           {
-            "name": "CognitiveServices-key1",
+            "name": "ComputerVision:ApiKey",
             "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
           }]
         },

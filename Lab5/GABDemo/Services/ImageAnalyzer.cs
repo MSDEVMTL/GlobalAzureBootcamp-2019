@@ -6,7 +6,7 @@ using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 
 namespace GABDemo.Services
 {
-    public class ImageAnalyzer
+    public class ImageAnalyzer : IImageAnalyzer
     {
         private readonly ComputerVisionClient _computerVision;
 
@@ -18,10 +18,9 @@ namespace GABDemo.Services
                 VisualFeatureTypes.Tags
             };
 
-        public ImageAnalyzer(string apiKey, string apiEndpoint)
+        public ImageAnalyzer(ComputerVisionClient computerVision)
         {
-            _computerVision = new ComputerVisionClient(new ApiKeyServiceClientCredentials(apiKey));
-            _computerVision.Endpoint = apiEndpoint;
+            _computerVision = computerVision;
         }
 
         public async Task<ImageAnalysis> AnalyzeAsync(string imageUrl)
