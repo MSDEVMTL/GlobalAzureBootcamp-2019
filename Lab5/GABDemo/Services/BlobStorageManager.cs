@@ -1,17 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace GABDemo.Services
 {
-    public class BlobStorageManager
+    public class BlobStorageManager : IBlogStorageManager
     {
         private readonly CloudStorageAccount _storageAccount;
 
-        public BlobStorageManager(string connectionString)
+        public BlobStorageManager(StorageAccountOptions options)
         {
-            if (!CloudStorageAccount.TryParse(connectionString, out _storageAccount))
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+                
+            if (string.IsNullOrWhiteSpace(options.ConnectionString))
+            {
+                throw new Exception("Storage connection string is missing");
+            }
+
+            if (!CloudStorageAccount.TryParse(options.ConnectionString, out _storageAccount))
             {
                 throw new Exception(
                     "Invalid storage account connecting string. Please verify the connection string and try again");

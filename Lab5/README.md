@@ -91,11 +91,11 @@ Next ... in the web app resource / parameters section of the ARM template (gab20
     "siteConfig": {
         "appSettings": [
         {
-        "name": "CognitiveServices-endpoint",
+        "name": "ComputerVision:Endpoint",
         "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
         },
         {
-        "name": "CognitiveServices-key1",
+        "name": "ComputerVision:ApiKey",
         "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
         }]
     },
@@ -279,30 +279,23 @@ To do so;
 
 ### Setting up the resources keys
 
-[WILL NEED TO CHANGE APPSETTINGS / CODE TO MAKE USE OF THE VALUES SET BY THE ARM TEMPLATE IN THE AZURE WEb APP]
+To use the computer vision api, first copy the api key you copied earlier into the file appsettings.json, under the ```ComputerVision:ApiKey``` section. 
 
-To use the computer vision api, first copy the api key you copied earlier into the file appsettings.json, under the ```Keys:ComputerVision:ApiKey``` section. 
+In the ```ComputerVision:ApiEndPoint``` section, enter the computer vision api endpoint. It should like like this: ```https://eastus.api.cognitive.microsoft.com```, where ```eastus``` is the region into which you created your computer vision api resource into.
 
-In the ```Keys:ComputerVision:ApiEndPoint``` section, enter the computer vision api endpoint. It should like like this: ```https://eastus.api.cognitive.microsoft.com```, where ```eastus``` is the region into which you created your computer vision api resource into.
-
-Now for the storage connection string, copy the connection string you copied earlier into the section ```Keys:Storage:ConnectionString```.
+Now for the storage connection string, copy the connection string you copied earlier into the section ```ConnectionStrings:ApplicationStorage```.
 
 ### Add code to make use of the resource keys
 
-To be able to use these keys into our application, create a class in the application named ```KeysOptions```. We will be using the Options pattern available in ASP.NET Core. In that class, you will need to copy the structure of your appsettings into code. It should look like the following:
+To be able to use these keys into our application, create two classes in the application named ```StorageAccountOptions``` and ```ComputerVisionOptions```. We will be using the Options pattern available in ASP.NET Core. In that class, you will need to copy the structure of your appsettings into code. It should look like the following:
 
 ```csharp
-public class KeysOptions
-{
-    public ComputerVisionOptions ComputerVision { get; set; }
-    public StorageAccountOptions Storage { get; set; }
-}
-
 public class StorageAccountOptions
 {
     public string ConnectionString { get; set; }
 }
-
+```
+```csharp
 public class ComputerVisionOptions
 {
     /// <summary>
@@ -320,7 +313,6 @@ public class ComputerVisionOptions
  Note that we have also created classes for the sub-sections.
 
 
-
 ### Creating classes to consume the storage and computer vision api
 
 Under the root of your application, create a folder called ```Services``` and create 2 classes (2 classes): ```BlobStorageManager``` and ```ImageAnalyzer```
@@ -334,9 +326,17 @@ In order to consume the blob storage, copy the following code into the class ```
 ```csharp
 private readonly CloudStorageAccount _storageAccount;
 
-public BlobStorageManager(string connectionString)
+public BlobStorageManager(StorageAccountOptions options)
 {
-    if (!CloudStorageAccount.TryParse(connectionString, out _storageAccount))
+    if (options == null)
+        throw new ArgumentNullException(nameof(options));
+        
+    if (string.IsNullOrWhiteSpace(options.ConnectionString))
+    {
+        throw new Exception("Storage connection string is missing");
+    }
+
+    if (!CloudStorageAccount.TryParse(options.ConnectionString, out _storageAccount))
     {
         throw new Exception(
             "Invalid storage account connecting string. Please verify the connection string and try again");
@@ -366,9 +366,21 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 ```
 
+Create an interface that will be used for the dependency injection called ```BlobStorageManager```. Copy the following code into this interface
+
+```csharp
+IEnumerable<IListBlobItem> GetFiles(string containerName);
+```
+
+Make sure to inherit from this interface. Your class definition should look like
+
+```csharp
+public class BlobStorageManager : IBlogStorageManager
+```
+
 #### ImageAnalyzer
 
-To consume the computer vision api, copy the following code into the class ```ImageAnalyzer```
+To consume the computer vision api, copy the following code into the class ```IImageAnalyzer```
 
 ```csharp
 private readonly ComputerVisionClient _computerVision;
@@ -381,10 +393,9 @@ private static readonly List<VisualFeatureTypes> Features =
         VisualFeatureTypes.Tags
     };
 
-public ImageAnalyzer(string apiKey, string apiEndpoint)
+public ImageAnalyzer(ComputerVisionClient computerVision)
 {
-    _computerVision = new ComputerVisionClient(new ApiKeyServiceClientCredentials(apiKey));
-    _computerVision.Endpoint = apiEndpoint;
+    _computerVision = computerVision;
 }
 
 public async Task<ImageAnalysis> AnalyzeAsync(string imageUrl)
@@ -411,27 +422,58 @@ using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 ```
 
+Create an interface that will be used for the dependency injection called ```IBlobStorageManager```. Copy the following code into this interface
+
+```csharp
+Task<ImageAnalysis> AnalyzeAsync(string imageUrl);
+```
+
+Make sure to inherit from this interface. Your class definition should look like
+
+```csharp
+public class ImageAnalyzer : IImageAnalyzer
+```
+
 #### Wiring all this into the Startup
 
 In your ```Startup``` class, under the ```ConfigureServices``` method, add the following:
 
 ```csharp
-services.Configure<KeysOptions>(Configuration.GetSection("Keys"))
-        .PostConfigure<KeysOptions>(options =>
-{
-    if (string.IsNullOrEmpty(options.ComputerVision.ApiKey))
-    {
-        throw new Exception("Computer Vision API Key is missing");
-    }
+services.Configure<ComputerVisionOptions>(Configuration.GetSection("ComputerVision"))
+        .PostConfigure<ComputerVisionOptions>(options =>
+        {
+            if (string.IsNullOrEmpty(options.ApiKey))
+            {
+                throw new Exception("Computer Vision API Key is missing");
+            }
 
-    if (string.IsNullOrEmpty(options.ComputerVision.ApiEndPoint))
-    {
-        throw new Exception("Computer Vision API Key is missing");
-    }
+            if (string.IsNullOrEmpty(options.ApiEndPoint))
+            {
+                throw new Exception("Computer Vision API Key is missing");
+            }
+
+        });
+services.Configure<StorageAccountOptions>(options =>
+{
+    options.ConnectionString = Configuration.GetConnectionString("ApplicationStorage");
 });
+
+services.AddScoped<IImageAnalyzer, ImageAnalyzer>(sp =>
+{
+    var options = sp.GetRequiredService<IOptions<ComputerVisionOptions>>().Value;
+    var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(options.ApiKey)) { Endpoint = options.ApiEndPoint };
+    return new ImageAnalyzer(client);
+});
+services.AddScoped<IBlogStorageManager, BlobStorageManager>(sp => new BlobStorageManager(sp.GetRequiredService<IOptions<StorageAccountOptions>>().Value));
 ```
 
-This will tell ASP.NET Core to map our appsettings structure to an object structure.
+This will map our settings to our Options objects and add our service class into our dependency injection container for later consumption.
+
+Make sure to add the following the following namespace to your startup class:
+
+```csharp
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+```
 
 ## Creating the controller and view
 
@@ -440,17 +482,18 @@ This will tell ASP.NET Core to map our appsettings structure to an object struct
  In that class, copy the following code:
 
  ```csharp
-private readonly KeysOptions _keys;
+private readonly IBlogStorageManager _blobStorageManager;
+private readonly IImageAnalyzer _imageAnalyzer;
 
-public AnalyzerController(IOptions<KeysOptions> apiKeysOptions)
+public AnalyzerController(IBlogStorageManager blobStorageManager, IImageAnalyzer imageAnalyzer)
 {
-    _keys = apiKeysOptions.Value;
+    _blobStorageManager = blobStorageManager ?? throw new ArgumentNullException(nameof(blobStorageManager));
+    _imageAnalyzer = imageAnalyzer ?? throw new ArgumentNullException(nameof(imageAnalyzer));
 }
 
 public IActionResult Index()
 {
-    var manager = new BlobStorageManager(_keys.Storage.ConnectionString);
-    var files = manager.GetFiles("images").Select(_ => _.Uri).ToList();
+    var files = _blobStorageManager.GetFiles("images").Select(_ => _.Uri).ToList();
 
     ViewBag.Files = files;
 
@@ -459,8 +502,7 @@ public IActionResult Index()
 
 public async Task<IActionResult> Analyze(string imageUrl)
 {
-    var imageAnalyzer = new ImageAnalyzer(_keys.ComputerVision.ApiKey, _keys.ComputerVision.ApiEndPoint);
-    var results = await imageAnalyzer.AnalyzeAsync(imageUrl);
+    var results = await _imageAnalyzer.AnalyzeAsync(imageUrl);
     ViewData["Title"] = "Image analysis results";
 
     return View("Results",results);
@@ -472,6 +514,7 @@ public async Task<IActionResult> Analyze(string imageUrl)
  The namespaces in this class should include:
 
  ```csharp
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;

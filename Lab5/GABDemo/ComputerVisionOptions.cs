@@ -1,16 +1,5 @@
 ﻿namespace GABDemo
 {
-    public class KeysOptions
-    {
-        public ComputerVisionOptions ComputerVision { get; set; }
-        public StorageAccountOptions Storage { get; set; }
-    }
-
-    public class StorageAccountOptions
-    {
-        public string ConnectionString { get; set; }
-    }
-
     public class ComputerVisionOptions
     {
         /// <summary>
