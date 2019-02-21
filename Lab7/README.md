@@ -48,23 +48,22 @@ In order to access different azure services our app will need an identity.
 ```json
 {
     "type": "Microsoft.KeyVault/vaults",
+    "apiVersion": "2018-02-14",
     "name": "[parameters('keyVaultName')]",
-    "apiVersion": "2016-10-01",
     "location": "[resourceGroup().location]",
     "properties": {
+        "enabledForDeployment": true,
+        "enabledForTemplateDeployment": true,
+        "enabledForDiskEncryption": true,
+        "tenantId": "[subscription().tenantId]",
         "accessPolicies": [],
-        "enabledForDiskEncryption": false,
         "sku": {
             "name": "standard",
             "family": "A"
         },
-        "enabledForTemplateDeployment": true,
-        "tenantId": "[subscription().tenantId]",
-        "enabledForDeployment": true,
-        "accessPolicies": []
-    },
-    "resources": [],
-    "dependsOn": []
+        "resources": [],
+        "dependsOn": []
+    }
 }
 ```
 > TIP: note that we are using template expressions like `[resourceGroup().location]` and `[subscription().tenantId]` to fill out automatically some values relative to the location where the resource will be deployed.
