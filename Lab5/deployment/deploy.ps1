@@ -4,7 +4,7 @@ param (
     [string]$location = "canadacentral",
     [string]$resourceGroupName = "GAB2019RG",
     [string]$deploymentName = "Gab2019Deployment1",
-    [bool]$createResourceGroup = $false
+    [switch]$createResourceGroup
 )
 
 $webAppName = "gab2019-mvc-$webAppNameSuffix"
