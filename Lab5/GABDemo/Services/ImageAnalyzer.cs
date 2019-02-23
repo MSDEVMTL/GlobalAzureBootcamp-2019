@@ -29,7 +29,8 @@ namespace GABDemo.Services
             {
                 throw new Exception($"Invalid remoteImageUrl: {imageUrl}");
             }
-            return _computerVision.AnalyzeImageAsync(imageUrl, Features);
+            var analysisResults = _computerVision.AnalyzeImageAsync(imageUrl, Features);
+            return analysisResults;
         }
     }
 }
