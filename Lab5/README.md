@@ -10,28 +10,28 @@ To do this, we will add Azure Cognitive Services (Vision) to our project. The we
 
 # Let's code!
 
-- [Add Azure components](#add-azure-components)
-  - [Modify the ARM template to add the Computer Vision service](#modify-the-arm-template-to-add-the-computer-vision-service)
-  - [Deploy the ARM templates to Azure](#deploy-the-arm-templates-to-azure)
-    - [Azure CLI - incremental mode](#Azure-CLI---incremental-mode)
-  - [Getting config info for the web app](#getting-config-info-for-the-web-app)  
-    - [Getting the API keys for the API](#getting-the-api-keys-for-the-api)
-    - [Getting the blob storage connection string](#getting-the-blob-storage-connection-string)
-    - [Getting config info from deployment](#getting-config-info-from-deployment)
-- [Upload the dog image into your storage account](#upload-the-dog-image-into-your-storage-account)
-- [Let's add computer vision to our web application](#let-s-add-computer-vision-to-our-web-application)
-  - [Adding the Computer Vision API library to the application](#adding-the-computer-vision-api-library-to-the-application)
-  - [Adding the Blob storage library to the application](#adding-the-blob-storage-library-to-the-application)
-  - [Using the API in code](#using-the-api-in-code)
-    - [Setting up the resources keys](#setting-up-the-resources-keys)
-    - [Add code to make use of the resource keys](#add-code-to-make-use-of-the-resource-keys)
-    - [Creating classes to consume the storage and computer vision api](#creating-classes-to-consume-the-storage-and-computer-vision-api)
-      - [BlobStorageManager](#blobstoragemanager)
-      - [ImageAnalyzer](#imageanalyzer)
-      - [Wiring all this into the Startup](#wiring-all-this-into-the-startup)
-  - [Creating the controller and view](#creating-the-controller-and-view)
-  - [Folder structure](#folder-structure)
-- [Reference](#reference)
+-   [Add Azure components](#add-azure-components)
+    -   [Modify the ARM template to add the Computer Vision service](#modify-the-arm-template-to-add-the-computer-vision-service)
+    -   [Deploy the ARM templates to Azure](#deploy-the-arm-templates-to-azure)
+        -   [Azure CLI - incremental mode](#Azure-CLI---incremental-mode)
+    -   [Getting config info for the web app](#getting-config-info-for-the-web-app)
+        -   [Getting the API keys for the API](#getting-the-api-keys-for-the-api)
+        -   [Getting the blob storage connection string](#getting-the-blob-storage-connection-string)
+        -   [Getting config info from deployment](#getting-config-info-from-deployment)
+-   [Upload the dog image into your storage account](#upload-the-dog-image-into-your-storage-account)
+-   [Let's add computer vision to our web application](#let-s-add-computer-vision-to-our-web-application)
+    -   [Adding the Computer Vision API library to the application](#adding-the-computer-vision-api-library-to-the-application)
+    -   [Adding the Blob storage library to the application](#adding-the-blob-storage-library-to-the-application)
+    -   [Using the API in code](#using-the-api-in-code)
+        -   [Setting up the resources keys](#setting-up-the-resources-keys)
+        -   [Add code to make use of the resource keys](#add-code-to-make-use-of-the-resource-keys)
+        -   [Creating classes to consume the storage and computer vision api](#creating-classes-to-consume-the-storage-and-computer-vision-api)
+            -   [BlobStorageManager](#blobstoragemanager)
+            -   [ImageAnalyzer](#imageanalyzer)
+            -   [Wiring all this into the Startup](#wiring-all-this-into-the-startup)
+    -   [Creating the controller and view](#creating-the-controller-and-view)
+    -   [Folder structure](#folder-structure)
+-   [Reference](#reference)
 
 # Add Azure components
 
@@ -56,7 +56,7 @@ First ... under the resources array in the ARM template (gab2019.json).
     "name": "[parameters('csVisionName')]",
     "location": "[resourceGroup().location]",
     "sku": {
-    "name": "F0"
+        "name": "F0"
     },
     "kind": "ComputerVision",
     "dependsOn": [],
@@ -65,7 +65,7 @@ First ... under the resources array in the ARM template (gab2019.json).
 }
 ```
 
-This will tell Azure that we want an nstance of Cognitive Services.
+This will tell Azure that we want an instance of Cognitive Services.
 
 **2 - Add the parameter information for Cognitive Services**
 
@@ -143,8 +143,9 @@ Next ... in the parameters array of the ARM templte parameter file (gab2019.para
 This will specify the name of the Cognitive Service resource
 
 At this point the ARM template for lab 5 is ready.
-- [ARM template](deployment/gab2019.json)
-- [ARM template parameters](deployment/gab2019.parameters.json)
+
+-   [ARM template](deployment/gab2019.json)
+-   [ARM template parameters](deployment/gab2019.parameters.json)
 
 ## Deploy the ARM templates to Azure
 
@@ -156,7 +157,7 @@ In [Lab 2](../Lab2/README.md) we saw a few methods to deploy the initial compone
 
 Azure CLI allows for two different deployment modes; "Complete" and "Incremental".
 
-The Incremental mode tells Azure to add the missing components whilke leaving the existing ones alone (tcomponents that exist in Azure but not in the template will also be kept).
+The Incremental mode tells Azure to add the missing components while leaving the existing ones alone (components that exist in Azure but not in the template will also be kept).
 
 The script below will deploy the ARM template resources.
 
@@ -173,7 +174,7 @@ Once done, the Cognitive Services resource would be deployed and the keys should
 
 ## Getting config info for the web app
 
-The ARM template deployment takes care of setting the config infomration in the web app, so there is no need to deploy the values in the app settings (or to commit these values to git).
+The ARM template deployment takes care of setting the config information in the web app, so there is no need to deploy the values in the app settings (or to commit these values to git).
 
 We will need the config info to run the web application locally.
 
@@ -185,11 +186,11 @@ This will be needed for us to use the cloud services while running our applicati
 
 To get your computer vision keys;
 
-- navigate to the Azure portal
-- locate your computer vision resource
-- go into the keys section
-  - find the key value under key1
-  - click the Copy button to copy the key
+-   navigate to the Azure portal
+-   locate your computer vision resource
+-   go into the keys section
+    -   find the key value under key1
+    -   click the Copy button to copy the key
 
 Copy this value into a text editor, we will be using it in the next sections.
 
@@ -197,15 +198,15 @@ Copy this value into a text editor, we will be using it in the next sections.
 
 ### Getting the blob storage connection string
 
-To get your storage key; 
+To get your storage key;
 
-- navigate to the Azure portal
-- locate your storage account
-- in the Settings section of the storage account overview
-  - select Access keys
-    - here you can view your account access keys and the complete connection string for each key
-  - find the Connection string value under key1
-  - click the Copy button to copy the connection string
+-   navigate to the Azure portal
+-   locate your storage account
+-   in the Settings section of the storage account overview
+    -   select Access keys
+        -   here you can view your account access keys and the complete connection string for each key
+    -   find the Connection string value under key1
+    -   click the Copy button to copy the connection string
 
 Copy this value into a text editor, we will be using it in the next sections.
 
@@ -217,12 +218,12 @@ Since we added output variables to the ARM template, this can make it easier to 
 
 To reach the output values;
 
-- navigate to the Azure portal
-- locate your resource group
-- in the deployments section
-  - click on the latest deployment
-    - click on the outputs section
-    - the output variable values will be tehre ready to be used (all in one place!)
+-   navigate to the Azure portal
+-   locate your resource group
+-   in the deployments section
+    -   click on the latest deployment
+        -   click on the outputs section
+        -   the output variable values will be tehre ready to be used (all in one place!)
 
 ![deployment-output][deployment-output]
 
@@ -230,143 +231,142 @@ To reach the output values;
 
 We will upload an image to blob storage to serve as test data.
 
-- create a container in your storage blob called ```images```
-- upload the dog image found in the data directory into this container
-  - Use either the portal or the storage explorer application (see [Lab 0](../Lab0/README.md) for details)
+-   create a container in your storage blob called `images`
+-   upload the dog image found in the data directory into this container
+    -   Use either the portal or the storage explorer application (see [Lab 0](../Lab0/README.md) for details)
 
 **Make sure to set the access level to public so the computer vision can read from it**
 
-To do that in Azure Storage Explorer;  
+To do that in Azure Storage Explorer;
 
-- right click on your container
-- select Set Public Access Level
+-   right click on your container
+-   select Set Public Access Level
 
 ![public-access-blob-se][public-access-blob-se]
 
-To do the same in the Azure Portal; 
+To do the same in the Azure Portal;
 
-- navigate to your storage account
-- click on the Blobs under Blob service
-- select your blob (in our case images)
-- click on Access policy
-- Select Blob (anonymous read access for blobs only) as the public access level
+-   navigate to your storage account
+-   click on the Blobs under Blob service
+-   select your blob (in our case images)
+-   click on Access policy
+-   Select Blob (anonymous read access for blobs only) as the public access level
 
 ![public-access-blob-portal][public-access-blob-portal]
 
 # Let's add computer vision to our web application
 
-Azure components are now deployed abd test data is ready. It s now time to add Computer Vision functionality to the web appication.
+Azure components are now deployed and test data is ready. It s now time to add Computer Vision functionality to the web appication.
 
 ## Adding the Computer Vision API library to the application
 
-We need to install the Computer Vision client library NuGet package. 
+We need to install the Computer Vision client library NuGet package.
 
-To do so; 
+To do so;
 
-- open the terminal in your Visual Studio Code (```ctrl+` ```) 
-- type ```dotnet add package Microsoft.Azure.CognitiveServices.Vision.ComputerVision```
+-   open the terminal in your Visual Studio Code (`` ctrl+` ``)
+-   type `dotnet add package Microsoft.Azure.CognitiveServices.Vision.ComputerVision`
 
 ## Adding the Blob storage library to the application
 
-We need to install the Blob storage library Nuget Package. 
+We need to install the Blob storage library Nuget Package.
 
-To do so; 
+To do so;
 
-- again in your terminal 
-- type ```dotnet add package Microsoft.Azure.Storage.Blob```
+-   again in your terminal
+-   type `dotnet add package Microsoft.Azure.Storage.Blob`
 
 ## Using the API in code
 
 ### Setting up the resources keys
 
-To use the computer vision api, first copy the api key you copied earlier into the file appsettings.json, under the ```ComputerVision:ApiKey``` section. 
+To use the computer vision api, first copy the api key you copied earlier into the file appsettings.json, under the `ComputerVision:ApiKey` section.
 
-In the ```ComputerVision:ApiEndPoint``` section, enter the computer vision api endpoint. It should like like this: ```https://eastus.api.cognitive.microsoft.com```, where ```eastus``` is the region into which you created your computer vision api resource into.
+In the `ComputerVision:ApiEndPoint` section, enter the computer vision api endpoint. It should like like this: `https://eastus.api.cognitive.microsoft.com`, where `eastus` is the region into which you created your computer vision api resource into.
 
-Now for the storage connection string, copy the connection string you copied earlier into the section ```ConnectionStrings:ApplicationStorage```.
+Now for the storage connection string, copy the connection string you copied earlier into the section `ConnectionStrings:ApplicationStorage`.
 
 ### Add code to make use of the resource keys
 
-To be able to use these keys into our application, create two classes in the application named ```StorageAccountOptions``` and ```ComputerVisionOptions```. We will be using the Options pattern available in ASP.NET Core. In that class, you will need to copy the structure of your appsettings into code. It should look like the following:
+To be able to use these keys into our application, create two classes in the application named `StorageAccountOptions` and `ComputerVisionOptions`. We will be using the Options pattern available in ASP.NET Core. In that class, you will need to copy the structure of your appsettings into code. It should look like the following:
 
 ```csharp
 public class StorageAccountOptions
 {
+    [Required]
     public string ConnectionString { get; set; }
 }
 ```
+
 ```csharp
 public class ComputerVisionOptions
 {
     /// <summary>
     /// Your subscription key
     /// </summary>
+    [Required]
     public string ApiKey { get; set; }
 
     /// <summary>
     /// The endpoint of the region in which your created your ComputerVision resource. i.e. https://westcentralus.api.cognitive.microsoft.com
     /// </summary>
+    [Required]
     public string ApiEndPoint { get; set; }
 }
- ```
+```
 
- Note that we have also created classes for the sub-sections.
-
+Note that we have also created classes for the sub-sections.
 
 ### Creating classes to consume the storage and computer vision api
 
-Under the root of your application, create a folder called ```Services``` and create 2 classes (2 classes): ```BlobStorageManager``` and ```ImageAnalyzer```
+Under the root of your application, create a folder called `Services` and create 2 classes (2 classes): `BlobStorageManager` and `ImageAnalyzer`
 
-The ```BlobStorageManager``` is used to consume the blob storage and the ```ImageAnalyzer``` is used to consume the computer vision api.
+The `BlobStorageManager` is used to consume the blob storage and the `ImageAnalyzer` is used to consume the computer vision api.
 
 #### BlobStorageManager
 
-In order to consume the blob storage, copy the following code into the class ```BlobStorageManager```
+In order to consume the blob storage, copy the following code into the class `BlobStorageManager`
 
 ```csharp
 private readonly CloudStorageAccount _storageAccount;
 
-public BlobStorageManager(StorageAccountOptions options)
+public BlobStorageManager(IOptions<StorageAccountOptions> options)
 {
-    if (options == null)
-        throw new ArgumentNullException(nameof(options));
-        
-    if (string.IsNullOrWhiteSpace(options.ConnectionString))
-    {
-        throw new Exception("Storage connection string is missing");
-    }
+    if (options == null) { throw new ArgumentNullException(nameof(options)); }
+    _storageAccount = CreateCloudStorageAccount(options.Value);
+}
 
-    if (!CloudStorageAccount.TryParse(options.ConnectionString, out _storageAccount))
+private CloudStorageAccount CreateCloudStorageAccount(StorageAccountOptions options)
+{
+    if (!CloudStorageAccount.TryParse(options.ConnectionString, out CloudStorageAccount storageAccount))
     {
-        throw new Exception(
-            "Invalid storage account connecting string. Please verify the connection string and try again");
+        throw new Exception("Invalid storage account connecting string. Please verify the connection string and try again");
     }
+    return storageAccount;
 }
 
 public IEnumerable<IListBlobItem> GetFiles(string containerName)
 {
     var cloudBlobClient = _storageAccount.CreateCloudBlobClient();
-
     var container = cloudBlobClient.GetContainerReference(containerName);
-    foreach (var file in container.ListBlobs())
-    {
-        yield return file;
-    }
+    var blobs = container.ListBlobs();
+    return blobs;
 }
 ```
 
-The method ```GetFiles``` will be used to list all the files in your blob container (in our cases we will use the _images_ container created earlier).
+The method `GetFiles` will be used to list all the files in your blob container (in our cases we will use the _images_ container created earlier).
 
 The namespaces for this class should have:
 
 ```csharp
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 ```
 
-Create an interface that will be used for the dependency injection called ```BlobStorageManager```. Copy the following code into this interface
+Create an interface that will be used for the dependency injection called `BlobStorageManager`. Copy the following code into this interface
 
 ```csharp
 IEnumerable<IListBlobItem> GetFiles(string containerName);
@@ -380,7 +380,7 @@ public class BlobStorageManager : IBlogStorageManager
 
 #### ImageAnalyzer
 
-To consume the computer vision api, copy the following code into the class ```IImageAnalyzer```
+To consume the computer vision api, copy the following code into the class `ImageAnalyzer`
 
 ```csharp
 private readonly ComputerVisionClient _computerVision;
@@ -395,22 +395,21 @@ private static readonly List<VisualFeatureTypes> Features =
 
 public ImageAnalyzer(ComputerVisionClient computerVision)
 {
-    _computerVision = computerVision;
+    _computerVision = computerVision ?? throw new ArgumentNullException(nameof(computerVision));
 }
 
-public async Task<ImageAnalysis> AnalyzeAsync(string imageUrl)
+public Task<ImageAnalysis> AnalyzeAsync(string imageUrl)
 {
     if (!Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
     {
-        throw new Exception("Invalid remoteImageUrl: {imageUrl}");
+        throw new Exception($"Invalid remoteImageUrl: {imageUrl}");
     }
-
-    ImageAnalysis analysis = await _computerVision.AnalyzeImageAsync(imageUrl, Features);
-    return analysis;
+    var analysisResults = _computerVision.AnalyzeImageAsync(imageUrl, Features);
+    return analysisResults;
 }
 ```
 
-As you can see, we are asking the API to return use the Categories of the image, its description, the image type information, the image tags and the image faces collection. You can also ask it to return the Color information (by adding ```VisualFeatureTypes.Color```) and Objects information (by adding ```VisualFeatureTypes.Objects```).
+As you can see, we are asking the API to return use the Categories of the image, its description, the image type information, the image tags and the image faces collection. You can also ask it to return the Color information (by adding `VisualFeatureTypes.Color`) and Objects information (by adding `VisualFeatureTypes.Objects`).
 
 The namespaces for this class should have:
 
@@ -422,7 +421,7 @@ using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 ```
 
-Create an interface that will be used for the dependency injection called ```IBlobStorageManager```. Copy the following code into this interface
+Create an interface that will be used for the dependency injection called `IBlobStorageManager`. Copy the following code into this interface
 
 ```csharp
 Task<ImageAnalysis> AnalyzeAsync(string imageUrl);
@@ -436,35 +435,25 @@ public class ImageAnalyzer : IImageAnalyzer
 
 #### Wiring all this into the Startup
 
-In your ```Startup``` class, under the ```ConfigureServices``` method, add the following:
+In your `Startup` class, under the `ConfigureServices` method, add the following:
 
 ```csharp
-services.Configure<ComputerVisionOptions>(Configuration.GetSection("ComputerVision"))
-        .PostConfigure<ComputerVisionOptions>(options =>
-        {
-            if (string.IsNullOrEmpty(options.ApiKey))
-            {
-                throw new Exception("Computer Vision API Key is missing");
-            }
+// Blob Storage
+services.AddOptions<StorageAccountOptions>()
+    .Configure(options => options.ConnectionString = Configuration.GetConnectionString("ApplicationStorage"))
+    .ValidateDataAnnotations();
+services.AddSingleton<IBlogStorageManager, BlobStorageManager>();
 
-            if (string.IsNullOrEmpty(options.ApiEndPoint))
-            {
-                throw new Exception("Computer Vision API Key is missing");
-            }
-
-        });
-services.Configure<StorageAccountOptions>(options =>
+// Computer Vision
+services.AddOptions<ComputerVisionOptions>()
+    .Bind(Configuration.GetSection("ComputerVision"))
+    .ValidateDataAnnotations();
+services.AddSingleton(serviceProvider =>
 {
-    options.ConnectionString = Configuration.GetConnectionString("ApplicationStorage");
+    var options = serviceProvider.GetRequiredService<IOptions<ComputerVisionOptions>>().Value;
+    return new ComputerVisionClient(new ApiKeyServiceClientCredentials(options.ApiKey)) { Endpoint = options.ApiEndPoint };
 });
-
-services.AddScoped<IImageAnalyzer, ImageAnalyzer>(sp =>
-{
-    var options = sp.GetRequiredService<IOptions<ComputerVisionOptions>>().Value;
-    var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(options.ApiKey)) { Endpoint = options.ApiEndPoint };
-    return new ImageAnalyzer(client);
-});
-services.AddScoped<IBlogStorageManager, BlobStorageManager>(sp => new BlobStorageManager(sp.GetRequiredService<IOptions<StorageAccountOptions>>().Value));
+services.AddSingleton<IImageAnalyzer, ImageAnalyzer>();
 ```
 
 This will map our settings to our Options objects and add our service class into our dependency injection container for later consumption.
@@ -477,11 +466,11 @@ using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 
 ## Creating the controller and view
 
- In the controller folder, create a class named ```AnalyzerController```. This is the controller that will be called by our application to deal with the image analysis.
+In the controller folder, create a class named `AnalyzerController`. This is the controller that will be called by our application to deal with the image analysis.
 
- In that class, copy the following code:
+In that class, copy the following code:
 
- ```csharp
+```csharp
 private readonly IBlogStorageManager _blobStorageManager;
 private readonly IImageAnalyzer _imageAnalyzer;
 
@@ -493,10 +482,8 @@ public AnalyzerController(IBlogStorageManager blobStorageManager, IImageAnalyzer
 
 public IActionResult Index()
 {
-    var files = _blobStorageManager.GetFiles("images").Select(_ => _.Uri).ToList();
-
+    var files = _blobStorageManager.GetFiles("images").Select(item => item.Uri).ToList();
     ViewBag.Files = files;
-
     return View();
 }
 
@@ -504,66 +491,59 @@ public async Task<IActionResult> Analyze(string imageUrl)
 {
     var results = await _imageAnalyzer.AnalyzeAsync(imageUrl);
     ViewData["Title"] = "Image analysis results";
-
-    return View("Results",results);
+    ViewData["ImageUrl"] = imageUrl;
+    return View("Results", results);
 }
- ```
+```
 
- The ```Index``` method will list all the images from our _images_ container and the ```Analyze``` method will take the url of our image in our container and analyze it with the computer vision api.
+The `Index` method will list all the images from our _images_ container and the `Analyze` method will take the url of our image in our container and analyze it with the computer vision api.
 
- The namespaces in this class should include:
+The namespaces in this class should include:
 
- ```csharp
+```csharp
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GABDemo.Services;
-using Microsoft.Extensions.Options;
- ```
+```
 
- In the Views folder, create a new folder called Analyzer. In that folder add 2 Razor Views called ```Index``` and ```Results```. 
+In the Views folder, create a new folder called Analyzer. In that folder add 2 Razor Views called `Index` and `Results`.
 
- In the ```Index``` view, copy the following code:
+In the `Index` view, copy the following code:
 
- ```html
+```html
 <table class="table">
     <thead>
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">Image</th>
-        <th scope="col">Actions</th>
-    </tr>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Image</th>
+            <th scope="col">Actions</th>
+        </tr>
     </thead>
     <tbody>
-        @if (ViewBag.Files != null)
-        {
-            int count = 1;
-            foreach (Uri file in ViewBag.Files)
-            {
-                <tr>
-                    <th scope="row">@count</th>
-                    <td>@file</td>
-                    <td>
-                        <a asp-action="Analyze" asp-route-imageUrl="@file.AbsoluteUri">Analyze</a>
-                    </td>
-                </tr>
-                count++;
-            }
-        }
+        @if (ViewBag.Files != null) { int count = 1; foreach (Uri file in ViewBag.Files) {
+        <tr>
+            <th scope="row">@count</th>
+            <td>@file</td>
+            <td>
+                <a asp-action="Analyze" asp-route-imageUrl="@file.AbsoluteUri">Analyze</a>
+            </td>
+        </tr>
+        count++; } }
     </tbody>
 </table>
- ```
+```
 
 This code displays all the files in our _images_ container.
 
-In the ```Results``` view, the most important part is having the model defined. At the top of the file, add the following:
+In the `Results` view, the most important part is having the model defined. At the top of the file, add the following:
 
 ```csharp
 @model Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models.ImageAnalysis
 ```
 
-With this, you can access ```Model``` in your view and display the results information the way you want it. Here's an example of how it can be displayed:
+With this, you can access `Model` in your view and display the results information the way you want it. Here's an example of how it can be displayed:
 
 ```html
 <h1>Categories</h1>
@@ -576,32 +556,18 @@ With this, you can access ```Model``` in your view and display the results infor
         </tr>
     </thead>
     <tbody>
-        @foreach (var category in Model.Categories)
-        {
-            <tr>
-                <td>@category.Name</td>
-                <td>@category.Score</td>
-                <td>
-                    @if (category.Detail != null)
-                    {
-                        if (category.Detail.Celebrities != null && category.Detail.Celebrities.Any())
-                        {
-                            foreach (var celebrity in category.Detail.Celebrities)
-                            {
-                                @celebrity<br />
-                            }
-                        }
-
-                        if (category.Detail.Landmarks != null && category.Detail.Landmarks.Any())
-                        {
-                            foreach (var landmark in category.Detail.Landmarks)
-                            {
-                                @landmark<br />
-                            }
-                        }
-                    }
-                </td>
-            </tr>
+        @foreach (var category in Model.Categories) {
+        <tr>
+            <td>@category.Name</td>
+            <td>@category.Score</td>
+            <td>
+                @if (category.Detail != null) { if (category.Detail.Celebrities != null && category.Detail.Celebrities.Any()) { foreach (var
+                celebrity in category.Detail.Celebrities) { @celebrity<br />
+                } } if (category.Detail.Landmarks != null && category.Detail.Landmarks.Any()) { foreach (var landmark in
+                category.Detail.Landmarks) { @landmark<br />
+                } } }
+            </td>
+        </tr>
         }
     </tbody>
 </table>
@@ -615,79 +581,113 @@ With this, you can access ```Model``` in your view and display the results infor
             <th scope="col">Confidence</th>
         </tr>
     </thead>
-    @foreach (var caption in Model.Description.Captions)
-    {
-        <tr>
-            <td>@caption.Text</td>
-            <td>@caption.Confidence</td>
-        </tr>
+    @foreach (var caption in Model.Description.Captions) {
+    <tr>
+        <td>@caption.Text</td>
+        <td>@caption.Confidence</td>
+    </tr>
     }
 </table>
 
 <h2>Tags</h2>
-@string.Join(", ", Model.Description.Tags)
-
-@if (Model.Adult != null)
-{
-    <h2>Adult content</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Adult score</th>
-                <th scope="col">Is adult content?</th>
-                <th scope="col">Is racy content?</th>
-                <th scope="col">Racy score</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>@Model.Adult.AdultScore</td>
-                <td>@Model.Adult.IsAdultContent</td>
-                <td>@Model.Adult.IsRacyContent</td>
-                <td>@Model.Adult.RacyScore</td>
-            </tr>
-        </tbody>
-    </table>
+@string.Join(", ", Model.Description.Tags) @if (Model.Adult != null) {
+<h2>Adult content</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Adult score</th>
+            <th scope="col">Is adult content?</th>
+            <th scope="col">Is racy content?</th>
+            <th scope="col">Racy score</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Adult.AdultScore</td>
+            <td>@Model.Adult.IsAdultContent</td>
+            <td>@Model.Adult.IsRacyContent</td>
+            <td>@Model.Adult.RacyScore</td>
+        </tr>
+    </tbody>
+</table>
 }
 
 <h2>Image Type</h2>
 Clipart confidence level: @Model.ImageType.ClipArtType<br />
 Line drawing confidence level: @Model.ImageType.LineDrawingType<br />
 
-@if (Model.Faces != null && Model.Faces.Count > 0)
-{
-    <h2>Faces</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Age</th>
-                <th scope="col">Gender (if applicable)</th>
-                <th scope="col">Face rectangle</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var faceDescription in @Model.Faces)
-            {
-                <tr>
-                    <td>@faceDescription.Age</td>
-                    <td>@(faceDescription.Gender != null ? faceDescription.Gender.Value.ToString() : "N/A")</td>
-                    <td>
-                        Height: @faceDescription.FaceRectangle.Height<br />
-                        Width: @faceDescription.FaceRectangle.Width<br />
-                        Left: @faceDescription.FaceRectangle.Left<br />
-                        Top: @faceDescription.FaceRectangle.Width<br />
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+@if (Model.Faces != null && Model.Faces.Count > 0) {
+<h2>Faces</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Age</th>
+            <th scope="col">Gender (if applicable)</th>
+            <th scope="col">Face rectangle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var faceDescription in @Model.Faces) {
+        <tr>
+            <td>@faceDescription.Age</td>
+            <td>@(faceDescription.Gender != null ? faceDescription.Gender.Value.ToString() : "N/A")</td>
+            <td>
+                Height: @faceDescription.FaceRectangle.Height<br />
+                Width: @faceDescription.FaceRectangle.Width<br />
+                Left: @faceDescription.FaceRectangle.Left<br />
+                Top: @faceDescription.FaceRectangle.Width<br />
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
 }
 
-<h2>Image Metadata</h2>
-Width: @Model.Metadata.Width<br />
-Height: @Model.Metadata.Height<br />
-Format: @Model.Metadata.Format<br />
+<div class="row">
+    <div class="col-sm">
+        <h2>Image Metadata</h2>
+        Width: @Model.Metadata.Width<br />
+        Height: @Model.Metadata.Height<br />
+        Format: @Model.Metadata.Format<br />
+    </div>
+    <div class="col-sm">
+        <h2>Image</h2>
+        <img src="@ViewData["ImageUrl"]" class="img-thumbnail" />
+    </div>
+</div>
 ```
+
+### Better options validation
+
+If your application throws an `OptionsValidationException` and that you want a better understanding of the error, add a class named `OptionsValidationExceptionFilterAttribute` at the root of your project and replace the class by the following code:
+
+```csharp
+/// <summary>
+/// This filter allows for displaying more explicit options validation exception.
+/// Implements the <see cref="Microsoft.AspNetCore.Mvc.Filters.ExceptionFilterAttribute" />
+/// </summary>
+/// <seealso cref="Microsoft.AspNetCore.Mvc.Filters.ExceptionFilterAttribute" />
+public class OptionsValidationExceptionFilterAttribute : ExceptionFilterAttribute
+{
+    /// <summary>
+    /// This method is called when an exception occurs and wrap <see cref="Microsoft.Extensions.Options.OptionsValidationException"/>
+    /// into another <see cref="Exception"/> to make the message easier to understand.
+    /// </summary>
+    /// <param name="context">The provided exception context.</param>
+    /// <inheritdoc />
+    public override void OnException(ExceptionContext context)
+    {
+        if (context.Exception is OptionsValidationException validationEx)
+        {
+            context.Exception = new Exception(validationEx.Failures.First(), validationEx);
+        }
+    }
+}
+```
+
+Then, in `Startup.cs`, replace `.AddMvc()` by `.AddMvc(options => options.Filters.Add<OptionsValidationExceptionFilterAttribute>())`.
+
+Re-run your application and the error message should be clearer. If it is a generic error message, make sure that the `ASPNETCORE_ENVIRONMENT` is set to `Development`.
 
 ## Folder structure
 
@@ -704,13 +704,14 @@ If you followed the steps above, your folder structure should look like this
 [Options pattern in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-2.2)
 
 # End
+
 [Previous Lab](../Lab4/README.md)
 [Next Lab](../Lab6/README.md)
 
-[gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
-[computer-vision-keys]: medias/lab5-keys.PNG "Computer Vision API Keys"
-[blob-connectionstring]: medias/portal-connectionstring-blob.png "Storage Account connection string"
-[deployment-output]: medias/lab5-deployment-output.png "ARM template deployment outputs"
-[public-access-blob-se]: medias/public-access-blob-se.png "Public access blob through storage explorer"
-[public-access-blob-portal]: medias/public-access-blob-portal.png "Public access blob through the azure portal"
-[folder-structure]: medias/folder-structure.png "Folder structure"
+[gablogo]: ../medias/GlobalAzureBootcamp2019.png 'Global Azure Bootcamp 2019'
+[computer-vision-keys]: medias/lab5-keys.PNG 'Computer Vision API Keys'
+[blob-connectionstring]: medias/portal-connectionstring-blob.png 'Storage Account connection string'
+[deployment-output]: medias/lab5-deployment-output.png 'ARM template deployment outputs'
+[public-access-blob-se]: medias/public-access-blob-se.png 'Public access blob through storage explorer'
+[public-access-blob-portal]: medias/public-access-blob-portal.png 'Public access blob through the azure portal'
+[folder-structure]: medias/folder-structure.png 'Folder structure'
