@@ -29,7 +29,8 @@ namespace GABDemo.Services
         {
             var cloudBlobClient = _storageAccount.CreateCloudBlobClient();
             var container = cloudBlobClient.GetContainerReference(containerName);
-            return container.ListBlobs();
+            var blobs = container.ListBlobs();
+            return blobs;
         }
     }
 }
