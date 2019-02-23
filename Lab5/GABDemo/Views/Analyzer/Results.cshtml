@@ -117,7 +117,15 @@ Line drawing confidence level: @Model.ImageType.LineDrawingType<br />
     </table>
 }
 
-<h2>Image Metadata</h2>
-Width: @Model.Metadata.Width<br />
-Height: @Model.Metadata.Height<br />
-Format: @Model.Metadata.Format<br />
+<div class="row">
+    <div class="col-sm">
+        <h2>Image Metadata</h2>
+        Width: @Model.Metadata.Width<br />
+        Height: @Model.Metadata.Height<br />
+        Format: @Model.Metadata.Format<br />
+    </div>
+    <div class="col-sm">
+        <h2>Image</h2>
+        <img src="@ViewContext.HttpContext.Request.Query["imageUrl"]" class="img-thumbnail" />
+    </div>
+</div>
