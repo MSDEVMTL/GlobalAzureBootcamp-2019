@@ -12,30 +12,25 @@ namespace GABDemo.Services
 
         public BlobStorageManager(StorageAccountOptions options)
         {
-            if (options == null)
-                throw new ArgumentNullException(nameof(options));
-                
-            if (string.IsNullOrWhiteSpace(options.ConnectionString))
-            {
-                throw new Exception("Storage connection string is missing");
-            }
+            if (options == null) { throw new ArgumentNullException(nameof(options)); }
+            if (string.IsNullOrWhiteSpace(options.ConnectionString)) { throw new Exception("Storage connection string is missing"); }
+            _storageAccount = CreateCloudStorageAccount(options);
+        }
 
-            if (!CloudStorageAccount.TryParse(options.ConnectionString, out _storageAccount))
+        private CloudStorageAccount CreateCloudStorageAccount(StorageAccountOptions options)
+        {
+            if (!CloudStorageAccount.TryParse(options.ConnectionString, out CloudStorageAccount storageAccount))
             {
-                throw new Exception(
-                    "Invalid storage account connecting string. Please verify the connection string and try again");
+                throw new Exception("Invalid storage account connecting string. Please verify the connection string and try again");
             }
+            return storageAccount;
         }
 
         public IEnumerable<IListBlobItem> GetFiles(string containerName)
         {
             var cloudBlobClient = _storageAccount.CreateCloudBlobClient();
-
             var container = cloudBlobClient.GetContainerReference(containerName);
-            foreach (var file in container.ListBlobs())
-            {
-                yield return file;
-            }
+            return container.ListBlobs();
         }
     }
 }
