@@ -10,11 +10,10 @@ namespace GABDemo.Services
     {
         private readonly CloudStorageAccount _storageAccount;
 
-        public BlobStorageManager(StorageAccountOptions options)
+        public BlobStorageManager(IOptions<StorageAccountOptions> options)
         {
             if (options == null) { throw new ArgumentNullException(nameof(options)); }
-            if (string.IsNullOrWhiteSpace(options.ConnectionString)) { throw new Exception("Storage connection string is missing"); }
-            _storageAccount = CreateCloudStorageAccount(options);
+            _storageAccount = CreateCloudStorageAccount(options.Value);
         }
 
         private CloudStorageAccount CreateCloudStorageAccount(StorageAccountOptions options)
