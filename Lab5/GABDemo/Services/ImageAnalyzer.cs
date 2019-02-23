@@ -20,18 +20,16 @@ namespace GABDemo.Services
 
         public ImageAnalyzer(ComputerVisionClient computerVision)
         {
-            _computerVision = computerVision;
+            _computerVision = computerVision ?? throw new ArgumentNullException(nameof(computerVision));
         }
 
-        public async Task<ImageAnalysis> AnalyzeAsync(string imageUrl)
+        public Task<ImageAnalysis> AnalyzeAsync(string imageUrl)
         {
             if (!Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
             {
-                throw new Exception("Invalid remoteImageUrl: {imageUrl}");
+                throw new Exception($"Invalid remoteImageUrl: {imageUrl}");
             }
-
-            ImageAnalysis analysis = await _computerVision.AnalyzeImageAsync(imageUrl, Features);
-            return analysis;
+            return _computerVision.AnalyzeImageAsync(imageUrl, Features);
         }
     }
 }
