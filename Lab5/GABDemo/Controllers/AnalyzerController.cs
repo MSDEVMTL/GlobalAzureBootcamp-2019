@@ -20,10 +20,8 @@ namespace GABDemo.Controllers
 
         public IActionResult Index()
         {
-            var files = _blobStorageManager.GetFiles("images").Select(_ => _.Uri).ToList();
-
+            var files = _blobStorageManager.GetFiles("images").Select(item => item.Uri).ToList();
             ViewBag.Files = files;
-
             return View();
         }
 
@@ -31,8 +29,8 @@ namespace GABDemo.Controllers
         {
             var results = await _imageAnalyzer.AnalyzeAsync(imageUrl);
             ViewData["Title"] = "Image analysis results";
-
-            return View("Results",results);
+            ViewData["ImageUrl"] = imageUrl;
+            return View("Results", results);
         }
     }
 }
