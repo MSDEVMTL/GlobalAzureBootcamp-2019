@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using GABDemo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace GABDemo
 {
@@ -31,21 +33,27 @@ namespace GABDemo
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.Configure<KeysOptions>(Configuration.GetSection("Keys"))
-                    .PostConfigure<KeysOptions>(options =>
+            // Blob Storage
+            services.AddOptions<StorageAccountOptions>()
+                .Configure(options => options.ConnectionString = Configuration.GetConnectionString("ApplicationStorage"))
+                .ValidateDataAnnotations();
+            services.AddSingleton<IBlogStorageManager, BlobStorageManager>();
+
+            // Computer Vision
+            services.AddOptions<ComputerVisionOptions>()
+                .Bind(Configuration.GetSection("ComputerVision"))
+                .ValidateDataAnnotations();
+            services.AddSingleton(serviceProvider =>
             {
-                if (string.IsNullOrEmpty(options.ComputerVision.ApiKey))
-                {
-                    throw new Exception("Computer Vision API Key is missing");
-                }
-
-                if (string.IsNullOrEmpty(options.ComputerVision.ApiEndPoint))
-                {
-                    throw new Exception("Computer Vision API Key is missing");
-                }
+                var options = serviceProvider.GetRequiredService<IOptions<ComputerVisionOptions>>().Value;
+                return new ComputerVisionClient(new ApiKeyServiceClientCredentials(options.ApiKey)) { Endpoint = options.ApiEndPoint };
             });
+            services.AddSingleton<IImageAnalyzer, ImageAnalyzer>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            // MVC
+            services
+                .AddMvc(options => options.Filters.Add<OptionsValidationExceptionFilterAttribute>())
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,13 +73,7 @@ namespace GABDemo
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

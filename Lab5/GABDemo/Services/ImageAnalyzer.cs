@@ -6,7 +6,7 @@ using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 
 namespace GABDemo.Services
 {
-    public class ImageAnalyzer
+    public class ImageAnalyzer : IImageAnalyzer
     {
         private readonly ComputerVisionClient _computerVision;
 
@@ -18,21 +18,19 @@ namespace GABDemo.Services
                 VisualFeatureTypes.Tags
             };
 
-        public ImageAnalyzer(string apiKey, string apiEndpoint)
+        public ImageAnalyzer(ComputerVisionClient computerVision)
         {
-            _computerVision = new ComputerVisionClient(new ApiKeyServiceClientCredentials(apiKey));
-            _computerVision.Endpoint = apiEndpoint;
+            _computerVision = computerVision ?? throw new ArgumentNullException(nameof(computerVision));
         }
 
-        public async Task<ImageAnalysis> AnalyzeAsync(string imageUrl)
+        public Task<ImageAnalysis> AnalyzeAsync(string imageUrl)
         {
             if (!Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
             {
-                throw new Exception("Invalid remoteImageUrl: {imageUrl}");
+                throw new Exception($"Invalid remoteImageUrl: {imageUrl}");
             }
-
-            ImageAnalysis analysis = await _computerVision.AnalyzeImageAsync(imageUrl, Features);
-            return analysis;
+            var analysisResults = _computerVision.AnalyzeImageAsync(imageUrl, Features);
+            return analysisResults;
         }
     }
 }
