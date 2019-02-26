@@ -210,9 +210,9 @@ Your template should now look like this:
 
 4. Add a new task Azure Resource ...
 
-5. Configure you task
+5. Configure your task
 
-6. Save your task and create a new release
+6. Save your pipeline and create a new release
 
 You should now see a new resource in your resource group.
 
@@ -332,7 +332,7 @@ Your template should now look like this:
 
 We now need to replace all place holders with parameters. This way, we will be able to customize our template and reuse our existing feature
 
-Replace your node `parameters with the following snippet:
+Replace your node `parameters` with the following snippet:
 
 ```json
 
@@ -444,7 +444,7 @@ Now use these parameters in your template.  Your template should now look like t
     "properties": {
 
       "ApplicationStorage": {
-        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
         "type": "Custom"
       }
     }
@@ -460,27 +460,11 @@ That should now look like this
 
 ## Part 6 - Final deployment
 
-```json
-{
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "appSvcPlanName": {
-      "value": ""
-    },
-    "webAppName": {
-      "value": ""
-    }
-  }
-}
-
-```
-
 1. Commit your change to the git repository using the following command.
 
 ```txt
   git add .
-  git commit -m "Add my first ARM template"
+  git commit -m "Add existing resources"
   git push
 ```
 
