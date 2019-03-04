@@ -34,7 +34,13 @@ To create a Git repository you can from Visual Studio Code open a terminal (Ctrl
 
 This command will initialize a local repository at the root of your solution folder. Now let's add all the code files to the repo.
 
-    git add -A -m "initial commit"  (i dont think that this command works --> should be git add . or git add  -A than you can use git commit -m "initial commit")
+    git add .
+
+This command will add all modified files under your workspace to the index of git.
+
+    git commit -m "Initial commit"
+
+This command will create a new commit containing the current contents of the index and the given log message describing the changes.
 
 Now, Git will track the evolution of our code. Git is a decentralized code repository system, therefore there is usually many repository where you can push and pull. However, before we can push our code to a remote repository we have other task to do. Will come back to it later.
 
