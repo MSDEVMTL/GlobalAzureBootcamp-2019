@@ -36,7 +36,7 @@ This command will initialize a local repository at the root of your solution fol
 
     git add .
 
-This command will add all modified file under your workspace to the index of git.
+This command will add all modified files under your workspace to the index of git.
 
     git commit -m "Initial commit"
 
