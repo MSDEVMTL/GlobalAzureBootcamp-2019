@@ -165,12 +165,12 @@ To run a Docker image manually:
 1. Type the following command:
 
     ```bash
-    docker run --rm -d -p 80:80/tcp gabdemo:latest
+    docker run --rm -d -p 80:80/tcp --name gabdemo gabdemo:latest
     ```
 
 1. Browse to `http://localhost` using your favorite browser to enjoy navigating your newly dockerized website.
 
-> IMPORTANT: if you want to stop your container later without searching for its ID manually, you can copy the CONTAINER ID that was outputted into the terminal window; this should be a string looking like this: `d8897f7bd10783d075260d953eec8a06885350bf8acc8322c0e4143432f01237`.
+> IMPORTANT: if you don't supply the --name parameter, the Docker daemon will generate a UUID automatically for you. That means that if you want to stop your container later without searching for its ID manually, you can copy the CONTAINER ID that was outputted into the terminal window; this should be a string looking like this: `d8897f7bd10783d075260d953eec8a06885350bf8acc8322c0e4143432f01237`.
 
 #### Using VS Code Docker Explorer
 
@@ -197,8 +197,14 @@ To stop a running container manually, if you know the CONTAINER ID:
 1. Type the following command to search for the ID of the running container:
 
     ```bash
+    # if you have supplied the name parameter
+    docker stop [ENTER YOUR CONTAINER NAME HERE]
+    # if you have not supplied a name parameter
     docker stop [ENTER THE CONTAINER ID THAT YOU WANT TO STOP HERE]
     # For example:
+    # with the name parameter
+    docker stop gabdemo
+    # with UUID
     docker stop d8897f7bd10783d075260d953eec8a06885350bf8acc8322c0e4143432f01237
     # Or using the shorter ID:
     docker stop d8897f7bd107
