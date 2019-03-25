@@ -43,11 +43,11 @@ In [Lab 2](../Lab2/README.md) we created an ARM template to deploy the backbone 
 
 We will start from that template and add the Cognitive Services resource to it
 
-Open the existing [ARM template](../Lab2/deployment/gab2019.json) and [ARM template parameters](../Lab2/deployment/gab2019.parameters.json) from lab2 [COMMIT LAB2 FINAL FILES].
+Open the existing [ARM template](../Lab2/deployment/gab2019.json) and [ARM template parameters](../Lab2/deployment/gab2019.parameters.json) from lab2.
 
 **1 - Add the Cognitive Services resource:**
 
-First ... under the resources array in the ARM template (gab2019.json).
+Firstly, under the resources array in the ARM template (gab2019.json) add:
 
 ```json
 {
@@ -69,7 +69,7 @@ This will tell Azure that we want an instance of Cognitive Services.
 
 **2 - Add the parameter information for Cognitive Services**
 
-Next ... in the parameters section of the ARM template,.
+Then, in the parameters section of the ARM template, add:
 
 ```json
 "csVisionName": {
@@ -83,7 +83,7 @@ This will tell Azure to add a meaningful description to the newly created resour
 
 **3 - Add the Cognitive Services access keys in the web application configuration**
 
-Next ... in the web app resource / parameters section of the ARM template (gab2019.json).
+In the web app resource / parameters section of the ARM template (gab2019.json), add:
 
 ```json
 "properties": {
@@ -109,7 +109,7 @@ Cognitive Services endpoint and key will be set into our MVC Web App (just like 
 
 **4 - Add output variables**
 
-Next ... in the output section of the template, we will add outputs to make it easier to get the keys and connection strings we will need to run our app locally
+In the output section of the template, we will add outputs to make it easier to get the keys and connection strings we will need to run our app locally. Replace the `outputs` section with the code below:
 
 ```json
 "outputs": {
@@ -132,7 +132,7 @@ This will add output variables to the resource group deployment.
 
 **5 - Add the parameter value for Cognitive Services**
 
-Next ... in the parameters array of the ARM templte parameter file (gab2019.parameters.json).
+In the parameters array of the ARM template parameter file (gab2019.parameters.json) add:
 
 ```json
 "csVisionName": {
@@ -176,41 +176,7 @@ Once done, the Cognitive Services resource would be deployed and the keys should
 
 The ARM template deployment takes care of setting the config information in the web app, so there is no need to deploy the values in the app settings (or to commit these values to git).
 
-We will need the config info to run the web application locally.
-
-### Getting the API keys for the API
-
-Once your ARM template has successfully been deployed, its time to get the keys to use the services.
-
-This will be needed for us to use the cloud services while running our application locally.
-
-To get your computer vision keys;
-
--   navigate to the Azure portal
--   locate your computer vision resource
--   go into the keys section
-    -   find the key value under key1
-    -   click the Copy button to copy the key
-
-Copy this value into a text editor, we will be using it in the next sections.
-
-![computer-vision-keys][computer-vision-keys]
-
-### Getting the blob storage connection string
-
-To get your storage key;
-
--   navigate to the Azure portal
--   locate your storage account
--   in the Settings section of the storage account overview
-    -   select Access keys
-        -   here you can view your account access keys and the complete connection string for each key
-    -   find the Connection string value under key1
-    -   click the Copy button to copy the connection string
-
-Copy this value into a text editor, we will be using it in the next sections.
-
-![blob-connectionstring][blob-connectionstring]
+We, however, will need the config information to run the web application locally. Copy these values into a text editor once the ARM templace has finished deploying or follow the steps below to get them from the portal. Refer yourself to Annex A to learn other ways to get all this information.
 
 ### Getting config info from deployment
 
@@ -249,10 +215,10 @@ To do the same in the Azure Portal;
 -   navigate to your storage account
 -   click on the Blobs under Blob service
 -   select your blob (in our case images)
--   click on Access policy
--   Select Blob (anonymous read access for blobs only) as the public access level
+-   In the overview blade, click the `Change access level`
+-   Select `Blob (anonymous read access for blobs only) as the public access level`
 
-![public-access-blob-portal][public-access-blob-portal]
+![public-access-blob-portal-overview][public-access-blob-portal-overview]
 
 # Let's add computer vision to our web application
 
@@ -285,6 +251,26 @@ To use the computer vision api, first copy the api key you copied earlier into t
 In the `ComputerVision:ApiEndPoint` section, enter the computer vision api endpoint. It should like like this: `https://eastus.api.cognitive.microsoft.com`, where `eastus` is the region into which you created your computer vision api resource into.
 
 Now for the storage connection string, copy the connection string you copied earlier into the section `ConnectionStrings:ApplicationStorage`.
+
+*Note*: The `Key1:Key2`, for instance `ComputerVision:ApiEndPoint` refers to ASP.NET Core way of setting application settings in appsettings.json. The `Key1:Key2` refers to the hierachy of JSON keys. For instance, your appsettings.json should look like this:
+
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "ApplicationStorage": ""
+  },
+  "ComputerVision": {
+    "ApiKey": "",
+    "ApiEndPoint": ""
+  }
+}
+```
 
 ### Add code to make use of the resource keys
 
@@ -695,6 +681,35 @@ If you followed the steps above, your folder structure should look like this
 
 ![folder-structure][folder-structure]
 
+# Annex
+
+## A
+### Getting the API keys for the API
+
+To get your computer vision keys;
+
+-   navigate to the Azure portal
+-   locate your computer vision resource
+-   go into the keys section
+    -   find the key value under key1
+    -   click the Copy button to copy the key
+
+![computer-vision-keys][computer-vision-keys]
+
+### Getting the blob storage connection string
+
+To get your storage key;
+
+-   navigate to the Azure portal
+-   locate your storage account
+-   in the Settings section of the storage account overview
+    -   select Access keys
+        -   here you can view your account access keys and the complete connection string for each key
+    -   find the Connection string value under key1
+    -   click the Copy button to copy the connection string
+
+![blob-connectionstring][blob-connectionstring]
+
 # Reference
 
 [Quickstart: Analyze an image using the Computer Vision SDK and C#](https://docs.microsoft.com/en-us/azure/cognitive-services/Computer-vision/quickstarts-sdk/csharp-analyze-sdk)
@@ -713,5 +728,5 @@ If you followed the steps above, your folder structure should look like this
 [blob-connectionstring]: medias/portal-connectionstring-blob.png 'Storage Account connection string'
 [deployment-output]: medias/lab5-deployment-output.png 'ARM template deployment outputs'
 [public-access-blob-se]: medias/public-access-blob-se.png 'Public access blob through storage explorer'
-[public-access-blob-portal]: medias/public-access-blob-portal.png 'Public access blob through the azure portal'
+[public-access-blob-portal-overview.png]: medias/public-access-blob-portal-overview.png.png 'Public access blob through the azure portal'
 [folder-structure]: medias/folder-structure.png 'Folder structure'
