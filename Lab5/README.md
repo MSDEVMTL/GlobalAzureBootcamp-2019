@@ -728,5 +728,5 @@ To get your storage key;
 [blob-connectionstring]: medias/portal-connectionstring-blob.png 'Storage Account connection string'
 [deployment-output]: medias/lab5-deployment-output.png 'ARM template deployment outputs'
 [public-access-blob-se]: medias/public-access-blob-se.png 'Public access blob through storage explorer'
-[public-access-blob-portal-overview.png]: medias/public-access-blob-portal-overview.png 'Public access blob through the azure portal'
+[public-access-blob-portal-overview]: medias/public-access-blob-portal-overview.png 'Public access blob through the azure portal'
 [folder-structure]: medias/folder-structure.png 'Folder structure'
