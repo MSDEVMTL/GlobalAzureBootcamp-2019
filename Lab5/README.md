@@ -252,7 +252,7 @@ In the `ComputerVision:ApiEndPoint` section, enter the computer vision api endpo
 
 Now for the storage connection string, copy the connection string you copied earlier into the section `ConnectionStrings:ApplicationStorage`.
 
-*Note*: The `Key1:Key2`, for instance `ComputerVision:ApiEndPoint` refers to ASP.NET Core way of setting application settings in appsettings.json. The `Key1:Key2` refers to the hierachy of JSON keys. For instance, your appsettings.json should look like this:
+*Note*: The `Key1:Key2`, for instance `ComputerVision:ApiEndPoint`, refers to ASP.NET Core way of setting application settings in appsettings.json. The `Key1:Key2` refers to the hierarchy of JSON keys. For instance, your appsettings.json should look like this:
 
 ```json
 {
