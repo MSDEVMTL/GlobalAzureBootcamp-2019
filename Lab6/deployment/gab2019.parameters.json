@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appSvcPlanName": {
+      "value": "gab2019-appplan"
+    },
+    "webAppName": {
+      "value": "gab2019-mvc"
+    },
+    "csVisionName": {
+      "value": "gab2019-vision"
+    },
+    "funcAppName": {
+      "value": "gab2019-funcApp"
+    },
+    "sourceCodeRepositoryURL":{
+      "value":"https://matrichard05@dev.azure.com/matrichard05/GAB2019/_git/GAB2019"
+    },
+    "sourceCodeBranch":{
+      "value":"master"
+    }
+  }
+}
