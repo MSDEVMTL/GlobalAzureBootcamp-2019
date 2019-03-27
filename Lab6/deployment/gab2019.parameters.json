@@ -13,12 +13,6 @@
     },
     "funcAppName": {
       "value": "gab2019-funcApp"
-    },
-    "sourceCodeRepositoryURL":{
-      "value":"https://matrichard05@dev.azure.com/matrichard05/GAB2019/_git/GAB2019"
-    },
-    "sourceCodeBranch":{
-      "value":"master"
     }
   }
 }
