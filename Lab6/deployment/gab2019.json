@@ -25,18 +25,6 @@
       "metadata": {
         "description": "The  name of the Function App"
       }
-    },
-    "sourceCodeRepositoryURL": {
-      "type": "string",
-      "metadata": {
-        "description": "Code repo"
-      }
-    },
-    "sourceCodeBranch": {
-      "type": "string",
-      "metadata": {
-        "description": "Git branch"
-      }
     }
   },
   "variables": {
@@ -151,7 +139,22 @@
               "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]",
               "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]"
             }
-         }
+         },
+         {
+          "apiVersion": "2018-02-01",
+          "type": "config",
+          "name": "connectionstrings",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('funcAppName'))]",
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+          ],
+          "properties": {
+            "ApplicationStorage": {
+              "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+              "type": "Custom"
+            }
+          }
+        }
       ]
     }
   ],
