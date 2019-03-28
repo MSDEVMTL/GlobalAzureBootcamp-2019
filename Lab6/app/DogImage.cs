@@ -8,7 +8,7 @@ namespace app
     public static class DogImage
     {
         [FunctionName("DogImage")]
-        public static void Run([BlobTrigger("samples-workitems/{name}", Connection = "ApplicationStorage")]Stream myBlob, string name, ILogger log)
+        public static void Run([BlobTrigger("images/{name}")]Stream myBlob, string name, ILogger log)
         {
             log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
             // call visionAPI here
