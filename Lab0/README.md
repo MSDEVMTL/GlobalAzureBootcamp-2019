@@ -4,9 +4,21 @@
 
 To get the best of the Global Azure bootcamp 2019, we **strongly** suggest that you prepare your station with all the required software. Nothing complicated and all the tools that we are going to use during the bootcamp supports macOS, Linux, and Windows - so you can hit the ground running, no matter the platform.
 
-## The Tools
+# .NET Core
 
-### Visual Studio Code
+We will be creating a Web application in .NET Core. Therefore you will need the .NET Core Framework installed on your local machine. To validate if you already have it execute the following command in a terminal.
+
+    dotnet --version
+
+If you have a version equal or greater to 2.1 your are fine. Otherwise we invite you to download a more recent version. In a web browser, navigate to [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download). Select your OS between Windows, Linux, or MacOS and click the button Download .NET Core SDK
+
+![dotnetcore][dotnetcore]
+
+Once the installer is downloaded follow the instruction in run it.  When the install is complete re-execute the comment to validate that you have a version equal or greater to 2.1
+
+# The Tools
+
+## Visual Studio Code
 
 ![code][code]
 
@@ -16,7 +28,7 @@ It's not a requirement but all labs will assume that you have it installed. To i
 
 ![code-select][code-select]
 
-#### Extension
+### Extension
 
 One of the strengths of Visual Studio Code is all its extensions.  During the following Labs, we will use some of them to make things easier.
 
@@ -40,7 +52,7 @@ You just installed your first extension.  Now, make sure to install at least the
 
 Once all the extensions are installed, click the *Refresh* button to restart VS Code.
 
-### Azure CLI
+## Azure CLI
 
 The Azure CLI is a command-line tool providing a great experience for managing Azure resources. The CLI is designed to make scripting easy, query data, support long-running operations, and more. To install it just follow the instruction based on your platform on the site: [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
 
@@ -52,7 +64,7 @@ To validate that you have it type the following commend in a terminal/ console
 
 THe result should be `azure-cli (2.0.55)` or newest.
 
-### Git
+## Git
 
 The Git is a decentralized source control manager, that stand apart from nearly every other SCM out there is its branching model.
 
@@ -66,7 +78,7 @@ This will install the console version of git. This is good enough to be fonction
 
 ![gitkraken][gitkraken]
 
-### Azure Storage Explorer (optional)
+## Azure Storage Explorer (optional)
 
 In Lab 5 and Lab 6 we will be uploading files to Azure Storage Explorer. You can definitely do that directly from the Azure portal. However, great tools that provide much more flexibility and ease is the Azure Storage Explorer.
 
@@ -82,9 +94,9 @@ Once Azure Storage Explorer is installed, you will need to add your account. The
 
 You are now ready for the Labs.
 
-## Accounts
+# Accounts
 
-### Azure Subscription
+## Azure Subscription
 
 Having an Azure subscription is manatory to be able to do the Global Azure Bootcamp. If you don't own an Azure subscription already, you can create your **free** account today. It comes with 200$ credit, so you can experience almost everything without spending a dime. 
 
@@ -94,7 +106,7 @@ Make sure to have your account up and ready before the bootcamp.
 
 ![freeAzure][freeAzure]
 
-### [Azure DevOps]
+## [Azure DevOps]
 
 For the GLobal Azure Bootcamp, you will need an Azure DevOps account. It's free! Get 10 free parallel jobs and unlimited minutes for your open source projects with Pipelines.
 
@@ -102,7 +114,7 @@ For the GLobal Azure Bootcamp, you will need an Azure DevOps account. It's free!
 
 ![azureDevOps][azureDevOps]
 
-### GitHub (optional)
+## GitHub (optional)
 
 GitHub is a development platform inspired by the way you work. From open source to business, you can host and review code, manage projects, and build software.  During the Global Azure Bottcamp you could host your code in a GitHub Repository if you prefer it to Azure DevOps. 
 
@@ -130,3 +142,4 @@ Contact our volunteers:
 [installdockerextension]: medias/installdockerextension.png
 [freeAzure]: medias/freeAzure.png
 [azureDevOps]: medias/azureDevOps.png
+[dotnetcore]: medias/dotnetcore.png
