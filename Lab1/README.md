@@ -6,27 +6,23 @@
 
 In this lab you will create an application in .Net Core, push it to a remote repository and create a Continuous Integration and Continuous Deployment (CI/CD) with the Azure DevOps Pipeline to deploy the website to Azure.
 
-## Let's code!
+# Let's code!
 
-### Build The Application
+## Build The Application
 
 First, create a folder named `gab2019`. This will be the root folder for today's solution, all subsequent labs during the day will add content and sub-folder to this one. Then let's create a new web application using the .Net Core. Open a terminal, and navigate to your new root folder "gab2019" folder (ex: C:\Dev\gab2019\).
 
     cd C:\dev\gab2019\
 
-Let's scafold an application named GABCDemo using the following command:
+Let's scaffold an application named GABCDemo using the following command:
 
     dotnet new mvc -o GABCDemo
-
-Go into the new folder where your application as just been created.
-
-    cd GABCDemo
 
 Open the solution into Visual Studio Code with:
 
     code .
 
-### Initialize Local Repository
+## Initialize Local Repository
 
 To create a Git repository you can from Visual Studio Code open a terminal (Ctrl + \`) or return to the terminal windows already open. Make sure your are in the folder `C:\dev\gab2019\` and the following command:
 
@@ -44,9 +40,15 @@ This command will create a new commit containing the current contents of the ind
 
 Now, Git will track the evolution of our code. Git is a decentralized code repository system, therefore there is usually many repository where you can push and pull. However, before we can push our code to a remote repository we have other task to do. Will come back to it later.
 
-### Create The Azure WebApp
+## Create The Azure WebApp
 
-The next step is to create a placeholder for our website.  We will create an empty shell of a web application in Azure with these three Azure CLI commands. You can execute them locally or from the Cloud Shell. (Don't forget to validate that you are in the good subscription)
+The next step is to create a placeholder for our website.  We will create an empty shell of a web application in Azure with these three Azure CLI commands. You can execute them locally, in a terminal or from the Azure Cloud Shell. The Cloud Shell is a terminal... in Azure! You can access it via the URL [https://shell.azure.com/](https://shell.azure.com).
+
+![CloudShell][CloudShell]
+
+Don't forget to validate that you are in the good subscription. if you are not sure try `az account show` to display information about the current subscription.
+
+> Note: You might experience an error if you webapp name is not unique. (Conflict: Website with given name <web app name> already exists.) Make sure to use a unique name. ex: gab2019<your_initial><2digits_random_number> gab2019AV47
 
     az group create --name gabcdemogroup --location eastus
 
@@ -54,17 +56,15 @@ The next step is to create a placeholder for our website.  We will create an emp
 
     az webapp create --name gabcdemo --resource-group gabcdemogroup --plan gabcdemoplan
 
-    Note: You might experience an error if you webapp name is not unique. (Conflict: Website with given name <web app name> already exists.) Make sure to use a unique name. ex: gab2019<your_initial><2digits_random_number> gab2019AV47
-
 The first command will create a Resource group. Then inside of this group we create a service plan, and finally we create a webapp to the mix.
 
 To validate that everything has been created, open a internet browser and navigate to the Azure Portal (portal.azure.com). From the left menu select *Resource Groups*. Click on the group *gabcdemogroup* that we just created, then click on the web App *gabcdemo*
 
 ![resourceGroup][resourceGroup]
 
-In the top section of the blade you will found the URL of the web site, click on it. You should see a meesage saying:"Your App Service app is up and running".  That perfect, our website shell is ready.
+In the top section of the blade you will found the URL of the web site, click on it. You should see a message saying:"Your App Service app is up and running".  That perfect, our website shell is ready.
 
-### Create an Azure DevOps project
+## Create an Azure DevOps project
 
 Navigate to [Dev.Azure.com](http://Dev.Azure.com) and if you don't already have an account [create one it's free!](../Lab0/README.md#azure-devops) Once you are logged-in, create a new project by clicking the New project blue button in the top right corner.
 
@@ -72,19 +72,25 @@ Navigate to [Dev.Azure.com](http://Dev.Azure.com) and if you don't already have 
 
 You will need to provide a unique name and a few simple information. 
 
-### Get the Remote Repository Url
+## Get the Best Azure DevOps Experience
+
+To get the best of the Azure DevOps portal and from the Azure Pipeline, turn ON a few (or all) option(s) in the Settings. To follow this Lab, the option **New YAML pipeline creation experience** should be on. Do enable it, click in the top-right corner on your avatar, and select the **Preview features** option. Then turn on the feature(s)
+
+![PreviewFeatures][PreviewFeatures]
+
+## Get the Remote Repository Url
 
 Here you have two options you can use the repository provided in the Azure DevOps project you just created, or create a another one in GitHub.
 
-#### Option 1: Using Azure DevOps Repos
+### Option 1: Using Azure DevOps Repos
 
 On Azure DevOps portal, from the left menu select *Repos*. Copy the command under the `or push an existing repository from command line`.
 
 ![gitremoteadd][gitremoteadd]
 
-#### Option 2: Using GitHub
+### Option 2: Using GitHub
 
-Azure Pipeline support many different repository. One that is very popular is Github. If you don't already have an account [create one it's free!](../Lab0/README.md#github-optional) Once you are logged-in, create a new repository by expending the "+" in the top right corner, then clicking the **New repository** button.
+Azure Pipeline support many different repository. One that is very popular is GitHub. If you don't already have an account [create one it's free!](../Lab0/README.md#github-optional) Once you are logged-in, create a new repository by expending the "+" in the top right corner, then clicking the **New repository** button.
 
 ![NewGitHubRepoHere][NewGitHubRepoHere]
 
@@ -96,20 +102,20 @@ Now from this page grab the code under `…or push an existing repository from t
 
 ![AddGitHubRemote][AddGitHubRemote]
 
-### Add a Remote Repository
+## Add a Remote Repository
 
 Return to the Terminal/ Console and paste the command.
 
-    git remote add origin https:.....
+    git remote add origin [URL_FOUND_IN_THE_PREVIOUS_STEP]
     git push origin --all
 
 THe first line is to add the remote repository and name it "origin". The second line is to push (upload) the content of the local repository to origin (the remote one). You will need to enter your credential.
 
-### Continuous Integration
+## Continuous Integration
 
 The goal is to have the code to get to compile at every commit. From the Azure DevOps' left menubar, select *Pipelines*, and click the create new button. The first step is to identify where our code is, as you can see Azure DevOps is flexible and accept code from different sources. Select the source you use at the precedent step (option 1: Azure Repos or option 2: GitHub).
 
-> **Note:** If you are using GitHub you will need to Authorize Azure DevOps to your Github repository by clicking the Authorize button.
+> **Note:** If you are using GitHub you will need to Authorize Azure DevOps to your GitHub repository by clicking the Authorize button.
 
 ![NewPipeline_step1][NewPipeline_step1]
 
@@ -117,15 +123,19 @@ Select the exact repository.
 
 ![NewPipeline_step2][NewPipeline_step2]
 
-This third step displays the YAML code that defines your pipeline. At this point, the file is not complete, but it's enough to build, we will come back to it later. Click the *Add* button to add the `azure-pipelines.yml` file at the root level of your repository.
+This third step is to configure our pipeline. You can start from a template, an existing configuration file or an empty one.  For now, let's take the recommended one (Azure DevOps detected our project was .NET Core) and select the template ASP.NET Core.
 
-![NewPipeline_step3][NewPipeline_step3]
+![SelectTemplateASPNETCore][SelectTemplateASPNETCore]
 
-The build pipeline is ready click the *Run* button to execute it for the first time. Now at every commit, the build will be triggered. To see the status of your build just on to into the build section from the left menubar.
+This will displays the *YAML code* that defines your pipeline. At this point, the file is not complete, we need to specify where is our project. On the line 16 add `./GABDemo/` (assuming your project is in folder GABDemo).
+
+![UpdateYaml][UpdateYaml]
+
+Click the *Save and run* button to add the `azure-pipelines.yml` file at the root level of your repository and execute it for the first time. Now at every commit, the build will be triggered. To see the status of your build just on to into the build section from the left menubar.
 
 ![buildSuccess][buildSuccess]
 
-### Continuous Deployment
+## Continuous Deployment
 
 Great, our code gets to compile at every commit. It would be nice if the code could also be automatically deployed into our dev environment. To achieve that we need to create a *Release Pipeline*.
 And our pipeline will need artifacts. We will edit the `azure-pipelines.yml` to add two new tasks. You can do this directly in the online repository or just from your local machine; remember the file is at the root.  Add these commands:
@@ -133,7 +143,7 @@ And our pipeline will need artifacts. We will edit the `azure-pipelines.yml` to 
     - task: DotNetCoreCLI@2
       displayName: 'dotnet publish $(buildConfiguration)'
       inputs:
-        command: publish
+        command: publish 
         publishWebProjects: True
         arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         zipAfterPublish: True
@@ -143,7 +153,7 @@ And our pipeline will need artifacts. We will edit the `azure-pipelines.yml` to 
 
 Those two tasks are to publish our application (package it), and make it available in our Artifact folder. To learn more about the type of command available and see example have a look the  excellent documentation at: https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core.  Once you are done, save and commit (and push if it was local).
 
-From the left menubar, click on e the *Pipelines*,  select *Release*, and client the *New Release* blue button. Select the template that matches your application. For this post *Azure App Service deployment* is the one we need. 
+From the left menubar, click on e the *Pipelines*,  select *Release*, and client the *New Release* blue button. Select the template that matches your application. For this lab *Azure App Service deployment* is the one we need. 
 
 ![New Release, select a template][NewRelease_step1]
 
@@ -152,8 +162,6 @@ The next thing to will be to rename the environment for something else than *Sta
 ![Release Pipeline][ReleasePipeline]
 
 You will now specify to the pipeline where to pick the artifacts it will deploy. In this case, we want the "output" of our latest build. And I renamed the Source alias as **Drop**.
-
-![AddArtifact][AddArtifact]
 
 To get our continuous deployment (CD) we need to enable that trigger by clicking on the little lightning bolt and enabled it.
 
@@ -165,11 +173,11 @@ Select the subscription you would like to use, and then click on the `Authorize`
 
 ![SetupReleaseDetails][SetupReleaseDetails]
 
-### Testing time
+## Testing time
 
 To test if our CI/CD works we will do a simple code change. First we need to get the latest version of the code. Remember that YAML file was added directly from the web so we don't have it locally.
 
-#### Git pull
+### Git pull
 
 To get the latest version of the code we need to do a `git pull`. You can execute the command directly from the terminal. However, Visual Studio is also well integrated with Git so let's try that way.
 
@@ -212,3 +220,8 @@ Once the deployment is done, refresh your web browser where the web page was sho
 [NewGitHubRepoHere]: medias/NewGitHubRepoHere.png
 [GithubRepoDetails]: medias/GithubRepoDetails.png
 [AddGitHubRemote]: medias/AddGitHubRemote.png
+[SelectTemplateASPNETCore]: medias/SelectTemplateASPNETCore.png
+[UpdateYaml]: medias/UpdateYaml.png
+[PreviewFeatures]: medias/PreviewFeatures.png
+[CloudShell]: medias/CloudShell.png
+
