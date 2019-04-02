@@ -20,6 +20,7 @@ Resource Manager provides several benefits:
 * You can define the dependencies between resources so they're deployed in the correct order.
 * You can see your template as a documentation of your infrastructure.  ( [Infrastructure as a code](https://docs.microsoft.com/en-us/azure/devops/learn/what-is-infrastructure-as-code) )
 
+
 ARM template are pretty simple.  They are just json files that describe the infrastructure of your project. You define your structure in a template and then use it with a parameter file.
 
 ```txt
@@ -29,34 +30,81 @@ myproject.parameters.json
 
 The two together can be deploy multiple environments.  You will change your parameter file depending on which environment you are deploying.
 
-We could want to deploy a VM or a Web application.  Let's say, in that case that your development environment could required a smaller resource than your production environment. With ARM, it will be the same structure, the same code, except your parameter file will change the size of your VM or Web application.
+We could want to deploy a VM or a Web application.  Let's say, in the case that your development environment require a smaller resource than your production environment. With ARM, it will be the same structure, the same code, except your parameter file will change the size of your VM or Web application.
 
-Also, when you deploying resources on Azure, ARM will parallelize you deployment.  It's really the fastest way to deploy.
+```txt
+myproject.json
+myproject.dev.parameters.json  (FREE plan)
+myproject.stage.parameters.json (Standard 1 Plan)
+myproject.production.parameters.json (Premium 1 Plan)
+```
+
+Also, when you instantiate resources on Azure, ARM will parallelize you deployment.  It's really the fastest way to deploy.
 
 # Deployment using ARM templates
 
-You can deploy them using 3 ways.
+You can deploy them using multiple tools:
 
-1) Using Visual Studio
+## Using Visual Studio
 
 ![VisualStudio_ARM](https://docs.microsoft.com/en-us/azure/azure-resource-manager/media/vs-azure-tools-resource-groups-deployment-projects-create-deploy/deploy.png)
 
 To learn more on how to deploy an ARM template with Visual Studio, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/vs-azure-tools-resource-groups-deployment-projects-create-deploy)
 
-2) Using the Azure Portal
+## Using the Azure Portal
 
 ![Portal_ARM](https://docs.microsoft.com/en-us/azure/azure-resource-manager/media/resource-group-template-deploy-portal/search-template.png)
 
 To learn more on how to deploy an ARM template with Azure Portal, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-portal)
 
-3) Using Azure PowerShell or CLI
+## Using Azure PowerShell or CLI
 
 ![Powershell_arm](http://techgenix.com/tgwordpress/wp-content/uploads/2018/06/1050-05-08-1024x390.png)
 
+> New-AzResourceGroupDeployment -ResourceGroupName <resource-group-name> -TemplateFile <path-to-template>
+
 To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy)
 
+> New-AzDeployment -Location <location> -TemplateFile <path-to-template>
+    
 To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli)
 
+    
+## Using Azure Pipeline Resource Group Deployment Task
+
+> Visual Designer
+![Azure Resource Group Deployment Task](https://docs.microsoft.com/en-us/azure/media/vs-azure-tools-resource-groups-ci-in-vsts/walkthrough18.png)
+
+> Yaml editor
+```yaml
+# Azure Resource Group Deployment
+# Deploy an Azure resource manager (ARM) template to a resource group. You can also start, stop, delete, deallocate all Virtual Machines (VM) in a resource group
+- task: AzureResourceGroupDeployment@2
+  inputs:
+    azureSubscription: 
+    #action: 'Create Or Update Resource Group' # Options: create Or Update Resource Group, select Resource Group, start, stop, stopWithDeallocate, restart, delete, deleteRG
+    resourceGroupName: 
+    #location: # Required when action == Create Or Update Resource Group
+    #templateLocation: 'Linked artifact' # Options: linked Artifact, uRL Of The File
+    #csmFileLink: # Required when templateLocation == URL Of The File
+    #csmParametersFileLink: # Optional
+    #csmFile: # Required when  TemplateLocation == Linked Artifact
+    #csmParametersFile: # Optional
+    #overrideParameters: # Optional
+    #deploymentMode: 'Incremental' # Options: incremental, complete, validation
+    #enableDeploymentPrerequisites: 'None' # Optional. Options: none, configureVMwithWinRM, configureVMWithDGAgent
+    #teamServicesConnection: # Required when enableDeploymentPrerequisites == ConfigureVMWithDGAgent
+    #teamProject: # Required when enableDeploymentPrerequisites == ConfigureVMWithDGAgent
+    #deploymentGroupName: # Required when enableDeploymentPrerequisites == ConfigureVMWithDGAgent
+    #copyAzureVMTags: true # Optional
+    #runAgentServiceAsUser: # Optional
+    #userName: # Required when enableDeploymentPrerequisites == ConfigureVMWithDGAgent && RunAgentServiceAsUser == True
+    #password: # Optional
+    #outputVariable: # Optional
+    #deploymentName: # Optional
+    #deploymentOutputs: # Optional
+    #addSpnToEnvironment: false # Optional
+ ```
 # Template format
 
 A Resource manager template is simply a JSON file using this structure
@@ -113,6 +161,9 @@ Now that we know a bit more on these ARM templates, let see how we can use them 
 If you have install the extension, you can do it easily if you type `arm!` at the beginning of the file or copy this snippet directly.
 
 ![Insert_ARM_Template_Skeleton](https://raw.githubusercontent.com/sam-cogan/arm-snippets-vscode/master/Extension/images/skeleton.gif)
+
+
+  
 
 ```json
 {
