@@ -28,7 +28,8 @@ namespace app
                 .AddEnvironmentVariables()
                 .Build();
             var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
-            var results = await visionAPI.AnalyzeImageAsync(myBlob.Uri.ToString(), Features);
+            var path = myBlob.GetSharedAccessSignature(new SharedAccessBlobPolicy{ Permissions = SharedAccessBlobPermissions.Read });
+            var results = await visionAPI.AnalyzeImageAsync(path, Features);
             if(IsDog(results))
             {
                 return;
