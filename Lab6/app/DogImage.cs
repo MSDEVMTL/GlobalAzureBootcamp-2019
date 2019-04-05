@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace app
 {
@@ -19,19 +22,24 @@ namespace app
         };
 
         [FunctionName("DogImage")]
-        public static void Run([BlobTrigger("images/{name}", Connection = "AzureWebJobsStorage")]Stream myBlob, System.Uri uri, string name, ILogger log)
+        public static async Task Run([BlobTrigger("images/{name}", Connection = "AzureWebJobsStorage")]CloudBlockBlob myBlob, System.Uri uri, string name, ILogger log)
         {
-            // var config = new ConfigurationBuilder()
-            //     .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-            //     .AddEnvironmentVariables()
-            //     .Build();
-            // var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config[""])) { Endpoint = config[] };
-
-
-            log.LogInformation($"C# Blob trigger function Processed blob\n URI:{uri} \n Name:{name} \n Size: {myBlob.Length} Bytes");
-            // call visionAPI here
+            var config = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .Build();
+            var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
+            var results = await visionAPI.AnalyzeImageAsync(myBlob.Uri.ToString(), Features);
+            if(IsDog(results))
+            {
+                return;
+            }
             
-            // delete if not dog
+            await myBlob.DeleteIfExistsAsync();
+        }
+
+        private static bool IsDog(ImageAnalysis image)
+        {
+            return image.Categories.Any(x => x.Name == "animal_dog") || image.Tags.Any(x => x.Name == "dog");
         }
     }
 }

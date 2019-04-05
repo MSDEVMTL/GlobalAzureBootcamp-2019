@@ -138,7 +138,9 @@
             "properties": {
               "FUNCTIONS_EXTENSION_VERSION":"~2",
               "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]",
-              "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]"
+              "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]",
+              "ComputerVision:Endpoint":"[reference(parameters('csVisionName'), '2017-04-18').endpoint]",
+              "ComputerVision:ApiKey":"[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
             }
          },
          {
