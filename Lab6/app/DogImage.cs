@@ -22,14 +22,16 @@ namespace app
         };
 
         [FunctionName("DogImage")]
-        public static async Task Run([BlobTrigger("images/{name}", Connection = "AzureWebJobsStorage")]CloudBlockBlob myBlob, System.Uri uri, string name, ILogger log)
+        public static async Task Run([BlobTrigger("images/{name}", Connection = "AzureWebJobsStorage")]CloudBlockBlob myBlob, string name, ILogger log)
         {
             var config = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
                 .Build();
             var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
-            var path = myBlob.GetSharedAccessSignature(new SharedAccessBlobPolicy{ Permissions = SharedAccessBlobPermissions.Read });
-            var results = await visionAPI.AnalyzeImageAsync(path, Features);
+            var sas = myBlob.GetSharedAccessSignature(new SharedAccessBlobPolicy{ Permissions = SharedAccessBlobPermissions.Read });
+            log.LogInformation($"Blob SAS: {sas}\n URI: {myBlob.Uri.ToString()}");
+            
+            var results = await visionAPI.AnalyzeImageAsync($"{myBlob.Uri}?sas", Features);
             if(IsDog(results))
             {
                 return;
