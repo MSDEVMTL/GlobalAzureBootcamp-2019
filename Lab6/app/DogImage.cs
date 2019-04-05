@@ -37,9 +37,10 @@ namespace app
                 .Build();
             var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
             var sas = myBlob.GetSharedAccessSignature(sasConstraints);
-            log.LogInformation($"Blob SAS: {sas}\n URI: {myBlob.Uri.ToString()}");
+            var path = $"{myBlob.Uri.ToString()}{sas}";
+            log.LogInformation($"Blob SAS: {sas}\n URI: {myBlob.Uri.ToString()}\n PATH: {path}");
             
-            var results = await visionAPI.AnalyzeImageAsync($"{myBlob.Uri}sas", Features);
+            var results = await visionAPI.AnalyzeImageAsync(path, Features);
             if(IsDog(results))
             {
                 return;
