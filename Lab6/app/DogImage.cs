@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,6 +22,13 @@ namespace app
             VisualFeatureTypes.Tags
         };
 
+        private static SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy
+        {
+            SharedAccessExpiryTime = DateTimeOffset.UtcNow.AddMinutes(10),
+            Permissions = SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.List
+        };
+
+
         [FunctionName("DogImage")]
         public static async Task Run([BlobTrigger("images/{name}", Connection = "AzureWebJobsStorage")]CloudBlockBlob myBlob, string name, ILogger log)
         {
@@ -28,10 +36,10 @@ namespace app
                 .AddEnvironmentVariables()
                 .Build();
             var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
-            var sas = myBlob.GetSharedAccessSignature(new SharedAccessBlobPolicy{ Permissions = SharedAccessBlobPermissions.Read });
+            var sas = myBlob.GetSharedAccessSignature(sasConstraints);
             log.LogInformation($"Blob SAS: {sas}\n URI: {myBlob.Uri.ToString()}");
             
-            var results = await visionAPI.AnalyzeImageAsync($"{myBlob.Uri}?sas", Features);
+            var results = await visionAPI.AnalyzeImageAsync($"{myBlob.Uri}sas", Features);
             if(IsDog(results))
             {
                 return;
