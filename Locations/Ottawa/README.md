@@ -1,7 +1,7 @@
 # Ottawa's speakers assignments
 * Intro - [Frank Boucher](https://github.com/FBoucher)
 * Lab 1 - [Frank Boucher](https://github.com/FBoucher)
-* Lab 2 - _Not assigned_
+* Lab 2 - [Eric Leonard](https://github.com/erleonard)
 * Lab 3 - [Carl-Hugo Marcotte](https://github.com/Carl-Hugo)
 * Lab 4 - _Not assigned_
 * Lab 5 - [Juan Martinez](https://github.com/arribajuan)
