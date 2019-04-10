@@ -131,7 +131,7 @@ To create a Docker image manually:
     - In VS Code you can `` ctrl+` `` or click `View > Terminal`.
         > You can even have multiple terminals opened at the same time. On Windows 10, they can be `cmd`, `PowerShell` and even `bash` if you have a Linux subsystem installed!
     - In Windows 10 you can open PowerShell by `right-click Start Menu > Windows PowerShell` or from Explorer (`Windows+E`): `File > Open Windows PowerShell`.
-    - In MacOS or Linux open `bash`. TODO: how to do that?
+    - In MacOS or Linux open `bash` ([How to use the Terminal command line in macOS](https://macpaw.com/how-to/use-terminal-on-mac)).
 1. Type the following command:
 
     ```bash
