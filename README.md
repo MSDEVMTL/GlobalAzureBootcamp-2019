@@ -1,4 +1,4 @@
-﻿# Global Azure Bootcamp 2019 - Montréal & Ottawa, Canada
+﻿# Global Azure Bootcamp 2019 - Montréal, Ottawa & Halifax, Canada
 
 ![gablogo][gablogo]
 
@@ -20,7 +20,6 @@ In an effort to improve their efficiency and the quality of their application th
 * They would like to be the application "portable"
 * Artificial Intellegent is an excellent way to bonify their application and distinguish themselves from the competition.
 * Get rid of their old process
-* 
 
 The team has been assigned a couple of days to find tools & put new processes in place to check all the action items of the list above. Excited, the team will actively start documenting themselves and working on this tomorrow.
 
@@ -50,10 +49,11 @@ All Platforms (Windows, MacOS, Linux)
 * [Visual Studio Code](https://code.visualstudio.com/?wt.mc_id=vscom_downloads)
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 * [Git](https://git-scm.com/downloads)
+* [Docker](https://www.docker.com/get-started)
 
 ## What you will need before the bootcamp?
 
-Before the bootcamp, we encourage you to make sure you have all the requirement software so you can concentrate on learning and not running installations.  Make sure you get all the source code and install all the required software.  See Lab 0.
+Before the bootcamp, we encourage you to make sure you have all the requirement software so you can concentrate on learning and not running installations.  Make sure you get all the source code and install all the required software.  See **[Lab 0)](./Lab0/README.md)**.
 
 ### Azure Subscription
 If you don't own an Azure subscription already, you can create your free account today. It comes with 200$ credit, so you can experience almost everything without spending a dime. 
@@ -62,6 +62,5 @@ Make sure to have your account up and ready before the bootcamp.
 
 [Create your free Azure account today](https://azure.microsoft.com/en-us/free/)
 
-*more detail soon....*
 
 [gablogo]: ./medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
