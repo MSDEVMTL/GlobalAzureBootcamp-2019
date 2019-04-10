@@ -23,7 +23,7 @@ We will first create a `Dockerfile` and optionally a `.dockerignore` file at the
 
 ![Docker files location](assets/images/dockerfiles-location.png)
 
-You have multiple options to achieve that, here are two:
+You have multiple options to achieve that, here are the two covered here:
 
 -   Setting up docker manually
 -   Setting up docker using VS Code Docker extension
@@ -173,7 +173,7 @@ To run a Docker image manually:
 
 1. Browse to `http://localhost` using your favorite browser to enjoy navigating your newly dockerized website.
 
-> IMPORTANT: if you don't supply the --name parameter, the Docker daemon will generate a UUID automatically for you. That means that if you want to stop your container later without searching for its ID manually, you can copy the CONTAINER ID that was outputted into the terminal window; this should be a string looking like this: `d8897f7bd10783d075260d953eec8a06885350bf8acc8322c0e4143432f01237`.
+> IMPORTANT: if you don't supply the `--name` parameter, the Docker daemon will generate a UUID automatically for you. That means that if you want to stop your container later without searching for its ID manually, you can copy the CONTAINER ID that was outputted into the terminal window; this should be a string looking like this: `d8897f7bd10783d075260d953eec8a06885350bf8acc8322c0e4143432f01237`.
 
 #### Using VS Code Docker Explorer
 
