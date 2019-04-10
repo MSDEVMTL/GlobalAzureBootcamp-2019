@@ -19,8 +19,11 @@ In this lab, we will execute the following steps:
 
 ### Make our project ready for docker
 
-We will first create a `Dockerfile` and optionally a `.dockerignore` file.
-You have multiple options to achieve this, here are two:
+We will first create a `Dockerfile` and optionally a `.dockerignore` file at the root of our project.
+
+![Docker files location](assets/images/dockerfiles-location.png)
+
+You have multiple options to achieve that, here are two:
 
 -   Setting up docker manually
 -   Setting up docker using VS Code Docker extension
