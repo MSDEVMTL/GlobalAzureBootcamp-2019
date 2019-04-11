@@ -10,28 +10,35 @@ To do this, we will add Azure Cognitive Services (Vision) to our project. The we
 
 # Let's code!
 
--   [Add Azure components](#add-azure-components)
-    -   [Modify the ARM template to add the Computer Vision service](#modify-the-arm-template-to-add-the-computer-vision-service)
-    -   [Deploy the ARM templates to Azure](#deploy-the-arm-templates-to-azure)
-        -   [Azure CLI - incremental mode](#Azure-CLI---incremental-mode)
-    -   [Getting config info for the web app](#getting-config-info-for-the-web-app)
-        -   [Getting the API keys for the API](#getting-the-api-keys-for-the-api)
-        -   [Getting the blob storage connection string](#getting-the-blob-storage-connection-string)
-        -   [Getting config info from deployment](#getting-config-info-from-deployment)
--   [Upload the dog image into your storage account](#upload-the-dog-image-into-your-storage-account)
--   [Let's add computer vision to our web application](#let-s-add-computer-vision-to-our-web-application)
-    -   [Adding the Computer Vision API library to the application](#adding-the-computer-vision-api-library-to-the-application)
-    -   [Adding the Blob storage library to the application](#adding-the-blob-storage-library-to-the-application)
-    -   [Using the API in code](#using-the-api-in-code)
-        -   [Setting up the resources keys](#setting-up-the-resources-keys)
-        -   [Add code to make use of the resource keys](#add-code-to-make-use-of-the-resource-keys)
-        -   [Creating classes to consume the storage and computer vision api](#creating-classes-to-consume-the-storage-and-computer-vision-api)
-            -   [BlobStorageManager](#blobstoragemanager)
-            -   [ImageAnalyzer](#imageanalyzer)
-            -   [Wiring all this into the Startup](#wiring-all-this-into-the-startup)
-    -   [Creating the controller and view](#creating-the-controller-and-view)
-    -   [Folder structure](#folder-structure)
--   [Reference](#reference)
+- [Lab 5 - Azure Cognitive Services](#lab-5---azure-cognitive-services)
+- [Goal](#goal)
+- [Let's code!](#lets-code)
+- [Add Azure components](#add-azure-components)
+  - [Modify the ARM template to add the Computer Vision service](#modify-the-arm-template-to-add-the-computer-vision-service)
+  - [Deploy the ARM templates to Azure](#deploy-the-arm-templates-to-azure)
+    - [Azure CLI - incremental mode](#azure-cli---incremental-mode)
+  - [Getting config info for the web app](#getting-config-info-for-the-web-app)
+    - [Getting config info from deployment](#getting-config-info-from-deployment)
+- [Upload the dog image into your storage account](#upload-the-dog-image-into-your-storage-account)
+- [Let's add computer vision to our web application](#lets-add-computer-vision-to-our-web-application)
+  - [Adding the Computer Vision API library to the application](#adding-the-computer-vision-api-library-to-the-application)
+  - [Adding the Blob storage library to the application](#adding-the-blob-storage-library-to-the-application)
+  - [Using the API in code](#using-the-api-in-code)
+    - [Setting up the resources keys](#setting-up-the-resources-keys)
+    - [Add code to make use of the resource keys](#add-code-to-make-use-of-the-resource-keys)
+    - [Creating classes to consume the storage and computer vision API](#creating-classes-to-consume-the-storage-and-computer-vision-api)
+      - [BlobStorageManager](#blobstoragemanager)
+      - [ImageAnalyzer](#imageanalyzer)
+      - [Wiring all this into the Startup](#wiring-all-this-into-the-startup)
+  - [Creating the controller and view](#creating-the-controller-and-view)
+    - [Better options validation](#better-options-validation)
+  - [Folder structure](#folder-structure)
+- [Annex](#annex)
+  - [A](#a)
+    - [Getting the API keys for the API](#getting-the-api-keys-for-the-api)
+    - [Getting the blob storage connection string](#getting-the-blob-storage-connection-string)
+- [Reference](#reference)
+- [End](#end)
 
 # Add Azure components
 
@@ -189,7 +196,7 @@ To reach the output values;
 -   in the deployments section
     -   click on the latest deployment
         -   click on the outputs section
-        -   the output variable values will be tehre ready to be used (all in one place!)
+        -   the output variable values will be there ready to be used (all in one place!)
 
 ![deployment-output][deployment-output]
 
@@ -235,7 +242,7 @@ To do so;
 
 ## Adding the Blob storage library to the application
 
-We need to install the Blob storage library Nuget Package.
+We need to install the Blob storage library NuGet Package.
 
 To do so;
 
@@ -246,9 +253,9 @@ To do so;
 
 ### Setting up the resources keys
 
-To use the computer vision api, first copy the api key you copied earlier into the file appsettings.json, under the `ComputerVision:ApiKey` section.
+To use the computer vision API, first copy the API key you copied earlier into the file appsettings.json, under the `ComputerVision:ApiKey` section.
 
-In the `ComputerVision:ApiEndPoint` section, enter the computer vision api endpoint. It should like like this: `https://eastus.api.cognitive.microsoft.com`, where `eastus` is the region into which you created your computer vision api resource into.
+In the `ComputerVision:ApiEndPoint` section, enter the computer vision API endpoint. It should like like this: `https://eastus.api.cognitive.microsoft.com`, where `eastus` is the region into which you created your computer vision API resource into.
 
 Now for the storage connection string, copy the connection string you copied earlier into the section `ConnectionStrings:ApplicationStorage`.
 
@@ -303,11 +310,11 @@ public class ComputerVisionOptions
 
 Note that we have also created classes for the sub-sections.
 
-### Creating classes to consume the storage and computer vision api
+### Creating classes to consume the storage and computer vision API
 
 Under the root of your application, create a folder called `Services` and create 2 classes (2 classes): `BlobStorageManager` and `ImageAnalyzer`
 
-The `BlobStorageManager` is used to consume the blob storage and the `ImageAnalyzer` is used to consume the computer vision api.
+The `BlobStorageManager` is used to consume the blob storage and the `ImageAnalyzer` is used to consume the computer vision API.
 
 #### BlobStorageManager
 
@@ -366,7 +373,7 @@ public class BlobStorageManager : IBlogStorageManager
 
 #### ImageAnalyzer
 
-To consume the computer vision api, copy the following code into the class `ImageAnalyzer`
+To consume the computer vision API, copy the following code into the class `ImageAnalyzer`
 
 ```csharp
 private readonly ComputerVisionClient _computerVision;
@@ -482,7 +489,7 @@ public async Task<IActionResult> Analyze(string imageUrl)
 }
 ```
 
-The `Index` method will list all the images from our _images_ container and the `Analyze` method will take the url of our image in our container and analyze it with the computer vision api.
+The `Index` method will list all the images from our _images_ container and the `Analyze` method will take the URL of our image in our container and analyze it with the computer vision API.
 
 The namespaces in this class should include:
 
@@ -712,11 +719,11 @@ To get your storage key;
 
 # Reference
 
-[Quickstart: Analyze an image using the Computer Vision SDK and C#](https://docs.microsoft.com/en-us/azure/cognitive-services/Computer-vision/quickstarts-sdk/csharp-analyze-sdk)
+[Quickstart: Analyze an image using the Computer Vision SDK and C#](https://docs.microsoft.com/en-us/azure/cognitive-services/Computer-vision/quickstarts-sdk/csharp-analyze-sdk?WT.mc_id=globalazure-github-frbouche)
 
-[Develop with blobs](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-dotnet?tabs=windows)
+[Develop with blobs](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-dotnet?tabs=windows?WT.mc_id=globalazure-github-frbouche)
 
-[Options pattern in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-2.2)
+[Options pattern in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?WT.mc_id=globalazure-github-frbouche&view=aspnetcore-2.2)
 
 # End
 

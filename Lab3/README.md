@@ -338,9 +338,9 @@ az container list --resource-group GAB2019Group --output table
 
 ## Reference
 
--   [Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
--   [Quickstart: Create a private container registry using the Azure CLI](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-azure-cli)
--   [Quickstart: Run a container application in Azure Container Instances with the Azure CLI](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-quickstart)
+-   [Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest?WT.mc_id=globalazure-github-frbouche)
+-   [Quickstart: Create a private container registry using the Azure CLI](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-azure-cli?WT.mc_id=globalazure-github-frbouche)
+-   [Quickstart: Run a container application in Azure Container Instances with the Azure CLI](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-quickstart?WT.mc_id=globalazure-github-frbouche)
 
 ## End
 

@@ -86,7 +86,7 @@ Back in **Code**, , make a simple change to a page, commit and push the change. 
 
 ## Reference
 
-[Deploy to an Azure Web App for Containers](https://docs.microsoft.com/en-us/azure/devops/pipelines/apps/cd/deploy-docker-webapp?view=azdevops)
+[Deploy to an Azure Web App for Containers](https://docs.microsoft.com/en-us/azure/devops/pipelines/apps/cd/deploy-docker-webapp?WT.mc_id=globalazure-github-frbouche&view=azdevops)
 
 ## End
 [Previous Lab](../Lab3/README.md)

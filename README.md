@@ -46,8 +46,8 @@ Time        | Duration | Tittle                                      | Descripti
 
 All Platforms (Windows, MacOS, Linux)
 
-* [Visual Studio Code](https://code.visualstudio.com/?wt.mc_id=vscom_downloads)
-* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+* [Visual Studio Code](https://code.visualstudio.com/?WT.mc_id=globalazure-github-frbouche&wt.mc_id=vscom_downloads)
+* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?WT.mc_id=globalazure-github-frbouche&view=azure-cli-latest)
 * [Git](https://git-scm.com/downloads)
 * [Docker](https://www.docker.com/get-started)
 
@@ -60,7 +60,7 @@ If you don't own an Azure subscription already, you can create your free account
 
 Make sure to have your account up and ready before the bootcamp.
 
-[Create your free Azure account today](https://azure.microsoft.com/en-us/free/)
+[Create your free Azure account today](https://azure.microsoft.com/en-us/free/?WT.mc_id=globalazure-github-frbouche)
 
 
 [gablogo]: ./medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"

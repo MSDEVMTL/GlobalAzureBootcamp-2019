@@ -18,7 +18,7 @@ Resource Manager provides several benefits:
 * You can **repeatedly** deploy your solution throughout the development life cycle and **have confidence** your resources are deployed in a consistent state.
 * You can manage your infrastructure through declarative templates rather than scripts.
 * You can define the dependencies between resources so they're deployed in the correct order.
-* You can see your template as a documentation of your infrastructure.  ( [Infrastructure as a code](https://docs.microsoft.com/en-us/azure/devops/learn/what-is-infrastructure-as-code) )
+* You can see your template as a documentation of your infrastructure.  ( [Infrastructure as a code](https://docs.microsoft.com/en-us/azure/devops/learn/what-is-infrastructure-as-code?WT.mc_id=globalazure-github-frbouche) )
 
 ARM template are pretty simple.  They are just json files that describe the infrastructure of your project. You define your structure in a template and then use it with a parameter file.
 
@@ -41,21 +41,21 @@ You can deploy them using 3 ways.
 
 ![VisualStudio_ARM](https://docs.microsoft.com/en-us/azure/azure-resource-manager/media/vs-azure-tools-resource-groups-deployment-projects-create-deploy/deploy.png)
 
-To learn more on how to deploy an ARM template with Visual Studio, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/vs-azure-tools-resource-groups-deployment-projects-create-deploy)
+To learn more on how to deploy an ARM template with Visual Studio, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/vs-azure-tools-resource-groups-deployment-projects-create-deploy?WT.mc_id=globalazure-github-frbouche)
 
 2) Using the Azure Portal
 
 ![Portal_ARM](https://docs.microsoft.com/en-us/azure/azure-resource-manager/media/resource-group-template-deploy-portal/search-template.png)
 
-To learn more on how to deploy an ARM template with Azure Portal, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-portal)
+To learn more on how to deploy an ARM template with Azure Portal, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-portal?WT.mc_id=globalazure-github-frbouche)
 
 3) Using Azure PowerShell or CLI
 
 ![Powershell_arm](http://techgenix.com/tgwordpress/wp-content/uploads/2018/06/1050-05-08-1024x390.png)
 
-To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy)
+To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy?WT.mc_id=globalazure-github-frbouche)
 
-To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli)
+To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli?WT.mc_id=globalazure-github-frbouche)
 
 # Template format
 
@@ -83,7 +83,7 @@ A Resource manager template is simply a JSON file using this structure
 | resources |Yes |Resource types that are deployed or updated in a resource group. |
 | outputs |No |Values that are returned after deployment. |
 
-[reference](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authoring-templates)
+[reference](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authoring-templates?WT.mc_id=globalazure-github-frbouche)
 
 # Let's code!
 
@@ -218,7 +218,7 @@ You should now see a new resource in your resource group.
 
 ## Part 3 - Add existing resources to our template
 
-In the previous lab, we created an Azure Web app and Azure App Service Plan to host our Web Application. It is possible to include an existing resource to your ARM template. You just need to specify the same unique name of yor resource.
+In the previous lab, we created an Azure Web app and Azure App Service Plan to host our Web Application. It is possible to include an existing resource to your ARM template. You just need to specify the same unique name of your resource.
 
 
 1) Add a Web App to your template. Type `arm-webapp` or copy the following snippet to your template resources.
@@ -472,10 +472,10 @@ That should now look like this
 
 If you want to know more on the syntax or the advantage of using Azure Resource Manager please visit the following:
 
-* [What is Azure Resource Manager](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview)
-* [Understanding the structure and syntax of Azure Resource Manager templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authoring-templates)
+* [What is Azure Resource Manager](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview?WT.mc_id=globalazure-github-frbouche)
+* [Understanding the structure and syntax of Azure Resource Manager templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authoring-templates?WT.mc_id=globalazure-github-frbouche)
 * [Best practices using Azure Resource Manager (ARM) Templates](https://www.youtube.com/watch?v=myYTGsONrn0)
-* [Azure Resource Manager](https://azure.microsoft.com/en-us/resources/templates/)
+* [Azure Resource Manager](https://azure.microsoft.com/en-us/resources/templates/?WT.mc_id=globalazure-github-frbouche)
 * [A library of examples](https://github.com/Azure/azure-quickstart-templates)
 * [Exploring three way to deploy your ARM templates](http://techgenix.com/deploy-arm-templates/)
 
