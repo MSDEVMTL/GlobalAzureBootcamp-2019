@@ -195,7 +195,7 @@ Once the deployment is done, refresh your web browser where the web page was sho
 
 ## Reference
 
-- [Build, test, and deploy .NET Core apps in Azure Pipelines](https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core)
+- [Build, test, and deploy .NET Core apps in Azure Pipelines](https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core?WT.mc_id=globalazure-github-frbouche)
 
 ## End
 

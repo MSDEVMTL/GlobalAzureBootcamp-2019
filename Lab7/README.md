@@ -4,16 +4,21 @@
 
 ## Goal
 
-Add a KeyVault to the ARM tempalte. migrate the API and storage keys to the keyvault. Use the keyvault instead of the keys in the ARM template and application.
+Add a KeyVault to the ARM template. migrate the API and storage keys to the keyvault. Use the keyvault instead of the keys in the ARM template and application.
 
 ## Let's code!
 
-1. [Create an identity for the App](#1-Create-an-identity-for-the-App)
-1. [Create a KeyVault to store secrets](#2-Create-a-keyVault-to-store-secrets)
-1. [Give the app access to the KeyVault's secrets](#3-Give-the-app-access-to-the-KeyVault's-secrets)
-1. [Move storage account key to KeyVault](#4-Move-storage-account-key-to-KeyVault)
-1. [Modify the app to get the Storage Account Keys from KeyVault](#5-Modify-the-app-to-get-the-Storage-Account-Keys-from-KeyVault)
-1. [Reference](#Reference)
+- [Lab 7 - Security - KeyVault](#lab-7---security---keyvault)
+  - [Goal](#goal)
+  - [Let's code!](#lets-code)
+  - [1. Create an identity for the App](#1-create-an-identity-for-the-app)
+  - [2. Create a KeyVault to store secrets](#2-create-a-keyvault-to-store-secrets)
+  - [3. Give the app access to the KeyVault's secrets](#3-give-the-app-access-to-the-keyvaults-secrets)
+  - [4. Move storage account key to KeyVault](#4-move-storage-account-key-to-keyvault)
+  - [5. Modify the app to get the Storage Account Keys from KeyVault](#5-modify-the-app-to-get-the-storage-account-keys-from-keyvault)
+  - [6. Optional: try to do the same thing with the ComputerVision API key](#6-optional-try-to-do-the-same-thing-with-the-computervision-api-key)
+  - [Reference](#reference)
+  - [End](#end)
 
 ## 1. Create an identity for the App
 
@@ -120,10 +125,10 @@ Wouldn't it be great if the ARM template could provision the Storage Account and
 }
 ```
 
-This resource will create a new secret in key vault by retrieving automatically the value from the storage account once it's provisionned
+This resource will create a new secret in key vault by retrieving automatically the value from the storage account once it's provisioned
 
 ## 5. Modify the app to get the Storage Account Keys from KeyVault
-Alright now that everything is provisionned correctly in azure, it's time to modify the web application and get the secret from KeyVault instead of using an hardcoded value.
+Alright now that everything is provisioned correctly in azure, it's time to modify the web application and get the secret from KeyVault instead of using an hardcoded value.
 
 5.1 install the Azure key vault package with `dotnet add package Microsoft.Extensions.Configuration.AzureKeyVault`
 
@@ -169,9 +174,9 @@ While you're there add the following keys to your `appsetting.json`
 
 ## Reference
 
-- [[listkeys()] function](https://docs.microsoft.com/en-us/rest/api/storagerp/storageaccounts/listkeys)
-- [KeyVault](https://azure.microsoft.com/en-ca/services/key-vault/)
-- [Azure Key Vault Configuration Provider in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/security/key-vault-configuration?view=aspnetcore-2.2)
+- [[listkeys()] function](https://docs.microsoft.com/en-us/rest/api/storagerp/storageaccounts/listkeys?WT.mc_id=globalazure-github-frbouche)
+- [KeyVault](https://azure.microsoft.com/en-ca/services/key-vault/?WT.mc_id=globalazure-github-frbouche)
+- [Azure Key Vault Configuration Provider in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/security/key-vault-configuration?WT.mc_id=globalazure-github-frbouche&view=aspnetcore-2.2)
 
 ## End
 

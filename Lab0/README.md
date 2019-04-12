@@ -35,7 +35,7 @@ One of the strengths of Visual Studio Code is all its extensions.  During the fo
 Installing an extension is very simple and it's done directly from VSCode. Follow these instruction:
 
 * Open VSCode and from the left menu and select the Extensions (Ctrl+Shift+X).
-* Type `Azure Resource Manager Snippets` into the search bar at the top of the Extensions Marketplace panel that just openned.
+* Type `Azure Resource Manager Snippets` into the search bar at the top of the Extensions Marketplace panel that just opened.
 * From the search result, select `Azure Resource Manager Snippets`.
 * Click on the little *Install* green button on the side of the extension to proceed with installation.
 
@@ -54,7 +54,7 @@ Once all the extensions are installed, click the *Refresh* button to restart VS 
 
 ## Azure CLI
 
-The Azure CLI is a command-line tool providing a great experience for managing Azure resources. The CLI is designed to make scripting easy, query data, support long-running operations, and more. To install it just follow the instruction based on your platform on the site: [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
+The Azure CLI is a command-line tool providing a great experience for managing Azure resources. The CLI is designed to make scripting easy, query data, support long-running operations, and more. To install it just follow the instruction based on your platform on the site: [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?WT.mc_id=globalazure-github-frbouche&view=azure-cli-latest).
 
 ![azurecli][azurecli]
 
@@ -74,7 +74,7 @@ To install this great tool go to the official web page [Git](https://git-scm.com
 
 ![gitdownload][gitdownload]
 
-This will install the console version of git. This is good enough to be fonctional. However if you are more visual or if you prefer graphical tool GitKraken is an excellent choice. You can download it from here: [Git Kraken](https://www.gitkraken.com/invite/saVBBaq4)
+This will install the console version of git. This is good enough to be functional. However if you are more visual or if you prefer graphical tool GitKraken is an excellent choice. You can download it from here: [Git Kraken](https://www.gitkraken.com/invite/saVBBaq4)
 
 ![gitkraken][gitkraken]
 
@@ -98,11 +98,11 @@ You are now ready for the Labs.
 
 ## Azure Subscription
 
-Having an Azure subscription is manatory to be able to do the Global Azure Bootcamp. If you don't own an Azure subscription already, you can create your **free** account today. It comes with 200$ credit, so you can experience almost everything without spending a dime. 
+Having an Azure subscription is mandatory to be able to do the Global Azure Bootcamp. If you don't own an Azure subscription already, you can create your **free** account today. It comes with 200$ credit, so you can experience almost everything without spending a dime. 
 
 Make sure to have your account up and ready before the bootcamp.
 
-[Create your free Azure account today](https://azure.microsoft.com/en-us/free/)
+[Create your free Azure account today](https://azure.microsoft.com/en-us/free?WT.mc_id=globalazure-github-frbouche)
 
 ![freeAzure][freeAzure]
 
@@ -110,7 +110,7 @@ Make sure to have your account up and ready before the bootcamp.
 
 For the GLobal Azure Bootcamp, you will need an Azure DevOps account. It's free! Get 10 free parallel jobs and unlimited minutes for your open source projects with Pipelines.
 
-[Create your free Azure DevOps account today!](https://azure.microsoft.com/en-ca/services/devops/)
+[Create your free Azure DevOps account today!](https://azure.microsoft.com/en-ca/services/devops?WT.mc_id=globalazure-github-frbouche)
 
 ![azureDevOps][azureDevOps]
 
