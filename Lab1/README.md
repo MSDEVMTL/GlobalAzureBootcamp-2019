@@ -6,6 +6,8 @@
 
 In this lab you will create an application in .Net Core, push it to a remote repository and create a Continuous Integration and Continuous Deployment (CI/CD) with the Azure DevOps Pipeline to deploy the website to Azure.
 
+![CICD](https://www.edureka.co/blog/content/ver.1531719070/uploads/2018/07/Asset-33-1.png)
+
 # Let's code!
 
 ## Build The Application
