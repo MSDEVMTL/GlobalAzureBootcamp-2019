@@ -46,6 +46,10 @@ The next step is to create a placeholder for our website.  We will create an emp
 
 ![CloudShell][CloudShell]
 
+Login to your Azure account
+
+    az login
+    
 Don't forget to validate that you are in the good subscription. if you are not sure try `az account show` to display information about the current subscription.
 
 > Note: You might experience an error if you webapp name is not unique. (Conflict: Website with given name <web app name> already exists.) Make sure to use a unique name. ex: gab2019<your_initial><2digits_random_number> gab2019AV47
