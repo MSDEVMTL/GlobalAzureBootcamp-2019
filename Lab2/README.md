@@ -168,9 +168,6 @@ If you have install the extension, you can do it easily if you type `arm!` at th
 
 ![Insert_ARM_Template_Skeleton](https://raw.githubusercontent.com/sam-cogan/arm-snippets-vscode/master/Extension/images/skeleton.gif)
 
-
-  
-
 ```json
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
@@ -253,7 +250,59 @@ Your template should now look like this:
 
 ## Part 2 - Deploy automatically your first template
 
-1. Commit your change to the git repository using the following command.
+In the previous lab, we created our first build and template.  Let's modify our release to deploy our new infrastructure every time.
+
+1. Modify the build to include the template
+
+``` yaml
+
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- script: dotnet build ./GABDemo/ --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish $(buildConfiguration)'
+  inputs:
+    command: publish 
+    publishWebProjects: True
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)'
+    contents: '?(gab2019.json|gab2019.parameters.json)'
+    targetFolder: $(Build.ArtifactStagingDirectory)
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: drop
+
+```
+
+
+1. Commit your change to the git repository using the following command. This will add to your repository, your two newly created files.
+
+
+```txt
+  C:\dev\gab2019\deployment\gab2019.json
+  C:\dev\gab2019\deployment\gab2019.parameters.json
+```
 
 ```txt
   git add .
@@ -261,13 +310,24 @@ Your template should now look like this:
   git push
 ```
 
-2. Browse to your Azure DevOps project
+2. Browse to your Azure DevOps project 
 
-3. Edit your Release pipeline
+3. Edit your Release pipeline and select your stage ` to Azure `
+![Edit your Release pipeline and select your stage to Azure](EditPipeline_1.PNG)
 
-4. Add a new task Azure Resource ...
+
+4. Add a new ` Azure Resource Group Deployment ` task
+![Add a new Azure Resource Group Deployment task](AddResourceGroupDeploymentTask.PNG)
+
+5. Move your task to be the first task to be execute
+![Move your task to be the first task to be execute](MoveFirst.PNG)
 
 5. Configure your task
+    *  Select your existing subscription
+    *  Select your existing resource group
+    *  Set the location of your resource `East US`
+    *  Set your template location
+
 
 6. Save your pipeline and create a new release
 
