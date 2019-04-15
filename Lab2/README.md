@@ -221,28 +221,26 @@ Your template should now look like this:
 
 ```json
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {},
-  "variables": {
-    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2018-07-01",
-      "name": "[concat('stg',variables('suffix'))]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "displayName": "[concat('stg',variables('suffix'))]"
-      },
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "StorageV2"
-    }
-  ],
-  "outputs": {}
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "suffix": "[uniqueString(resourcegroup().id, resourceGroup().location)]"
+    },
+    "resources": [{
+        "type": "Microsoft.Storage/storageAccounts",
+        "apiVersion": "2018-07-01",
+        "name": "[concat('stg', variables('suffix'))]",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "StorageAccount1"
+        },
+        "sku": {
+            "name": "Standard_LRS"
+        },
+        "kind": "StorageV2"
+    }],
+    "outputs": {}
 }
 ```
 
