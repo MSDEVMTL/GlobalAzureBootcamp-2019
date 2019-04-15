@@ -8,10 +8,6 @@ In the previous lab, you deployed the container manually but it would be awesome
 
 Magical! To do so, let's start by creating a new pipeline.
 
-**>>>>TODO: CHECK IF YOU NEED TO DISABLE OR DELETE THE PREVIOUS PIPELINE**
-
-**>>>>TODO: CHECK IF YOU NEED TO CREATE A NEW WEB APP FOR CONTAINERS**
-
 ## Let's code!
 
 ### Create a new pipeline
