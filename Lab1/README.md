@@ -6,6 +6,8 @@
 
 In this lab you will create an application in .Net Core, push it to a remote repository and create a Continuous Integration and Continuous Deployment (CI/CD) with the Azure DevOps Pipeline to deploy the website to Azure.
 
+![CICD](https://www.edureka.co/blog/content/ver.1531719070/uploads/2018/07/Asset-33-1.png)
+
 # Let's code!
 
 ## Build The Application
@@ -46,6 +48,10 @@ The next step is to create a placeholder for our website.  We will create an emp
 
 ![CloudShell][CloudShell]
 
+Login to your Azure account
+
+    az login
+    
 Don't forget to validate that you are in the good subscription. if you are not sure try `az account show` to display information about the current subscription.
 
 > Note: You might experience an error if you webapp name is not unique. (Conflict: Website with given name <web app name> already exists.) Make sure to use a unique name. ex: gab2019<your_initial><2digits_random_number> gab2019AV47
