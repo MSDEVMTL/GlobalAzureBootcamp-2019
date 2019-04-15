@@ -197,7 +197,7 @@ If you have install the extension, you can do it easily if you type `arm!` at th
 
 This template, will provision a new Azure Storage Account with the name `StorageAccount1`. Obviously, you want your storage name to be unique. One way to do so is to use a built-in function with the following ARM syntax.
 
-```json
+```txt
 [uniqueString(resourceGroup().id, resourceGroup().location)]
 ```
 
