@@ -61,7 +61,6 @@ To learn more on how to deploy an ARM template with Azure Portal, click [here](h
 
 ![Powershell_arm](http://techgenix.com/tgwordpress/wp-content/uploads/2018/06/1050-05-08-1024x390.png)
 
-<<<<<<< HEAD
 > New-AzResourceGroupDeployment -ResourceGroupName <resource-group-name> -TemplateFile <path-to-template>
 
 To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy)
@@ -69,11 +68,10 @@ To learn more on how to deploy an ARM template with PowerShell, click [here](htt
 > New-AzDeployment -Location <location> -TemplateFile <path-to-template>
     
 To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli)
-=======
+
 To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy?WT.mc_id=globalazure-github-frbouche)
 
 To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli?WT.mc_id=globalazure-github-frbouche)
->>>>>>> master
 
     
 ## Using Azure Pipeline Resource Group Deployment Task
