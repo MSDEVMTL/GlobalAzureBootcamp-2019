@@ -20,6 +20,7 @@ Resource Manager provides several benefits:
 * You can define the dependencies between resources so they're deployed in the correct order.
 * You can see your template as a documentation of your infrastructure.  ( [Infrastructure as a code](https://docs.microsoft.com/en-us/azure/devops/learn/what-is-infrastructure-as-code?WT.mc_id=globalazure-github-frbouche) )
 
+
 ARM template are pretty simple.  They are just json files that describe the infrastructure of your project. You define your structure in a template and then use it with a parameter file.
 
 ```txt
@@ -29,34 +30,85 @@ myproject.parameters.json
 
 The two together can be deploy multiple environments.  You will change your parameter file depending on which environment you are deploying.
 
-We could want to deploy a VM or a Web application.  Let's say, in that case that your development environment could required a smaller resource than your production environment. With ARM, it will be the same structure, the same code, except your parameter file will change the size of your VM or Web application.
+We could want to deploy a VM or a Web application.  Let's say, in the case that your development environment require a smaller resource than your production environment. With ARM, it will be the same structure, the same code, except your parameter file will change the size of your VM or Web application.
 
-Also, when you deploying resources on Azure, ARM will parallelize you deployment.  It's really the fastest way to deploy.
+```txt
+myproject.json
+myproject.dev.parameters.json  (FREE plan)
+myproject.stage.parameters.json (Standard 1 Plan)
+myproject.production.parameters.json (Premium 1 Plan)
+```
+
+Also, when you instantiate resources on Azure, ARM will parallelize you deployment.  It's really the fastest way to deploy.
 
 # Deployment using ARM templates
 
-You can deploy them using 3 ways.
+You can deploy them using multiple tools:
 
-1) Using Visual Studio
+## Using Visual Studio
 
 ![VisualStudio_ARM](https://docs.microsoft.com/en-us/azure/azure-resource-manager/media/vs-azure-tools-resource-groups-deployment-projects-create-deploy/deploy.png)
 
 To learn more on how to deploy an ARM template with Visual Studio, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/vs-azure-tools-resource-groups-deployment-projects-create-deploy?WT.mc_id=globalazure-github-frbouche)
 
-2) Using the Azure Portal
+## Using the Azure Portal
 
 ![Portal_ARM](https://docs.microsoft.com/en-us/azure/azure-resource-manager/media/resource-group-template-deploy-portal/search-template.png)
 
 To learn more on how to deploy an ARM template with Azure Portal, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-portal?WT.mc_id=globalazure-github-frbouche)
 
-3) Using Azure PowerShell or CLI
+## Using Azure PowerShell or CLI
 
 ![Powershell_arm](http://techgenix.com/tgwordpress/wp-content/uploads/2018/06/1050-05-08-1024x390.png)
+
+> New-AzResourceGroupDeployment -ResourceGroupName <resource-group-name> -TemplateFile <path-to-template>
+
+To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy)
+
+> New-AzDeployment -Location <location> -TemplateFile <path-to-template>
+    
+To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli)
 
 To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy?WT.mc_id=globalazure-github-frbouche)
 
 To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli?WT.mc_id=globalazure-github-frbouche)
 
+    
+## Using Azure Pipeline Resource Group Deployment Task
+
+> Visual Designer
+![Azure Resource Group Deployment Task](https://docs.microsoft.com/en-us/azure/media/vs-azure-tools-resource-groups-ci-in-vsts/walkthrough18.png)
+
+> Yaml editor
+```yaml
+# Azure Resource Group Deployment
+# Deploy an Azure resource manager (ARM) template to a resource group. You can also start, stop, delete, deallocate all Virtual Machines (VM) in a resource group
+- task: AzureResourceGroupDeployment@2
+  inputs:
+    azureSubscription: 
+    #action: 'Create Or Update Resource Group' # Options: create Or Update Resource Group, select Resource Group, start, stop, stopWithDeallocate, restart, delete, deleteRG
+    resourceGroupName: 
+    #location: # Required when action == Create Or Update Resource Group
+    #templateLocation: 'Linked artifact' # Options: linked Artifact, uRL Of The File
+    #csmFileLink: # Required when templateLocation == URL Of The File
+    #csmParametersFileLink: # Optional
+    #csmFile: # Required when  TemplateLocation == Linked Artifact
+    #csmParametersFile: # Optional
+    #overrideParameters: # Optional
+    #deploymentMode: 'Incremental' # Options: incremental, complete, validation
+    #enableDeploymentPrerequisites: 'None' # Optional. Options: none, configureVMwithWinRM, configureVMWithDGAgent
+    #teamServicesConnection: # Required when enableDeploymentPrerequisites == ConfigureVMWithDGAgent
+    #teamProject: # Required when enableDeploymentPrerequisites == ConfigureVMWithDGAgent
+    #deploymentGroupName: # Required when enableDeploymentPrerequisites == ConfigureVMWithDGAgent
+    #copyAzureVMTags: true # Optional
+    #runAgentServiceAsUser: # Optional
+    #userName: # Required when enableDeploymentPrerequisites == ConfigureVMWithDGAgent && RunAgentServiceAsUser == True
+    #password: # Optional
+    #outputVariable: # Optional
+    #deploymentName: # Optional
+    #deploymentOutputs: # Optional
+    #addSpnToEnvironment: false # Optional
+ ```
 # Template format
 
 A Resource manager template is simply a JSON file using this structure
@@ -145,7 +197,7 @@ If you have install the extension, you can do it easily if you type `arm!` at th
 
 This template, will provision a new Azure Storage Account with the name `StorageAccount1`. Obviously, you want your storage name to be unique. One way to do so is to use a built-in function with the following ARM syntax.
 
-```json
+```txt
 [uniqueString(resourceGroup().id, resourceGroup().location)]
 ```
 
@@ -169,34 +221,78 @@ Your template should now look like this:
 
 ```json
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {},
-  "variables": {
-    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2018-07-01",
-      "name": "[concat('stg',variables('suffix'))]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "displayName": "[concat('stg',variables('suffix'))]"
-      },
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "StorageV2"
-    }
-  ],
-  "outputs": {}
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "suffix": "[uniqueString(resourcegroup().id, resourceGroup().location)]"
+    },
+    "resources": [{
+        "type": "Microsoft.Storage/storageAccounts",
+        "apiVersion": "2018-07-01",
+        "name": "[concat('stg', variables('suffix'))]",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "StorageAccount1"
+        },
+        "sku": {
+            "name": "Standard_LRS"
+        },
+        "kind": "StorageV2"
+    }],
+    "outputs": {}
 }
 ```
 
 ## Part 2 - Deploy automatically your first template
 
-1. Commit your change to the git repository using the following command.
+In the previous lab, we created our first build and template.  Let's modify our release to deploy our new infrastructure every time.
+
+1. Modify the build to include the ARM template
+
+``` yaml
+
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- script: dotnet build ./GABDemo/ --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish $(buildConfiguration)'
+  inputs:
+    command: publish 
+    publishWebProjects: True
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)'
+    contents: '?(gab2019.json|gab2019.parameters.json)'
+    targetFolder: $(Build.ArtifactStagingDirectory)
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: drop
+
+```
+
+
+2. Commit your change to the git repository using the following command. This will add to your repository, your two newly created files.
 
 ```txt
   git add .
@@ -204,17 +300,29 @@ Your template should now look like this:
   git push
 ```
 
-2. Browse to your Azure DevOps project
+2. Browse to your Azure DevOps project 
 
-3. Edit your Release pipeline
+3. Edit your Release pipeline and select your stage ` to Azure `
+![Edit your Release pipeline and select your stage to Azure](./medias/EditPipeline_1.PNG)
 
-4. Add a new task Azure Resource ...
+4. Add a new ` Azure Resource Group Deployment ` task
+![Add a new Azure Resource Group Deployment task](./medias/AddResourceGroupDeploymentTask.PNG)
+
+5. Move your task to be the first task to be execute
+![Move your task to be the first task to be execute](./medias/MoveFirst.PNG)
 
 5. Configure your task
+    *  Select your existing subscription
+    *  Select your existing resource group
+    *  Set the location of your resource `East US`
+    *  Set your template location
+    ![Set your template location](./medias/SelectTemplate.PNG)
 
 6. Save your pipeline and create a new release
 
 You should now see a new resource in your resource group.
+
+![AddedStorage](./medias/AddedStorage.PNG)
 
 ## Part 3 - Add existing resources to our template
 
