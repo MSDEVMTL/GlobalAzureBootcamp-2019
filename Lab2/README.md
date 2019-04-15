@@ -252,7 +252,7 @@ Your template should now look like this:
 
 In the previous lab, we created our first build and template.  Let's modify our release to deploy our new infrastructure every time.
 
-1. Modify the build to include the template
+1. Modify the build to include the ARM template
 
 ``` yaml
 
@@ -296,13 +296,7 @@ steps:
 ```
 
 
-1. Commit your change to the git repository using the following command. This will add to your repository, your two newly created files.
-
-
-```txt
-  C:\dev\gab2019\deployment\gab2019.json
-  C:\dev\gab2019\deployment\gab2019.parameters.json
-```
+2. Commit your change to the git repository using the following command. This will add to your repository, your two newly created files.
 
 ```txt
   git add .
@@ -327,7 +321,7 @@ steps:
     *  Select your existing resource group
     *  Set the location of your resource `East US`
     *  Set your template location
-
+    ![Set your template location](SelectTemplate.PNG)
 
 6. Save your pipeline and create a new release
 
