@@ -303,27 +303,27 @@ steps:
 2. Browse to your Azure DevOps project 
 
 3. Edit your Release pipeline and select your stage ` to Azure `
-![Edit your Release pipeline and select your stage to Azure](EditPipeline_1.PNG)
+![Edit your Release pipeline and select your stage to Azure][EditPipeline_1.PNG]
 
 
 4. Add a new ` Azure Resource Group Deployment ` task
-![Add a new Azure Resource Group Deployment task](AddResourceGroupDeploymentTask.PNG)
+![Add a new Azure Resource Group Deployment task][AddResourceGroupDeploymentTask.PNG]
 
 5. Move your task to be the first task to be execute
-![Move your task to be the first task to be execute](MoveFirst.PNG)
+![Move your task to be the first task to be execute][MoveFirst.PNG]
 
 5. Configure your task
     *  Select your existing subscription
     *  Select your existing resource group
     *  Set the location of your resource `East US`
     *  Set your template location
-    ![Set your template location](SelectTemplate.PNG)
+    ![Set your template location][SelectTemplate.PNG]
 
 6. Save your pipeline and create a new release
 
 You should now see a new resource in your resource group.
 
-![AddedStorage](AddedStorage)
+![AddedStorage][AddedStorage]
 
 ## Part 3 - Add existing resources to our template
 
