@@ -323,6 +323,8 @@ steps:
 
 You should now see a new resource in your resource group.
 
+![AddedStorage](AddedStorage)
+
 ## Part 3 - Add existing resources to our template
 
 In the previous lab, we created an Azure Web app and Azure App Service Plan to host our Web Application. It is possible to include an existing resource to your ARM template. You just need to specify the same unique name of your resource.
