@@ -560,7 +560,7 @@ Now configure your parameters file (gab2019.parameters.json) to pass the paramet
     "name": "connectionstrings",
     "dependsOn": [
       "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-      "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+      "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
     ],
     "properties": {
 
@@ -633,7 +633,7 @@ That should now look like this
     "name": "connectionstrings",
     "dependsOn": [
       "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-      "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+      "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
     ],
     "properties": {
 
