@@ -565,7 +565,7 @@ Now configure your parameters file (gab2019.parameters.json) to pass the paramet
     "properties": {
 
       "ApplicationStorage": {
-        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
         "type": "Custom"
       }
     }
@@ -638,7 +638,7 @@ That should now look like this
     "properties": {
 
       "ApplicationStorage": {
-        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
         "type": "Custom"
       }
     }
