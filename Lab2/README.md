@@ -545,6 +545,7 @@ Now configure your parameters file (gab2019.parameters.json) to pass the paramet
     "webAppName": {
       "value": "gabcdemo"
     }
+  }
 }
 
 ```
