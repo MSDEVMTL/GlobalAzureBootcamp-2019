@@ -63,16 +63,11 @@ To learn more on how to deploy an ARM template with Azure Portal, click [here](h
 
 > New-AzResourceGroupDeployment -ResourceGroupName <resource-group-name> -TemplateFile <path-to-template>
 
-To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy)
-
-> New-AzDeployment -Location <location> -TemplateFile <path-to-template>
-    
-To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli)
-
 To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy?WT.mc_id=globalazure-github-frbouche)
 
-To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli?WT.mc_id=globalazure-github-frbouche)
+> New-AzDeployment -Location <location> -TemplateFile <path-to-template>
 
+To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli?WT.mc_id=globalazure-github-frbouche)
     
 ## Using Azure Pipeline Resource Group Deployment Task
 
@@ -537,6 +532,24 @@ Now use these parameters in your template.  Your template should now look like t
 
 ```
 
+Now configure your parameters file (gab2019.parameters.json) to pass the parameter values define in your ARM template.
+
+``` json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appSvcPlanName": {
+      "value": "gabcdemoplan"
+    },
+    "webAppName": {
+      "value": "gabcdemo"
+    }
+  }
+}
+
+```
+
 ## Part 5 - Configure our Web App Automatically
 
 ```json
@@ -547,12 +560,12 @@ Now use these parameters in your template.  Your template should now look like t
     "name": "connectionstrings",
     "dependsOn": [
       "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-      "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+      "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
     ],
     "properties": {
 
       "ApplicationStorage": {
-        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
         "type": "Custom"
       }
     }
@@ -563,7 +576,94 @@ Now use these parameters in your template.  Your template should now look like t
 That should now look like this
 
 ```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appSvcPlanName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the App Service Plan that will host your Web App."
+      }
+    },
+    "webAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of your Web App."
+      }
+    }
+  },
+  "variables": {
+    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2018-07-01",
+      "name": "[concat('stg',variables('suffix'))]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "[concat('stg',variables('suffix'))]"
+      },
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2"
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-02-01",
+      "name": "[parameters('webAppName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]": "Resource",
+        "displayName": "[parameters('webAppName')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+      ],
+      "properties": {
+        "name": "[parameters('webAppName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+      },
+      "resources": [
+  {
+    "apiVersion": "2018-02-01",
+    "type": "config",
+    "name": "connectionstrings",
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
+      "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
+    ],
+    "properties": {
 
+      "ApplicationStorage": {
+        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+        "type": "Custom"
+      }
+    }
+  }
+]
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2016-09-01",
+      "name": "[parameters('appSvcPlanName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "F1",
+        "capacity": 1
+      },
+      "tags": {
+        "displayName": "[parameters('appSvcPlanName')]"
+      },
+      "properties": {
+        "name": "[parameters('appSvcPlanName')]"
+      }
+    }
+  ],
+  "outputs": {}
+}
 ```
 
 ## Part 6 - Final deployment
