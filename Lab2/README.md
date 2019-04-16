@@ -63,16 +63,11 @@ To learn more on how to deploy an ARM template with Azure Portal, click [here](h
 
 > New-AzResourceGroupDeployment -ResourceGroupName <resource-group-name> -TemplateFile <path-to-template>
 
-To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy)
-
-> New-AzDeployment -Location <location> -TemplateFile <path-to-template>
-    
-To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli)
-
 To learn more on how to deploy an ARM template with PowerShell, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy?WT.mc_id=globalazure-github-frbouche)
 
-To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli?WT.mc_id=globalazure-github-frbouche)
+> New-AzDeployment -Location <location> -TemplateFile <path-to-template>
 
+To learn more on how to deploy an ARM template with CLI, click [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli?WT.mc_id=globalazure-github-frbouche)
     
 ## Using Azure Pipeline Resource Group Deployment Task
 
@@ -533,6 +528,23 @@ Now use these parameters in your template.  Your template should now look like t
     }
   ],
   "outputs": {}
+}
+
+```
+
+Now configure your parameters file (gab2019.parameters.json) to pass the parameter values define in your ARM template.
+
+``` json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appSvcPlanName": {
+      "value": "gabcdemoplan"
+    },
+    "webAppName": {
+      "value": "gabcdemo"
+    }
 }
 
 ```
