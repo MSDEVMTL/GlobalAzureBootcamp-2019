@@ -19,8 +19,11 @@ In this lab, we will execute the following steps:
 
 ### Make our project ready for docker
 
-We will first create a `Dockerfile` and optionally a `.dockerignore` file.
-You have multiple options to achieve this, here are two:
+We will first create a `Dockerfile` and optionally a `.dockerignore` file at the root of our project.
+
+![Docker files location](assets/images/dockerfiles-location.png)
+
+You have multiple options to achieve that, here are the two covered here:
 
 -   Setting up docker manually
 -   Setting up docker using VS Code Docker extension
@@ -131,7 +134,7 @@ To create a Docker image manually:
     - In VS Code you can `` ctrl+` `` or click `View > Terminal`.
         > You can even have multiple terminals opened at the same time. On Windows 10, they can be `cmd`, `PowerShell` and even `bash` if you have a Linux subsystem installed!
     - In Windows 10 you can open PowerShell by `right-click Start Menu > Windows PowerShell` or from Explorer (`Windows+E`): `File > Open Windows PowerShell`.
-    - In MacOS or Linux open `bash`. TODO: how to do that?
+    - In MacOS or Linux open `bash` ([How to use the Terminal command line in macOS](https://macpaw.com/how-to/use-terminal-on-mac)).
 1. Type the following command:
 
     ```bash
@@ -170,7 +173,7 @@ To run a Docker image manually:
 
 1. Browse to `http://localhost` using your favorite browser to enjoy navigating your newly dockerized website.
 
-> IMPORTANT: if you don't supply the --name parameter, the Docker daemon will generate a UUID automatically for you. That means that if you want to stop your container later without searching for its ID manually, you can copy the CONTAINER ID that was outputted into the terminal window; this should be a string looking like this: `d8897f7bd10783d075260d953eec8a06885350bf8acc8322c0e4143432f01237`.
+> IMPORTANT: if you don't supply the `--name` parameter, the Docker daemon will generate a UUID automatically for you. That means that if you want to stop your container later without searching for its ID manually, you can copy the CONTAINER ID that was outputted into the terminal window; this should be a string looking like this: `d8897f7bd10783d075260d953eec8a06885350bf8acc8322c0e4143432f01237`.
 
 #### Using VS Code Docker Explorer
 
@@ -335,9 +338,9 @@ az container list --resource-group GAB2019Group --output table
 
 ## Reference
 
--   [Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
--   [Quickstart: Create a private container registry using the Azure CLI](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-azure-cli)
--   [Quickstart: Run a container application in Azure Container Instances with the Azure CLI](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-quickstart)
+-   [Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest?WT.mc_id=globalazure-github-frbouche)
+-   [Quickstart: Create a private container registry using the Azure CLI](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-azure-cli?WT.mc_id=globalazure-github-frbouche)
+-   [Quickstart: Run a container application in Azure Container Instances with the Azure CLI](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-quickstart?WT.mc_id=globalazure-github-frbouche)
 
 ## End
 
