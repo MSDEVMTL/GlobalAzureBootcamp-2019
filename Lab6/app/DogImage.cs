@@ -15,6 +15,7 @@ namespace app
 {
     public static class DogImage
     {
+        // Feature we want to work with when getting analysis back
         private static readonly List<VisualFeatureTypes> Features = new List<VisualFeatureTypes>
         {
             VisualFeatureTypes.Categories, VisualFeatureTypes.Description,
@@ -22,6 +23,7 @@ namespace app
             VisualFeatureTypes.Tags
         };
 
+        // We must provide SAS token in order to have the API read the image located at the provided URL since our container is private
         private static SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy
         {
             SharedAccessExpiryTime = DateTimeOffset.UtcNow.AddMinutes(10),
@@ -32,19 +34,7 @@ namespace app
         [FunctionName("DogImage")]
         public static async Task Run([BlobTrigger("images/{name}", Connection = "AzureWebJobsStorage")]CloudBlockBlob myBlob, string name, ILogger log)
         {
-            var config = new ConfigurationBuilder()
-                .AddEnvironmentVariables()
-                .Build();
-            var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
-            var path = $"{myBlob.Uri.ToString()}{myBlob.GetSharedAccessSignature(sasConstraints)}";
-            
-            var results = await visionAPI.AnalyzeImageAsync(path, Features);
-            if(IsDog(results))
-            {
-                return;
-            }
-            
-            await myBlob.DeleteIfExistsAsync();
+            // FUNCTION CODE HERE
         }
 
         private static bool IsDog(ImageAnalysis image)

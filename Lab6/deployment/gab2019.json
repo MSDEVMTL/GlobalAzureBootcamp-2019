@@ -20,12 +20,7 @@
         "description": "The  name of the Computer Vision API"
       }
     },
-    "funcAppName": {
-      "type": "string",
-      "metadata": {
-        "description": "The  name of the Function App"
-      }
-    }
+    // 1.2.1 FUNCTION PARAMETER HERE
   },
   "variables": {
     "storageAccountName": "[concat('gab2019', uniquestring(resourceGroup().id))]"
@@ -107,59 +102,7 @@
       "properties": {},
       "scale": null
     },
-    {
-      "apiVersion": "2015-08-01",
-      "name": "[parameters('funcAppName')]",
-      "type": "Microsoft.Web/sites",
-      "kind": "functionapp",
-      "location": "[resourceGroup().location]",
-      "properties": {
-         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]",
-         "siteConfig": {
-            "alwaysOn": false,
-            "appSettings": [
-                { "name": "FUNCTIONS_EXTENSION_VERSION", "value": "~2" }
-            ]
-         }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-      ],
-      "resources": [
-         {
-            "apiVersion": "2015-08-01",
-            "name": "appsettings",
-            "type": "config",
-            "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', parameters('funcAppName'))]",
-              "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-            ],
-            "properties": {
-              "FUNCTIONS_EXTENSION_VERSION":"~2",
-              "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]",
-              "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]",
-              "ComputerVision:Endpoint":"[reference(parameters('csVisionName'), '2017-04-18').endpoint]",
-              "ComputerVision:ApiKey":"[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
-            }
-         },
-         {
-          "apiVersion": "2018-02-01",
-          "type": "config",
-          "name": "connectionstrings",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', parameters('funcAppName'))]",
-            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-          ],
-          "properties": {
-            "AzureWebJobsStorage": {
-              "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-              "type": "Custom"
-            }
-          }
-        }
-      ]
-    }
+    // 1.2.2 FUNCTION CREATION HERE
   ],
   "outputs": {
     "CognitiveServices-endpoint": {
