@@ -2,7 +2,7 @@
 
 # Lab 0 - What you will need before the bootcamp
 
-To get the best of the Global Azure bootcamp 2019, we **strongly** suggest that you prepare your station with all the required software. Nothing complicated and all the tools that we are going to use during the bootcamp supports macOS, Linux, and Windows - so you can hit the ground running, no matter the platform.
+To get the best of the Global Azure bootcamp 2019, we **strongly** suggest that you prepare your station with all the required software. Nothing is complicated and all the tools that we are going to use during the bootcamp support macOS, Linux, and Windows - so you can hit the ground running, no matter the platform.
 
 # .NET Core
 
@@ -50,7 +50,7 @@ You just installed your first extension.  Now, make sure to install at least the
 
 ![installdockerextension][installdockerextension]
 
-Once all the extensions are installed, click the *Refresh* button to restart VS Code.
+Once all the extensions are installed, click the *Reload* button to restart VS Code.
 
 ## Azure CLI
 
@@ -66,9 +66,9 @@ THe result should be `azure-cli (2.0.55)` or newest.
 
 ## Git
 
-The Git is a decentralized source control manager, that stand apart from nearly every other SCM out there is its branching model.
+Git is a decentralized source control manager that stand apart from nearly every other SCM (Software Configuration Management) tool out there with its branching model. 
 
-Git allows and encourages you to have multiple local branches that can be entirely independent of each other. The creation, merging, and deletion of those lines of development takes seconds.
+Git allows and encourages you to have multiple local branches that can be entirely independent of each other. The creation, merging, and deletion of those lines of development takes seconds. 
 
 To install this great tool go to the official web page [Git](https://git-scm.com/downloads) and download the version matching your current platform.
 
@@ -80,7 +80,7 @@ This will install the console version of git. This is good enough to be function
 
 ## Azure Storage Explorer (optional)
 
-In Lab 5 and Lab 6 we will be uploading files to Azure Storage Explorer. You can definitely do that directly from the Azure portal. However, great tools that provide much more flexibility and ease is the Azure Storage Explorer.
+In Lab 5 and Lab 6 we will be uploading files to Azure Storage Explorer. You can definitely do that directly from the Azure portal. However, a great tool that provides much more flexibility and ease is the Azure Storage Explorer.
 
 ![azureexplorer][azureexplorer]
 
@@ -108,7 +108,7 @@ Make sure to have your account up and ready before the bootcamp.
 
 ## [Azure DevOps]
 
-For the GLobal Azure Bootcamp, you will need an Azure DevOps account. It's free! Get 10 free parallel jobs and unlimited minutes for your open source projects with Pipelines.
+For the Global Azure Bootcamp, you will need an Azure DevOps account. It's free! Get 10 free parallel jobs and unlimited minutes for your open source projects with Pipelines.
 
 [Create your free Azure DevOps account today!](https://azure.microsoft.com/en-ca/services/devops?WT.mc_id=globalazure-github-frbouche)
 
@@ -116,7 +116,7 @@ For the GLobal Azure Bootcamp, you will need an Azure DevOps account. It's free!
 
 ## GitHub (optional)
 
-GitHub is a development platform inspired by the way you work. From open source to business, you can host and review code, manage projects, and build software.  During the Global Azure Bottcamp you could host your code in a GitHub Repository if you prefer it to Azure DevOps. 
+GitHub is a development platform inspired by the way you work. From open source to business, you can host and review code, manage projects, and build software.  During the Global Azure Bootcamp you could host your code in a GitHub Repository if you prefer it to Azure DevOps. 
 
 [Create your free account today](https://github.com/)
 

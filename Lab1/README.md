@@ -40,7 +40,7 @@ This command will add all modified files under your workspace to the index of gi
 
 This command will create a new commit containing the current contents of the index and the given log message describing the changes.
 
-Now, Git will track the evolution of our code. Git is a decentralized code repository system, therefore there is usually many repository where you can push and pull. However, before we can push our code to a remote repository we have other task to do. Will come back to it later.
+Now, Git will track the evolution of our code. Git is a decentralized code repository system, therefore there are usually many repositories where you can push and pull. However, before we can push our code to a remote repository we have other tasks to do. We will come back to it later.
 
 ## Create The Azure WebApp
 
@@ -54,13 +54,13 @@ Login to your Azure account
     
 Don't forget to validate that you are in the good subscription. if you are not sure try `az account show` to display information about the current subscription.
 
-> Note: You might experience an error if you webapp name is not unique. (Conflict: Website with given name <web app name> already exists.) Make sure to use a unique name. ex: gab2019<your_initial><2digits_random_number> gab2019AV47
+> Note: You might experience an error if your webapp name is not unique. (Conflict: Website with given name <web app name> already exists.) Make sure to use a unique name. ex: gab2019<your_initial><2digits_random_number> gab2019AV47
 
     az group create --name gabcdemogroup --location eastus
 
     az appservice plan create --name gabcdemoplan --resource-group gabcdemogroup --sku FREE
 
-    az webapp create --name gabcdemo --resource-group gabcdemogroup --plan gabcdemoplan
+    az webapp create --name <web app name> --resource-group gabcdemogroup --plan gabcdemoplan
 
 The first command will create a Resource group. Then inside of this group we create a service plan, and finally we create a webapp to the mix.
 
@@ -68,7 +68,7 @@ To validate that everything has been created, open a internet browser and naviga
 
 ![resourceGroup][resourceGroup]
 
-In the top section of the blade you will found the URL of the web site, click on it. You should see a message saying:"Your App Service app is up and running".  That perfect, our website shell is ready.
+In the top section of the page you will found the URL of the web site, click on it. You should see a message saying:"Your App Service app is up and running".  That's perfect, our website shell is ready.
 
 ## Create an Azure DevOps project
 
@@ -76,11 +76,11 @@ Navigate to [Dev.Azure.com](http://Dev.Azure.com) and if you don't already have 
 
 ![createNewProject][createNewProject]
 
-You will need to provide a unique name and a few simple information. 
+You will need to provide a unique name and a few simple pieces of information. 
 
 ## Get the Best Azure DevOps Experience
 
-To get the best of the Azure DevOps portal and from the Azure Pipeline, turn ON a few (or all) option(s) in the Settings. To follow this Lab, the option **New YAML pipeline creation experience** should be on. Do enable it, click in the top-right corner on your avatar, and select the **Preview features** option. Then turn on the feature(s)
+To get the best of the Azure DevOps portal and from the Azure Pipeline, turn ON a few (or all) option(s) in the Settings. To follow this Lab, the option **New YAML pipeline creation experience** should be on. To enable it, click in the top-right corner on your avatar, and select the **Preview features** option. Then turn on the feature(s)
 
 ![PreviewFeatures][PreviewFeatures]
 
@@ -133,11 +133,11 @@ This third step is to configure our pipeline. You can start from a template, an 
 
 ![SelectTemplateASPNETCore][SelectTemplateASPNETCore]
 
-This will displays the *YAML code* that defines your pipeline. At this point, the file is not complete, we need to specify where is our project. On the line 16 add `./GABDemo/` (assuming your project is in folder GABDemo).
+This will display the *YAML code* that defines your pipeline. At this point, the file is not complete, we need to specify where our project is. On the line 16 add `./GABDemo/` (assuming your project is in folder GABDemo).
 
 ![UpdateYaml][UpdateYaml]
 
-Click the *Save and run* button to add the `azure-pipelines.yml` file at the root level of your repository and execute it for the first time. Now at every commit, the build will be triggered. To see the status of your build just on to into the build section from the left menubar.
+Click the *Save and run* button to add the `azure-pipelines.yml` file at the root level of your repository and execute it for the first time. The master branch is fine for this demo. Now at every commit, the build will be triggered. To see the status of your build just click on the build section from the left menubar.
 
 ![buildSuccess][buildSuccess]
 
@@ -157,17 +157,17 @@ And our pipeline will need artifacts. We will edit the `azure-pipelines.yml` to 
     - task: PublishBuildArtifacts@1
       displayName: 'publish artifacts'
 
-Those two tasks are to publish our application (package it), and make it available in our Artifact folder. To learn more about the type of command available and see example have a look the  excellent documentation at: https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core.  Once you are done, save and commit (and push if it was local).
+Those two tasks are to publish our application (package it), and make it available in our Artifact folder. To learn more about the type of command available and see example have a look the excellent documentation at: https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core.  Once you are done, save and commit (and push if it was local).
 
-From the left menubar, click on e the *Pipelines*,  select *Release*, and client the *New Release* blue button. Select the template that matches your application. For this lab *Azure App Service deployment* is the one we need. 
+From the left menubar, click on the *Pipelines*,  select *Release*, and client the *New Release* blue button. Select the template that matches your application. For this lab *Azure App Service deployment* is the one we need. 
 
 ![New Release, select a template][NewRelease_step1]
 
-The next thing to will be to rename the environment for something else than *Stage 1*, I named mine "to Azure" but it could be **dev**, **prod** or anything that make sense for you.  Click on the *Add an Artifact* button.
+The next thing to will be to rename the environment to something other than *Stage 1*, I named mine "to Azure" but it could be **dev**, **prod** or anything that make sense for you.  Click on the *Add an Artifact* button.
 
 ![Release Pipeline][ReleasePipeline]
 
-You will now specify to the pipeline where to pick the artifacts it will deploy. In this case, we want the "output" of our latest build. And I renamed the Source alias as **Drop**.
+You will now specify the pipeline from which to pick the artifacts it will deploy. In this case, we want the "output" of our latest build. Here I also renamed the Source alias as **Drop**.
 
 To get our continuous deployment (CD) we need to enable that trigger by clicking on the little lightning bolt and enabled it.
 
@@ -193,7 +193,7 @@ From the left menu, select the Source Control icon (third one from the top), tha
 
 Now that you have the last version of the code, go in the Home controller and change one of the message. Don't forget to save your work.  
 
-The last steps you need to do is a git commit, and a git push. Once more you can do it directly from the terminal or from visual studio.
+The last steps you need to do are a git commit, and then a git push. Once more you can do it directly from the terminal or from visual studio.
 
 That last push should have trigger our build pipeline. go back into Azure DevOps to see if it's In progress. Once the build is done the Release pipeline should start the deployment.
 
