@@ -136,6 +136,56 @@ Let's have a quick look at the Function signature:
 
 Refer to the documentation to learn more about the [Azure Functions binding expression patterns](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-expressions-patterns?WT.mc_id=globalazure-github-frbouche)
 
+> Note in Lab 1 we should add a gitignore file at the root or move to the root the one created by dotnet new.  Then we should remove the other gitignore file from lab 5 and 6.
+
+## Add the code inside the Azure Function
+
+Before we add some code inside the Azure Function let's add some requirement features.
+
+First inside the class `DogDetector`, and before the method `Run` paste this code.
+
+        // Feature we want to work with when getting analysis back
+        private static readonly List<VisualFeatureTypes> Features = new List<VisualFeatureTypes>
+        {
+            VisualFeatureTypes.Categories, VisualFeatureTypes.Description,
+            VisualFeatureTypes.Faces, VisualFeatureTypes.ImageType,
+            VisualFeatureTypes.Tags
+        };
+
+        // We must provide SAS token in order to have the API read the image located at the provided URL since our container is private
+        private static SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy
+        {
+            SharedAccessExpiryTime = DateTimeOffset.UtcNow.AddMinutes(10),
+            Permissions = SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.List
+        };
+
+Now let's add the code insode the method `Run` just after the log.
+
+            var config = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .Build();
+            var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
+            var path = $"{myBlob.Uri.ToString()}{myBlob.GetSharedAccessSignature(sasConstraints)}";`
+            
+            var results = await visionAPI.AnalyzeImageAsync(path, Features);
+            if(IsDog(results))
+            {
+                return;
+            }
+            
+            await myBlob.DeleteIfExistsAsync();
+
+This function does BLAH BLAH BLAH
+
+The only piece missing is that `IsDog` method, so let's add it. Paste the following code insode the class `DogDetector`.
+
+        private static bool IsDog(ImageAnalysis image)
+        {
+            return image.Categories.Any(x => x.Name == "animal_dog") || image.Tags.Any(x => x.Name == "dog");
+        }
+
+
+---
 
 # TODOS
 1. ARM template to add function app
