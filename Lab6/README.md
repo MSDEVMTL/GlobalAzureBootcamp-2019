@@ -21,7 +21,7 @@ It's a good practice to keep these kind of component in a different life cycle. 
 > 1. A template creating the Azure Function and the Cognitive Services
 > 1. A main template that use nested call to references the previous one.
 > Deploying the main template will deploy the entire solution. Deploy one or the other sub-template will only deploy a subsets of resources.
-> You can learn more by reading the documentation: [Using linked and nested templates when deploying Azure resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates)
+> You can learn more by reading the documentation: [Using linked and nested templates when deploying Azure resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates?WT.mc_id=globalazure-github-frbouche)
 
 # Modify the ARM template to add the Azure Function
 
@@ -89,8 +89,52 @@ Now let's add the Function App. Under the resources array in the ARM template ad
       ]
     }
 
+Now let's explain what we just added. 
 
----
+- The first section defines our Azure Function name, type, and a few basic properties. 
+- The second section `dependsOn` specify that the Function need to be created after the storage account and the service plan.
+- In the last section we define a list of `resources` contained inside the Function: `appsettings`, `connectionstrings`. Those resources are very important since they will keep the information like the connection to the ComputerVision Service, and Storage.
+  
+# Create the Azure Function App
+
+From the windows explorer create a new sub-folder `gab2019-FuncApp`. For example in Lab 1 if you created a folder `C:\dev\gab2019\` it will look like this.
+
+    C:
+    └───dev
+        └───gab2019
+            ├───deployment
+            ├───GABCDemo
+            └───GABCDemo-FuncApp
+
+Open a new instance of VSCode. Click on the Azure Logo from the Left menu-bar, we will use the Azure Function extension. The first icon (1) is to create a Function App. The second icon (2) will create one function inside a function App. A Function App can contain many different functions. The third icon (3) is to deploy from VSCode. It's very useful when you are deploying in a dev environment or just for a quick test. However, we wont use this last button since we will deploy using our Azure Pipeline. 
+
+The key icon (4) is to explore Azure Function already deployed in Azure. Once the VSCode extension is authenticated to your subscription, a key icon will be display by subscription.
+
+![CreateAzureFunction][CreateAzureFunction]
+
+Let's create the Function App. Click on the first icon (the folder with a lightning bolt), and navigate to the folder `gab2019-FuncApp` created previously.  When prompt to *select a language for your function project*, select **C#**. 
+
+> Wait... It can take a few second while things are getting prepared.
+
+You now be ask to *Select a template for your project's first function*; Select **Skip for now**. Then Select to open it in the current VSCode window.
+
+![CreateFunctionApp][CreateFunctionApp]
+
+We now need to create a Function inside our Function App. Click again on the Azure logo to use the Azure Function Extension. This time click on the second icon (the lightning bolt with a little plus sign).
+
+When ask *Select a template for your function*; Select **Blob Trigger**. Then You will need to provide a function name (ex: DogDetector), and a namespace (ex: GABC.Function).
+
+We need to specify where we will keep our connections. When asked to *Select setting from "local.settings.json"*, type **AzureWebJobsStorage**.
+
+The last step is to specify the path where our Azure Function trigger will be watching. Since we want the function to be trigger every time a new file is created in the container *images*, enter `images`
+
+Let's have a quick look at the Function signature:
+1. `FunctionName`: is the name displayed in the portal.
+1. `[BlobTrigger("images/{name}"`: Setup the function for which type of trigger (Blob) what container to look into (images) and what the blob name will be ({name})
+1. `Connection = "AzureWebJobsStorage"`: This is the connection string to use.
+1. `Stream myBlob, string name, ILogger log`: Binded parameters to use in the function.
+
+Refer to the documentation to learn more about the [Azure Functions binding expression patterns](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-expressions-patterns?WT.mc_id=globalazure-github-frbouche)
 
 
 # TODOS
@@ -164,12 +208,12 @@ Now let's add the Function App. Under the resources array in the ARM template ad
 2. in ADO create new build pipeline using yaml and **target lab6/app/build.yaml**, it should trigger on every commit (CI)
    1. yaml should target the csproj of the app (may need adjustment depending on location)
 3. in ADO create release pipeline using generated artifact from yaml, it should trigger when build is done (CD)
-4. in DogImage.cs
+4. ~~in DogImage.cs
    1. Function Signature explanation:
       1. `FunctionName` is the name displayed in the portal
       2. `[BlobTrigger("images/{name}"` Setup the function for which type of trigger (Blob) what container to look into (images) and what the blob name will be ({name})
       3. `Connection = "AzureWebJobsStorage"` what connection string to use
-      4. `CloudBlockBlob myBlob, string name, ILogger log` binded parameters to use in the function
+      4. `CloudBlockBlob myBlob, string name, ILogger log` binded parameters to use in the function~~
    **more info on triggers here: https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-expressions-patterns**
    1. Copy the Code inside the function:
     `var config = new ConfigurationBuilder()
@@ -193,8 +237,13 @@ Now let's add the Function App. Under the resources array in the ARM template ad
 
 ## Reference
 
+- [Automate resource deployment for your function app in Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/functions-infrastructure-as-code?WT.mc_id=globalazure-github-frbouche)
+- [Azure Functions binding expression patterns](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-expressions-patterns?WT.mc_id=globalazure-github-frbouche)
+
 ## End
 [Previous Lab](../Lab5/README.md)
 [Next Lab](../Lab7/README.md)
 
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
+[CreateAzureFunction]: medias/CreateAzureFunction.png 'Azure Function Extension explained'
+[CreateFunctionApp]: medias/CreateFunctionApp.gif 'Create Azure Function App'
