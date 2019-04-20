@@ -68,7 +68,7 @@ Click on the **Triggers** tab and check **Enable continuous integration**.
 ![10][10]
 
 
-### Configurate the Web App
+### Configure the Web App
 
 In the Web App created in the previous lab, change the container settings to pint to the container located in the Azure Container Registry that was just built by the pipeline.  The startup file is **GABCDemo.dll**.  Set **Continuous Deployment** to On.
 
@@ -80,7 +80,7 @@ Launch a browser and test the app.
 
 ### Commit a change
 
-Back in **Code**, , make a simple change to a page, commit and push the change.  The pipeline will pick the change, build the code, create a container and deploy it to ACR.  The Web App will pick the change using the Webhook and pull the new container.
+Back in **Code**, make a simple change to a page, commit and push the change.  The pipeline will pick the change, build the code, create a container and deploy it to ACR.  The Web App will pick the change using the Webhook and pull the new container.
 
 
 ## Reference
