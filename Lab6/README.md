@@ -4,6 +4,7 @@
 
 > # STILL IN PROGRESS
 > Need to validate that the azure pipeline is working
+> Right now we cant create a second pipeline
 
 ## Goal
 
