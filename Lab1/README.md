@@ -133,7 +133,7 @@ This third step is to configure our pipeline. You can start from a template, an 
 
 ![SelectTemplateASPNETCore][SelectTemplateASPNETCore]
 
-This will displays the *YAML code* that defines your pipeline. At this point, the file is not complete, we need to specify where is our project. On the line 16 add `./GABDemo/` (assuming your project is in folder GABDemo).
+This will displays the *YAML code* that defines your pipeline. At this point, the file is not complete, we need to specify where is our project. On the line 16 add `./GABCDemo/` (assuming your project is in folder GABCDemo).
 
 ![UpdateYaml][UpdateYaml]
 
