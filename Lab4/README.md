@@ -68,11 +68,14 @@ Click on the **Triggers** tab and check **Enable continuous integration**.
 ![10][10]
 
 
-### Create a Webhook
+### Configurate the Web App
 
-Create a **Webhook** from you Web App to your container following the steps you already did in the previous lab.
+In the Web App created in the previous lab, change the container settings to pint to the container located in the Azure Container Registry that was just built by the pipeline.  The startup file is **GABCDemo.dll**.  Set **Continuous Deployment** to On.
 
-**>>>>TODO: REFERENCE THE LAB 3 STEPS**
+
+### Test the Web App
+
+Launch a browser and test the app.
 
 
 ### Commit a change
