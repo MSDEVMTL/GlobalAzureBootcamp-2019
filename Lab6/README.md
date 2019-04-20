@@ -2,10 +2,6 @@
 
 # Lab 6 - Serverless - Azure Function
 
-> # STILL IN PROGRESS
-> Need to validate that the azure pipeline is working
-> Right now we cant create a second pipeline
-
 ## Goal
 
 Create an Azure Functions (blob trigger) to process all new images into a blob storage. The Function will use the Vision API to keep only the dogs pictures.
@@ -149,7 +145,26 @@ Refer to the documentation to learn more about the [Azure Functions binding expr
 
 ## Add the code inside the Azure Function
 
-Before we add some code inside the Azure Function let's add some requirement features.
+Before we add some code inside the Azure Function let's add some requirement features. Let's first start by adding some package we will need. Look into the file `GABCDemo-FuncApp.csproj`. Currently you should have only one `<PackageReference>`, referencing the Microsoft.NET.Sdk.Functions. Let's add a few more.
+
+Open the terminal ( Ctrl + \` ) if it's not already done. Be sure you are in the `gab2019-FuncApp` folder, and enter the following command.
+
+  dotnet add package Newtonsoft.Json
+
+If you look again the file `GABCDemo-FuncApp.csproj`, you will see that the package is now referenced. Repeat the previous command for the package `Microsoft.Azure.WebJobs.Extensions.Storage`, `Microsoft.Azure.CognitiveServices.Vision.ComputerVision` , and `Microsoft.Azure.WebJobs.Script.ExtensionsMetadataGenerator`
+
+We will need a few new refences. At the top of the file, add these using lines:
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage.Blob;
+```
 
 First inside the class `DogDetector`, and before the method `Run` paste this code.
 
@@ -170,28 +185,32 @@ private static SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolic
 };
 ```
 
-Now let's add the code inside the method `Run` just after the log.
+Now let's replace the code of the main method `Run`.
 
 ``` csharp
-var config = new ConfigurationBuilder()
-    .AddEnvironmentVariables()
-    .Build();
-var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
-var path = $"{myBlob.Uri.ToString()}{myBlob.GetSharedAccessSignature(sasConstraints)}";`
-
-var results = await visionAPI.AnalyzeImageAsync(path, Features);
-if(IsDog(results))
-{
-    return;
+[FunctionName("DogDetector")]
+public static async Task Run([BlobTrigger("images/{name}", Connection = "AzureWebJobsStorage")]CloudBlockBlob myBlob, string name, ILogger log)
+{        
+    var config = new ConfigurationBuilder()
+        .AddEnvironmentVariables()
+        .Build();
+    var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
+    var path = $"{myBlob.Uri.ToString()}{myBlob.GetSharedAccessSignature(sasConstraints)}";
+    
+    var results = await visionAPI.AnalyzeImageAsync(path, Features);
+    if(IsDog(results))
+    {
+        return;
+    }
+    
+    await myBlob.DeleteIfExistsAsync();
 }
-
-await myBlob.DeleteIfExistsAsync();
 ```
+As you can see we changed the signature. `Run` is now an `async Task`. We also changed the type of myBlob from `Stream` to `CloudBlockBlob`, this will give us access to more useful properties in our current scenario.
 
+The code, it will retrieve the connectionString from the configuration, instantiate the Vision API, and call AnalyzeImageAsync passing the info about the image. It will finally check if `IsDog` is true and delete the image if not. 
 
-This function does **BLAH BLAH BLAH**
-
-The only piece missing is that `IsDog` method, so let's add it. Paste the following code insode the class `DogDetector`.
+The only piece missing is that `IsDog` method, so let's add it. Paste the following code inside the class `DogDetector`.
 
 ``` csharp
 private static bool IsDog(ImageAnalysis image)
@@ -202,11 +221,13 @@ private static bool IsDog(ImageAnalysis image)
 
 ## Preparation for a New Azure Pipeline
 
-Often when Azure function are used in a solution we want them to have their onw life cycle. It could be because they are use with a legacy application that doesn't really changes, or it cold be because we want to be able to deployment separatly.  
+Often when Azure function are used in a solution we want them to have their onw life cycle. It could be because they are use with a legacy application that doesn't really changes, or it cold be because we want to be able to deployment separately.  
 
 You can close this instance of VSCode, or just return in the other instance (the one open at the root `c:\Dev\gab2019`).
 
-Let's create a new `build-AzFunc.yml` file at the root `gab2019` (beside the build.yaml). Copy the following code and have a look to see if you understand what's happening.
+We could use only one Yaml file and have multiple jobs define in it. However, for this lab we will use two different files.
+
+Let's create a new `build-AzFunc.yml` file at the root `gab2019` (beside the azure-pipeline.yml). Copy the following code and have a look to see if you understand what's happening.
 
 ``` yaml
 trigger:
@@ -249,8 +270,8 @@ steps:
   displayName: 'Test Assemblies'
   inputs:
     testAssemblyVer2: |
-    **\$(BuildConfiguration)\*test*.dll
-    !**\obj\**
+     **\$(BuildConfiguration)\*test*.dll
+     !**\obj\**
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
@@ -270,20 +291,39 @@ steps:
 
 Now, we have everything we need to create the new Azure Pipeline. You can close this instance of VSCode, or just return in the other instance (the one open at the root `c:\Dev\gab2019`).
 
-Let's commit, and push all our changes. That should trigger the existing Azure Pipeline, but that doen's matter. We will create a new one.
+Let's commit, and push all our changes. That should trigger the existing Azure Pipeline, but that doesn't matter. We will create a new one.
 
-## Create a New Azure Pipeline
-
-In the Azure DevOps portal, click on the Pipeline icon in the left menu-bar, and create a new Build pipeline.
-When ask for the YMALin ADO create new build pipeline using yaml and **target **\GABCDemo-FuncApp\*.csproj/app/build.yaml**, it should trigger on every commit (CI)
-   1. yaml should target the csproj of the app (may need adjustment depending on location)
-1. Commit code to repo...
+## Create a New Azure BuildPipeline
 
 
-2. in ADO create new build pipeline using yaml and **target lab6/app/build.yaml**, it should trigger on every commit (CI)
-   1. yaml should target the csproj of the app (may need adjustment depending on location)
-3. in ADO create release pipeline using generated artifact from yaml, it should trigger when build is done (CD)
----
+In the Azure DevOps portal, click on the Pipeline icon in the left menu-bar, and select the *New Build pipeline* option.
+
+![secondPipeline][secondPipeline]
+
+This time we will need to use the classic editor, otherwise the azure-pipeline.yml file will be selected automatically.
+
+![UseClassic][UseClassic]
+
+Select your repository, and click the *Continue* button. If you are using Azure Repos, everything should be fine. If you are using GitHub, just do the selection like previously. 
+
+Now it's time to select the *YAML* option in the template list.
+
+![yaml][yaml]
+
+To configure the template, click on the [...] button. Then select the `build-AzFunc.yml` file and click the *OK* blue button. 
+
+![SelectYamlFile][SelectYamlFile]
+
+You can now click the *Save & queue* button to start the build.
+
+
+## Create a New Azure Release Pipeline
+
+In the Azure DevOps portal, click on the Pipeline icon in the left menu-bar, and select Release. Click *New Release pipeline* option. This time you will need to create two artifacts, one for each build pipeline.
+
+![TwoArtifacts][TwoArtifacts]
+
+> !! IN PROGRESS !! 
 
 ## Time to test our work
 
@@ -307,3 +347,8 @@ When ask for the YMALin ADO create new build pipeline using yaml and **target **
 [CreateAzureFunction]: medias/CreateAzureFunction.png 'Azure Function Extension explained'
 [CreateFunctionApp]: medias/CreateFunctionApp.gif 'Create Azure Function App'
 [FunctionCreated]: medias/FunctionCreated.gif 'Generated Function'
+[secondPipeline]: medias/secondPipeline.png 'Create a second Azure Pipeline'
+[UseClassic]: medias/UseClassic.png 'Use the classic editor instead'
+[yaml]: medias/yaml.png 'Use the classic editor instead'
+[SelectYamlFile]: medias/SelectYamlFile.png 'Select the YAML file'
+[TwoArtifacts]: medias/TwoArtifacts.png 'Create two artifacts'
