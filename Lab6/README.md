@@ -346,7 +346,7 @@ In the Azure DevOps portal, click on the Pipeline icon in the left menu-bar, and
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
 [CreateAzureFunction]: medias/CreateAzureFunction.png 'Azure Function Extension explained'
 [CreateFunctionApp]: medias/CreateFunctionApp.gif 'Create Azure Function App'
-[FunctionCreated]: medias/FunctionCreated.gif 'Generated Function'
+[FunctionCreated]: medias/FunctionCreated.png 'Generated Function'
 [secondPipeline]: medias/secondPipeline.png 'Create a second Azure Pipeline'
 [UseClassic]: medias/UseClassic.png 'Use the classic editor instead'
 [yaml]: medias/yaml.png 'Use the classic editor instead'
