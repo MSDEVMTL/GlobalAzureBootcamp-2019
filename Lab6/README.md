@@ -2,6 +2,9 @@
 
 # Lab 6 - Serverless - Azure Function
 
+> # STILL IN PROGRESS
+> Need to validate that the azure pipeline is working
+
 ## Goal
 
 Create an Azure Functions (blob trigger) to process all new images into a blob storage. The Function will use the Vision API to keep only the dogs pictures.
@@ -35,59 +38,62 @@ This will reuse the name received in parameter `webAppName` and add `-funcApp` t
 
 Now let's add the Function App. Under the resources array in the ARM template add the following snippet we will explain it after:
 
-    {
-      "apiVersion": "2015-08-01",
-      "name": "[variables('funcAppName')]",
-      "type": "Microsoft.Web/sites",
-      "kind": "functionapp",
-      "location": "[resourceGroup().location]",
-      "properties": {
-         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]",
-         "siteConfig": {
-            "alwaysOn": false,
-            "appSettings": [
-                { "name": "FUNCTIONS_EXTENSION_VERSION", "value": "~2" }
-            ]
-         }
+``` json
+
+{
+  "apiVersion": "2015-08-01",
+  "name": "[variables('funcAppName')]",
+  "type": "Microsoft.Web/sites",
+  "kind": "functionapp",
+  "location": "[resourceGroup().location]",
+  "properties": {
+      "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]",
+      "siteConfig": {
+        "alwaysOn": false,
+        "appSettings": [
+            { "name": "FUNCTIONS_EXTENSION_VERSION", "value": "~2" }
+        ]
+      }
+  },
+  "dependsOn": [
+    "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]",
+    "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+  ],
+  "resources": [
+      {
+        "apiVersion": "2015-08-01",
+        "name": "appsettings",
+        "type": "config",
+        "dependsOn": [
+          "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]",
+          "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+        ],
+        "properties": {
+          "FUNCTIONS_EXTENSION_VERSION":"~2",
+          "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]",
+          "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]",
+          "ComputerVision:Endpoint":"[reference(parameters('csVisionName'), '2017-04-18').endpoint]",
+          "ComputerVision:ApiKey":"[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+        }
       },
+      {
+      "apiVersion": "2018-02-01",
+      "type": "config",
+      "name": "connectionstrings",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]",
+        "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
       ],
-      "resources": [
-         {
-            "apiVersion": "2015-08-01",
-            "name": "appsettings",
-            "type": "config",
-            "dependsOn": [
-              "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]",
-              "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-            ],
-            "properties": {
-              "FUNCTIONS_EXTENSION_VERSION":"~2",
-              "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]",
-              "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]",
-              "ComputerVision:Endpoint":"[reference(parameters('csVisionName'), '2017-04-18').endpoint]",
-              "ComputerVision:ApiKey":"[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
-            }
-         },
-         {
-          "apiVersion": "2018-02-01",
-          "type": "config",
-          "name": "connectionstrings",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]",
-            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-          ],
-          "properties": {
-            "AzureWebJobsStorage": {
-              "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-              "type": "Custom"
-            }
-          }
+      "properties": {
+        "AzureWebJobsStorage": {
+          "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+          "type": "Custom"
         }
-      ]
+      }
     }
+  ]
+}
+```
 
 Now let's explain what we just added. 
 
@@ -146,56 +152,136 @@ Before we add some code inside the Azure Function let's add some requirement fea
 
 First inside the class `DogDetector`, and before the method `Run` paste this code.
 
-        // Feature we want to work with when getting analysis back
-        private static readonly List<VisualFeatureTypes> Features = new List<VisualFeatureTypes>
-        {
-            VisualFeatureTypes.Categories, VisualFeatureTypes.Description,
-            VisualFeatureTypes.Faces, VisualFeatureTypes.ImageType,
-            VisualFeatureTypes.Tags
-        };
+``` csharp
+// Feature we want to work with when getting analysis back
+private static readonly List<VisualFeatureTypes> Features = new List<VisualFeatureTypes>
+{
+    VisualFeatureTypes.Categories, VisualFeatureTypes.Description,
+    VisualFeatureTypes.Faces, VisualFeatureTypes.ImageType,
+    VisualFeatureTypes.Tags
+};
 
-        // We must provide SAS token in order to have the API read the image located at the provided URL since our container is private
-        private static SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy
-        {
-            SharedAccessExpiryTime = DateTimeOffset.UtcNow.AddMinutes(10),
-            Permissions = SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.List
-        };
+// We must provide SAS token in order to have the API read the image located at the provided URL since our container is private
+private static SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy
+{
+    SharedAccessExpiryTime = DateTimeOffset.UtcNow.AddMinutes(10),
+    Permissions = SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.List
+};
+```
 
 Now let's add the code inside the method `Run` just after the log.
 
-            var config = new ConfigurationBuilder()
-                .AddEnvironmentVariables()
-                .Build();
-            var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
-            var path = $"{myBlob.Uri.ToString()}{myBlob.GetSharedAccessSignature(sasConstraints)}";`
-            
-            var results = await visionAPI.AnalyzeImageAsync(path, Features);
-            if(IsDog(results))
-            {
-                return;
-            }
-            
-            await myBlob.DeleteIfExistsAsync();
+``` csharp
+var config = new ConfigurationBuilder()
+    .AddEnvironmentVariables()
+    .Build();
+var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
+var path = $"{myBlob.Uri.ToString()}{myBlob.GetSharedAccessSignature(sasConstraints)}";`
+
+var results = await visionAPI.AnalyzeImageAsync(path, Features);
+if(IsDog(results))
+{
+    return;
+}
+
+await myBlob.DeleteIfExistsAsync();
+```
+
 
 This function does **BLAH BLAH BLAH**
 
 The only piece missing is that `IsDog` method, so let's add it. Paste the following code insode the class `DogDetector`.
 
-        private static bool IsDog(ImageAnalysis image)
-        {
-            return image.Categories.Any(x => x.Name == "animal_dog") || image.Tags.Any(x => x.Name == "dog");
-        }
+``` csharp
+private static bool IsDog(ImageAnalysis image)
+{
+    return image.Categories.Any(x => x.Name == "animal_dog") || image.Tags.Any(x => x.Name == "dog");
+}
+```
 
 ## Preparation for a New Azure Pipeline
 
-1. in ADO create new build pipeline using yaml and **target lab6/app/build.yaml**, it should trigger on every commit (CI)
-   1. yaml should target the csproj of the app (may need adjustment depending on location)
-3. Commit code to repo...
+Often when Azure function are used in a solution we want them to have their onw life cycle. It could be because they are use with a legacy application that doesn't really changes, or it cold be because we want to be able to deployment separatly.  
+
+You can close this instance of VSCode, or just return in the other instance (the one open at the root `c:\Dev\gab2019`).
+
+Let's create a new `build-AzFunc.yml` file at the root `gab2019` (beside the build.yaml). Copy the following code and have a look to see if you understand what's happening.
+
+``` yaml
+trigger:
+- master
 
 
-1. in ADO create new build pipeline using yaml and **target lab6/app/build.yaml**, it should trigger on every commit (CI)
+pool:
+  name: Hosted VS2017
+  demands:
+  - msbuild
+  - visualstudio
+  - vstest
+  
+steps:
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 4.4.1'
+  inputs:
+    versionSpec: 4.4.1
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    restoreSolution: '**\GABCDemo-FuncApp\*.csproj'
+
+- task: VSBuild@1
+  displayName: 'Build solution'
+  inputs:
+    solution: '**\GABCDemo-FuncApp\*.csproj'
+    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:publishUrl="$(Agent.TempDirectory)\WebAppContent\\"'
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+
+- task: ArchiveFiles@2
+  displayName: 'Archive Files'
+  inputs:
+    rootFolderOrFile: '$(Agent.TempDirectory)\WebAppContent'
+    includeRootFolder: false
+
+- task: VSTest@2
+  displayName: 'Test Assemblies'
+  inputs:
+    testAssemblyVer2: |
+    **\$(BuildConfiguration)\*test*.dll
+    !**\obj\**
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+
+- task: PublishSymbols@2
+  displayName: 'Publish symbols path'
+  inputs:
+    SearchPattern: '**\bin\**\*.pdb'
+    PublishSymbols: false
+  continueOnError: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()
+```
+
+Now, we have everything we need to create the new Azure Pipeline. You can close this instance of VSCode, or just return in the other instance (the one open at the root `c:\Dev\gab2019`).
+
+Let's commit, and push all our changes. That should trigger the existing Azure Pipeline, but that doen's matter. We will create a new one.
+
+## Create a New Azure Pipeline
+
+In the Azure DevOps portal, click on the Pipeline icon in the left menu-bar, and create a new Build pipeline.
+When ask for the YMALin ADO create new build pipeline using yaml and **target **\GABCDemo-FuncApp\*.csproj/app/build.yaml**, it should trigger on every commit (CI)
    1. yaml should target the csproj of the app (may need adjustment depending on location)
-2. in ADO create release pipeline using generated artifact from yaml, it should trigger when build is done (CD)
+1. Commit code to repo...
+
+
+2. in ADO create new build pipeline using yaml and **target lab6/app/build.yaml**, it should trigger on every commit (CI)
+   1. yaml should target the csproj of the app (may need adjustment depending on location)
+3. in ADO create release pipeline using generated artifact from yaml, it should trigger when build is done (CD)
 ---
 
 ## Time to test our work
