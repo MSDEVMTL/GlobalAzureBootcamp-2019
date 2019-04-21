@@ -199,7 +199,7 @@ This template, will provision a new Azure Storage Account with the name `Storage
 
 This will generate a unique string using your resource group id and location as seed.
 
-7) Add a variable 'suffix' with your unique name as value.
+7) Add a variable 'suffix' to contain that unique string which can be reused.
 
 ```json
 "variables": {
@@ -207,10 +207,13 @@ This will generate a unique string using your resource group id and location as 
 }
 ```
 
-8) Let use that new variable to name your storage
+8) Add avariable 'storageName' which combines the storage name plus the unique suffix string. Let use that new variable to name your storage account.
 
 ```json
-"[concat('stg',variables('suffix'))]"
+"variables": {
+    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+    "storageName": "[concat('stg', variables('suffix'))]"
+}
 ```
 
 Your template should now look like this:
@@ -221,16 +224,17 @@ Your template should now look like this:
     "contentVersion": "1.0.0.0",
     "parameters": {},
     "variables": {
-        "suffix": "[uniqueString(resourcegroup().id, resourceGroup().location)]"
+        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+        "storageName": "[concat('stg', variables('suffix'))]"
     },
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2018-07-01",
-            "name": "[concat('stg', variables('suffix'))]",
+            "name": "[variables('storageName')]",
             "location": "[resourceGroup().location]",
             "tags": {
-                "displayName": "StorageAccount1"
+                "displayName": "[variables('storageName')]"
             },
             "sku": {
                 "name": "Standard_LRS"
@@ -376,16 +380,17 @@ Your template should now look like this:
     "contentVersion": "1.0.0.0",
     "parameters": {},
     "variables": {
-        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
+        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+        "storageName": "[concat('stg', variables('suffix'))]"
     },
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2018-07-01",
-            "name": "[concat('stg',variables('suffix'))]",
+            "name": "[variables('storageName')]",
             "location": "[resourceGroup().location]",
             "tags": {
-                "displayName": "[concat('stg',variables('suffix'))]"
+                "displayName": "[variables('storageName')]"
             },
             "sku": {
                 "name": "Standard_LRS"
@@ -474,16 +479,17 @@ Now use these parameters in your template.  Your template should now look like t
         }
     },
     "variables": {
-        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
+        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+        "storageName": "[concat('stg', variables('suffix'))]"
     },
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2018-07-01",
-            "name": "[concat('stg',variables('suffix'))]",
+            "name": "[variables('storageName')]",
             "location": "[resourceGroup().location]",
             "tags": {
-                "displayName": "[concat('stg',variables('suffix'))]"
+                "displayName": "[variables('storageName')]"
             },
             "sku": {
                 "name": "Standard_LRS"
@@ -555,11 +561,11 @@ Now configure your parameters file (gab2019.parameters.json) to pass the paramet
         "name": "connectionstrings",
         "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-            "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
         ],
         "properties": {
             "ApplicationStorage": {
-                "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+                "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
                 "type": "Custom"
             }
         }
