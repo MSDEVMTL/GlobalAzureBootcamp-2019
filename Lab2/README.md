@@ -588,16 +588,17 @@ That should now look like this
         }
     },
     "variables": {
-        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
+        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+        "storageName": "[concat('stg', variables('suffix'))]"
     },
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2018-07-01",
-            "name": "[concat('stg',variables('suffix'))]",
+            "name": "[variables('storageName')]",
             "location": "[resourceGroup().location]",
             "tags": {
-                "displayName": "[concat('stg',variables('suffix'))]"
+                "displayName": "[variables('storageName')]"
             },
             "sku": {
                 "name": "Standard_LRS"
@@ -627,11 +628,11 @@ That should now look like this
                     "name": "connectionstrings",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-                        "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
+                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
                     ],
                     "properties": {
                         "ApplicationStorage": {
-                            "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+                            "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
                             "type": "Custom"
                         }
                     }
