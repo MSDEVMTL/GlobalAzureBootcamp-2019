@@ -13,16 +13,13 @@
       "metadata": {
         "description": "The name of your Web App."
       }
-    },
-    "csVisionName": {
-      "type": "string",
-      "metadata": {
-        "description": "The  name of the Computer Vision API"
     }
   }
   },
   "variables": {
-    "storageAccountName": "[concat('gab2019', uniquestring(resourceGroup().id))]"
+    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+    "storageName": "[concat('stg', variables('suffix'))]",
+    "csVisionName": "[concat('vision', variables('suffix'))]"
   },
   "resources": [
     {
@@ -39,11 +36,11 @@
           "appSettings": [
           {
             "name": "ComputerVision:Endpoint",
-            "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+            "value": "[reference(variables('csVisionName'), '2017-04-18').endpoint]"
           },
           {
             "name": "ComputerVision:ApiKey",
-            "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+            "value": "[listKeys(variables('csVisionName'), '2017-04-18').key1]"
           }]
         },
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
@@ -91,7 +88,7 @@
     {
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2016-02-01-preview",
-      "name": "[parameters('csVisionName')]",
+      "name": "[variables('csVisionName')]",
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "F0"
@@ -105,11 +102,11 @@
   "outputs": {
     "CognitiveServices-endpoint": {
       "type": "string",
-      "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+      "value": "[reference(variables('csVisionName'), '2017-04-18').endpoint]"
     },
     "CognitiveServices-key1": {
       "type": "string",
-      "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+      "value": "[listKeys(variables('csVisionName'), '2017-04-18').key1]"
     },
     "Storage-connectionString": {
       "type": "string",

@@ -52,7 +52,21 @@ We will start from that template and add the Cognitive Services resource to it
 
 Open the existing [ARM template](../Lab2/deployment/gab2019.json) and [ARM template parameters](../Lab2/deployment/gab2019.parameters.json) from lab2.
 
-**1 - Add the Cognitive Services resource:**
+**1 - Add a 'csVisionName' variable to name the Cognitive Services resource**
+
+We will create a unique name for the vision resources utilizing the 'suffix' variable created previously.
+
+The variable section should now look like this:
+
+```json
+"variables": {
+    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+    "storageName": "[concat('stg', variables('suffix'))]",
+    "csVisionName": "[concat('vision', variables('suffix'))]"
+}
+```
+
+**2 - Add the Cognitive Services resource:**
 
 Firstly, under the resources array in the ARM template (gab2019.json) add:
 
@@ -60,7 +74,7 @@ Firstly, under the resources array in the ARM template (gab2019.json) add:
 {
     "type": "Microsoft.CognitiveServices/accounts",
     "apiVersion": "2016-02-01-preview",
-    "name": "[parameters('csVisionName')]",
+    "name": "[variables('csVisionName')]",
     "location": "[resourceGroup().location]",
     "sku": {
         "name": "F0"
@@ -74,20 +88,6 @@ Firstly, under the resources array in the ARM template (gab2019.json) add:
 
 This will tell Azure that we want an instance of Cognitive Services.
 
-**2 - Add the parameter information for Cognitive Services**
-
-Then, in the parameters section of the ARM template, add:
-
-```json
-"csVisionName": {
-    "type": "string",
-    "metadata": {
-    "description": "The  name of the Computer Vision API"
-}
-```
-
-This will tell Azure to add a meaningful description to the newly created resource.
-
 **3 - Add the Cognitive Services access keys in the web application configuration**
 
 In the web app resource / parameters section of the ARM template (gab2019.json), add:
@@ -99,11 +99,11 @@ In the web app resource / parameters section of the ARM template (gab2019.json),
         "appSettings": [
         {
         "name": "ComputerVision:Endpoint",
-        "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+        "value": "[reference(variables('csVisionName'), '2017-04-18').endpoint]"
         },
         {
         "name": "ComputerVision:ApiKey",
-        "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+        "value": "[listKeys(variables('csVisionName'), '2017-04-18').key1]"
         }]
     },
     "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
@@ -122,11 +122,11 @@ In the output section of the template, we will add outputs to make it easier to 
 "outputs": {
     "CognitiveServices-endpoint": {
         "type": "string",
-        "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+        "value": "[reference(variables('csVisionName'), '2017-04-18').endpoint]"
     },
     "CognitiveServices-key1": {
         "type": "string",
-        "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+        "value": "[listKeys(variables('csVisionName'), '2017-04-18').key1]"
     },
     "Storage-connectionString": {
         "type": "string",
@@ -136,18 +136,6 @@ In the output section of the template, we will add outputs to make it easier to 
 ```
 
 This will add output variables to the resource group deployment.
-
-**5 - Add the parameter value for Cognitive Services**
-
-In the parameters array of the ARM template parameter file (gab2019.parameters.json) add:
-
-```json
-"csVisionName": {
-    "value": "gab2019-vision"
-}
-```
-
-This will specify the name of the Cognitive Service resource
 
 At this point the ARM template for lab 5 is ready.
 
