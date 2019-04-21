@@ -554,22 +554,21 @@ Now configure your parameters file (gab2019.parameters.json) to pass the paramet
 
 ```json
 "resources": [
-  {
-    "apiVersion": "2018-02-01",
-    "type": "config",
-    "name": "connectionstrings",
-    "dependsOn": [
-      "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-      "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
-    ],
-    "properties": {
-
-      "ApplicationStorage": {
-        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-        "type": "Custom"
-      }
+    {
+        "apiVersion": "2018-02-01",
+        "type": "config",
+        "name": "connectionstrings",
+        "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
+            "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
+        ],
+        "properties": {
+            "ApplicationStorage": {
+                "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+                "type": "Custom"
+            }
+        }
     }
-  }
 ]
 ```
 
