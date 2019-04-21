@@ -281,7 +281,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    sourceFolder: '$(Build.SourcesDirectory)'
+    sourceFolder: '$(Build.SourcesDirectory)/deployment'
     contents: '?(gab2019.json|gab2019.parameters.json)'
     targetFolder: $(Build.ArtifactStagingDirectory)
 
