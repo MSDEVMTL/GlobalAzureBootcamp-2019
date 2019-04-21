@@ -577,92 +577,91 @@ That should now look like this
 
 ```json
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "appSvcPlanName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the App Service Plan that will host your Web App."
-      }
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appSvcPlanName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the App Service Plan that will host your Web App."
+            }
+        },
+        "webAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of your Web App."
+            }
+        }
     },
-    "webAppName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of your Web App."
-      }
-    }
-  },
-  "variables": {
-    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2018-07-01",
-      "name": "[concat('stg',variables('suffix'))]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "displayName": "[concat('stg',variables('suffix'))]"
-      },
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "StorageV2"
+    "variables": {
+        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
     },
-    {
-      "type": "Microsoft.Web/sites",
-      "apiVersion": "2018-02-01",
-      "name": "[parameters('webAppName')]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]": "Resource",
-        "displayName": "[parameters('webAppName')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
-      ],
-      "properties": {
-        "name": "[parameters('webAppName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
-      },
-      "resources": [
-  {
-    "apiVersion": "2018-02-01",
-    "type": "config",
-    "name": "connectionstrings",
-    "dependsOn": [
-      "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-      "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2018-07-01",
+            "name": "[concat('stg',variables('suffix'))]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[concat('stg',variables('suffix'))]"
+            },
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2"
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-02-01",
+            "name": "[parameters('webAppName')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]": "Resource",
+                "displayName": "[parameters('webAppName')]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+            ],
+            "properties": {
+                "name": "[parameters('webAppName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2018-02-01",
+                    "type": "config",
+                    "name": "connectionstrings",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
+                        "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
+                    ],
+                    "properties": {
+                        "ApplicationStorage": {
+                            "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+                            "type": "Custom"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2016-09-01",
+            "name": "[parameters('appSvcPlanName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "F1",
+                "capacity": 1
+            },
+            "tags": {
+                "displayName": "[parameters('appSvcPlanName')]"
+            },
+            "properties": {
+                "name": "[parameters('appSvcPlanName')]"
+            }
+        }
     ],
-    "properties": {
-
-      "ApplicationStorage": {
-        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-        "type": "Custom"
-      }
-    }
-  }
-]
-    },
-    {
-      "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2016-09-01",
-      "name": "[parameters('appSvcPlanName')]",
-      "location": "[resourceGroup().location]",
-      "sku": {
-        "name": "F1",
-        "capacity": 1
-      },
-      "tags": {
-        "displayName": "[parameters('appSvcPlanName')]"
-      },
-      "properties": {
-        "name": "[parameters('appSvcPlanName')]"
-      }
-    }
-  ],
-  "outputs": {}
+    "outputs": {}
 }
 ```
 
