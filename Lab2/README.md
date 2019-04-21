@@ -111,12 +111,12 @@ A Resource manager template is simply a JSON file using this structure
 ```json
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "",
-    "parameters": {  },
-    "variables": {  },
-    "functions": [  ],
-    "resources": [  ],
-    "outputs": {  }
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {},
+    "functions": [],
+    "resources": [],
+    "outputs": {}
 }
 ```
 
@@ -167,6 +167,7 @@ If you have install the extension, you can do it easily if you type `arm!` at th
     "contentVersion": "1.0.0.0",
     "parameters": {},
     "variables": {},
+    "functions": [],
     "resources": [],
     "outputs": {}
 }
@@ -175,19 +176,19 @@ If you have install the extension, you can do it easily if you type `arm!` at th
 6. Let's add our first Azure resource. Between the `"resources": []` brackets add a storage Account.  To do so, you still can use the extension with the keyword `arm-stg` or copy the following snippet.
 
 ```json
-    {
-        "type": "Microsoft.Storage/storageAccounts",
-        "apiVersion": "2018-07-01",
-        "name": "StorageAccount1",
-        "location": "[resourceGroup().location]",
-        "tags": {
-            "displayName": "StorageAccount1"
-        },
-        "sku": {
-            "name": "Standard_LRS"
-        },
-        "kind": "StorageV2"
-    }
+{
+    "type": "Microsoft.Storage/storageAccounts",
+    "apiVersion": "2018-07-01",
+    "name": "StorageAccount1",
+    "location": "[resourceGroup().location]",
+    "tags": {
+        "displayName": "StorageAccount1"
+    },
+    "sku": {
+        "name": "Standard_LRS"
+    },
+    "kind": "StorageV2"
+}
 ```
 
 This template, will provision a new Azure Storage Account with the name `StorageAccount1`. Obviously, you want your storage name to be unique. One way to do so is to use a built-in function with the following ARM syntax.
@@ -198,18 +199,21 @@ This template, will provision a new Azure Storage Account with the name `Storage
 
 This will generate a unique string using your resource group id and location as seed.
 
-7) Add a variable 'suffix' with your unique name as value.
+7) Add a variable 'suffix' to contain that unique string which can be reused.
 
 ```json
 "variables": {
     "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
-  }
+}
 ```
 
-8) Let use that new variable to name your storage
+8) Add avariable 'storageName' which combines the storage name plus the unique suffix string. Let use that new variable to name your storage account.
 
 ```json
- "[concat('stg',variables('suffix'))]"
+"variables": {
+    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+    "storageName": "[concat('stg', variables('suffix'))]"
+}
 ```
 
 Your template should now look like this:
@@ -220,21 +224,24 @@ Your template should now look like this:
     "contentVersion": "1.0.0.0",
     "parameters": {},
     "variables": {
-        "suffix": "[uniqueString(resourcegroup().id, resourceGroup().location)]"
+        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+        "storageName": "[concat('stg', variables('suffix'))]"
     },
-    "resources": [{
-        "type": "Microsoft.Storage/storageAccounts",
-        "apiVersion": "2018-07-01",
-        "name": "[concat('stg', variables('suffix'))]",
-        "location": "[resourceGroup().location]",
-        "tags": {
-            "displayName": "StorageAccount1"
-        },
-        "sku": {
-            "name": "Standard_LRS"
-        },
-        "kind": "StorageV2"
-    }],
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2018-07-01",
+            "name": "[variables('storageName')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[variables('storageName')]"
+            },
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2"
+        }
+    ],
     "outputs": {}
 }
 ```
@@ -246,7 +253,6 @@ In the previous lab, we created our first build and template.  Let's modify our 
 1. Modify the build to include the ARM template
 
 ``` yaml
-
 # ASP.NET Core
 # Build and test ASP.NET Core projects targeting .NET Core.
 # Add steps that run tests, create a NuGet package, deploy, and more:
@@ -283,16 +289,15 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: drop
-
 ```
 
 
 2. Commit your change to the git repository using the following command. This will add to your repository, your two newly created files.
 
 ```txt
-  git add .
-  git commit -m "Add my first ARM template"
-  git push
+git add .
+git commit -m "Add my first ARM template"
+git push
 ```
 
 2. Browse to your Azure DevOps project 
@@ -327,7 +332,7 @@ In the previous lab, we created an Azure Web app and Azure App Service Plan to h
 1) Add a Web App to your template. Type `arm-webapp` or copy the following snippet to your template resources.
 
 ```json
- {
+{
     "type": "Microsoft.Web/sites",
     "apiVersion": "2018-02-01",
     "name": "WEB_APP_NAME",
@@ -365,70 +370,69 @@ In the previous lab, we created an Azure Web app and Azure App Service Plan to h
         "name": "AppServicePlan1"
     }
 }
-
 ```
 
 Your template should now look like this:
 
 ```json
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {},
-  "variables": {
-    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2018-07-01",
-      "name": "[concat('stg',variables('suffix'))]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "displayName": "[concat('stg',variables('suffix'))]"
-      },
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "StorageV2"
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+        "storageName": "[concat('stg', variables('suffix'))]"
     },
-    {
-        "type": "Microsoft.Web/sites",
-        "apiVersion": "2018-02-01",
-        "name": "WEB_APP_NAME",
-        "location": "[resourceGroup().location]",
-        "tags": {
-            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/APP_SERVICE_PLAN_NAME')]": "Resource",
-            "displayName": "WEB_APP_NAME"
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2018-07-01",
+            "name": "[variables('storageName')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[variables('storageName')]"
+            },
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2"
         },
-        "dependsOn": [
-            "Microsoft.Web/serverfarms/APP_SERVICE_PLAN_NAME"
-        ],
-        "properties": {
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-02-01",
             "name": "WEB_APP_NAME",
-            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"
-        }
-    },
-    {
-        "type": "Microsoft.Web/serverfarms",
-        "apiVersion": "2016-09-01",
-        "name": "AppServicePlan1",
-        "location": "[resourceGroup().location]",
-        "sku": {
-            "name": "F1",
-            "capacity": 1
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/APP_SERVICE_PLAN_NAME')]": "Resource",
+                "displayName": "WEB_APP_NAME"
+            },
+            "dependsOn": [
+                "Microsoft.Web/serverfarms/APP_SERVICE_PLAN_NAME"
+            ],
+            "properties": {
+                "name": "WEB_APP_NAME",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', 'APP_SERVICE_PLAN_NAME')]"
+            }
         },
-        "tags": {
-            "displayName": "AppServicePlan1"
-        },
-        "properties": {
-            "name": "AppServicePlan1"
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2016-09-01",
+            "name": "AppServicePlan1",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "F1",
+                "capacity": 1
+            },
+            "tags": {
+                "displayName": "AppServicePlan1"
+            },
+            "properties": {
+                "name": "AppServicePlan1"
+            }
         }
-    }
-  ],
-  "outputs": {}
+    ],
+    "outputs": {}
 }
-
 ```
 
 ## Part 4 - Add parameters to your template
@@ -438,138 +442,134 @@ We now need to replace all place holders with parameters. This way, we will be a
 Replace your node `parameters` with the following snippet:
 
 ```json
-
- "parameters": {
-      "appSvcPlanName": {
+"parameters": {
+    "appSvcPlanName": {
         "type": "string",
         "metadata": {
-          "description": "The name of the App Service Plan that will host your Web App."
+            "description": "The name of the App Service Plan that will host your Web App."
         }
-      },
-      "webAppName": {
+    },
+    "webAppName": {
         "type": "string",
         "metadata": {
-          "description": "The name of your Web App."
+            "description": "The name of your Web App."
         }
-      }
     }
-
+}
 ```
 
 Now use these parameters in your template.  Your template should now look like this:
 
 ```json
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "appSvcPlanName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the App Service Plan that will host your Web App."
-      }
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appSvcPlanName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the App Service Plan that will host your Web App."
+            }
+        },
+        "webAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of your Web App."
+            }
+        }
     },
-    "webAppName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of your Web App."
-      }
-    }
-  },
-  "variables": {
-    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2018-07-01",
-      "name": "[concat('stg',variables('suffix'))]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "displayName": "[concat('stg',variables('suffix'))]"
-      },
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "StorageV2"
+    "variables": {
+        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+        "storageName": "[concat('stg', variables('suffix'))]"
     },
-    {
-      "type": "Microsoft.Web/sites",
-      "apiVersion": "2018-02-01",
-      "name": "[parameters('webAppName')]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]": "Resource",
-        "displayName": "[parameters('webAppName')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
-      ],
-      "properties": {
-        "name": "[parameters('webAppName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
-      }
-    },
-    {
-      "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2016-09-01",
-      "name": "[parameters('appSvcPlanName')]",
-      "location": "[resourceGroup().location]",
-      "sku": {
-        "name": "F1",
-        "capacity": 1
-      },
-      "tags": {
-        "displayName": "[parameters('appSvcPlanName')]"
-      },
-      "properties": {
-        "name": "[parameters('appSvcPlanName')]"
-      }
-    }
-  ],
-  "outputs": {}
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2018-07-01",
+            "name": "[variables('storageName')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[variables('storageName')]"
+            },
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2"
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-02-01",
+            "name": "[parameters('webAppName')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]": "Resource",
+                "displayName": "[parameters('webAppName')]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+            ],
+            "properties": {
+                "name": "[parameters('webAppName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2016-09-01",
+            "name": "[parameters('appSvcPlanName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "F1",
+                "capacity": 1
+            },
+            "tags": {
+                "displayName": "[parameters('appSvcPlanName')]"
+            },
+            "properties": {
+                "name": "[parameters('appSvcPlanName')]"
+            }
+        }
+    ],
+    "outputs": {}
 }
-
 ```
 
 Now configure your parameters file (gab2019.parameters.json) to pass the parameter values define in your ARM template.
 
 ``` json
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "appSvcPlanName": {
-      "value": "gabcdemoplan"
-    },
-    "webAppName": {
-      "value": "gabcdemo"
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appSvcPlanName": {
+            "value": "gabcdemoplan"
+        },
+        "webAppName": {
+            "value": "gabcdemo"
+        }
     }
-  }
 }
-
 ```
 
 ## Part 5 - Configure our Web App Automatically
 
 ```json
 "resources": [
-  {
-    "apiVersion": "2018-02-01",
-    "type": "config",
-    "name": "connectionstrings",
-    "dependsOn": [
-      "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-      "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
-    ],
-    "properties": {
-
-      "ApplicationStorage": {
-        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-        "type": "Custom"
-      }
+    {
+        "apiVersion": "2018-02-01",
+        "type": "config",
+        "name": "connectionstrings",
+        "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
+        ],
+        "properties": {
+            "ApplicationStorage": {
+                "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+                "type": "Custom"
+            }
+        }
     }
-  }
 ]
 ```
 
@@ -577,92 +577,92 @@ That should now look like this
 
 ```json
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "appSvcPlanName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the App Service Plan that will host your Web App."
-      }
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appSvcPlanName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the App Service Plan that will host your Web App."
+            }
+        },
+        "webAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of your Web App."
+            }
+        }
     },
-    "webAppName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of your Web App."
-      }
-    }
-  },
-  "variables": {
-    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]"
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2018-07-01",
-      "name": "[concat('stg',variables('suffix'))]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "displayName": "[concat('stg',variables('suffix'))]"
-      },
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "StorageV2"
+    "variables": {
+        "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+        "storageName": "[concat('stg', variables('suffix'))]"
     },
-    {
-      "type": "Microsoft.Web/sites",
-      "apiVersion": "2018-02-01",
-      "name": "[parameters('webAppName')]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]": "Resource",
-        "displayName": "[parameters('webAppName')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
-      ],
-      "properties": {
-        "name": "[parameters('webAppName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
-      },
-      "resources": [
-  {
-    "apiVersion": "2018-02-01",
-    "type": "config",
-    "name": "connectionstrings",
-    "dependsOn": [
-      "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-      "[resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix')))]"
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2018-07-01",
+            "name": "[variables('storageName')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[variables('storageName')]"
+            },
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2"
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-02-01",
+            "name": "[parameters('webAppName')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]": "Resource",
+                "displayName": "[parameters('webAppName')]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+            ],
+            "properties": {
+                "name": "[parameters('webAppName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2018-02-01",
+                    "type": "config",
+                    "name": "connectionstrings",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
+                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
+                    ],
+                    "properties": {
+                        "ApplicationStorage": {
+                            "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+                            "type": "Custom"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2016-09-01",
+            "name": "[parameters('appSvcPlanName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "F1",
+                "capacity": 1
+            },
+            "tags": {
+                "displayName": "[parameters('appSvcPlanName')]"
+            },
+            "properties": {
+                "name": "[parameters('appSvcPlanName')]"
+            }
+        }
     ],
-    "properties": {
-
-      "ApplicationStorage": {
-        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',concat('stg',variables('suffix')),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', concat('stg',variables('suffix'))), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-        "type": "Custom"
-      }
-    }
-  }
-]
-    },
-    {
-      "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2016-09-01",
-      "name": "[parameters('appSvcPlanName')]",
-      "location": "[resourceGroup().location]",
-      "sku": {
-        "name": "F1",
-        "capacity": 1
-      },
-      "tags": {
-        "displayName": "[parameters('appSvcPlanName')]"
-      },
-      "properties": {
-        "name": "[parameters('appSvcPlanName')]"
-      }
-    }
-  ],
-  "outputs": {}
+    "outputs": {}
 }
 ```
 
@@ -671,9 +671,9 @@ That should now look like this
 1. Commit your change to the git repository using the following command.
 
 ```txt
-  git add .
-  git commit -m "Add existing resources"
-  git push
+git add .
+git commit -m "Add existing resources"
+git push
 ```
 
 ## Reference
