@@ -16,9 +16,9 @@ First, create a folder named `gab2019`. This will be the root folder for today's
 
     cd C:\dev\gab2019\
 
-Let's scaffold an application named GABCDemo using the following command:
+Let's scaffold an application named GABDemo using the following command:
 
-    dotnet new mvc -o GABCDemo
+    dotnet new mvc -o GABDemo
 
 Open the solution into Visual Studio Code with:
 
