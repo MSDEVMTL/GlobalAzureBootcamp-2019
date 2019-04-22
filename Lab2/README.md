@@ -542,10 +542,10 @@ Now configure your parameters file (gab2019.parameters.json) to pass the paramet
     "contentVersion": "1.0.0.0",
     "parameters": {
         "appSvcPlanName": {
-            "value": "gabcdemoplan"
+            "value": "gabdemoplan"
         },
         "webAppName": {
-            "value": "gabcdemo"
+            "value": "gabdemo"
         }
     }
 }
