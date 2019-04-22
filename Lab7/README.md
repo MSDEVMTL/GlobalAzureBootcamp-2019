@@ -114,7 +114,7 @@ Wouldn't it be great if the ARM template could provision the Storage Account and
 ```json
 {
     "type": "Microsoft.KeyVault/vaults/secrets",
-    "name": "[concat(parameters('keyVaultName'), '/ConnectionStrings-ApplicationStorage')]",
+    "name": "[concat(parameters('keyVaultName'), '/ConnectionStrings--ApplicationStorage')]",
     "apiVersion": "2016-10-01",
     "location": "[resourceGroup().location]",
     "properties": {
