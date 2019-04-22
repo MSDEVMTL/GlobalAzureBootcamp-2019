@@ -56,15 +56,15 @@ Don't forget to validate that you are in the good subscription. if you are not s
 
 > Note: You might experience an error if you webapp name is not unique. (Conflict: Website with given name <web app name> already exists.) Make sure to use a unique name. ex: gab2019<your_initial><2digits_random_number> gab2019AV47
 
-    az group create --name gabcdemogroup --location eastus
+    az group create --name gabdemogroup --location eastus
 
-    az appservice plan create --name gabcdemoplan --resource-group gabcdemogroup --sku FREE
+    az appservice plan create --name gabdemoplan --resource-group gabdemogroup --sku FREE
 
-    az webapp create --name gabcdemo --resource-group gabcdemogroup --plan gabcdemoplan
+    az webapp create --name gabdemo --resource-group gabdemogroup --plan gabdemoplan
 
 The first command will create a Resource group. Then inside of this group we create a service plan, and finally we create a webapp to the mix.
 
-To validate that everything has been created, open a internet browser and navigate to the Azure Portal (portal.azure.com). From the left menu select *Resource Groups*. Click on the group *gabcdemogroup* that we just created, then click on the web App *gabcdemo*
+To validate that everything has been created, open a internet browser and navigate to the Azure Portal (portal.azure.com). From the left menu select *Resource Groups*. Click on the group *gabdemogroup* that we just created, then click on the web App *gabdemo*
 
 ![resourceGroup][resourceGroup]
 
@@ -133,7 +133,7 @@ This third step is to configure our pipeline. You can start from a template, an 
 
 ![SelectTemplateASPNETCore][SelectTemplateASPNETCore]
 
-This will displays the *YAML code* that defines your pipeline. At this point, the file is not complete, we need to specify where is our project. On the line 16 add `./GABCDemo/` (assuming your project is in folder GABCDemo).
+This will displays the *YAML code* that defines your pipeline. At this point, the file is not complete, we need to specify where is our project. On the line 16 add `./GABDemo/` (assuming your project is in folder GABDemo).
 
 ![UpdateYaml][UpdateYaml]
 
