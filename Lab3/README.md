@@ -314,27 +314,6 @@ To do that:
 1. Copy the FQDN (that should look like `gab-2019-container-demo.canadacentral.azurecontainer.io`).
 1. Using a browser, navigate to that URI, ex.: `http://gab-2019-container-demo.canadacentral.azurecontainer.io/` and you should see your container running in the Cloud!
 
-### Cleaning up resources
-
-Once you are done, you can delete everything by deleting your resource group:
-
-```bash
-az group delete --name GAB2019Group
-# Enter 'y' to confirm
-```
-
-Or if you prefer to keep you other resources but only want to delete your running container, you can:
-
-```bash
-az container delete --resource-group GAB2019Group --name gab2019container
-# Enter 'y' to confirm
-```
-
-Then you can list the running containers to make sure it has been deleted:
-
-```bash
-az container list --resource-group GAB2019Group --output table
-```
 
 ## Reference
 
