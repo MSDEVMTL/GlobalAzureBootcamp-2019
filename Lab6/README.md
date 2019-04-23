@@ -332,6 +332,23 @@ Like we did during Lab 1 when we created our first release pipeline, click on th
 
 Save it. You can trigger manually un Release or do a change in the code and commit-push it.
 
+To create a release manually, first click on the **+ Release** button in the top right corner, and select **Create release**.
+
+![CreateReleaseStep1][CreateReleaseStep1]
+
+That will open a Release details, select your destination (ex: Stage1, To Azure).
+
+![CreateReleaseStep2][CreateReleaseStep2]
+
+Now the release is created we need to deploy it. Click on the **Release-1**. 
+
+![CreateReleaseStep3][CreateReleaseStep3]
+
+Last step, click the **Deploy** button... et voila.
+
+![CreateReleaseStep4][CreateReleaseStep4]
+
+
 ## Time to test our work
 
 
@@ -359,3 +376,7 @@ Save it. You can trigger manually un Release or do a change in the code and comm
 [yaml]: medias/yaml.png 'Use the classic editor instead'
 [SelectYamlFile]: medias/SelectYamlFile.png 'Select the YAML file'
 [TwoArtifacts]: medias/TwoArtifacts.png 'Create two artifacts'
+[CreateReleaseStep1]: medias/CreateReleaseStep1.png 'Create Release Step 1'
+[CreateReleaseStep2]: medias/CreateReleaseStep2.png 'Create Release Step 2'
+[CreateReleaseStep3]: medias/CreateReleaseStep3.png 'Create Release Step 3'
+[CreateReleaseStep4]: medias/CreateReleaseStep4.png 'Create Release Step 4'
