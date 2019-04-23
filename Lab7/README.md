@@ -41,9 +41,11 @@ In order to access different azure services our app will need an identity.
 
 ![](medias/create-key.png)
 
-6. Copy the Application ID, object Id and the newly created key value in a notepad, we'll need them later
+6. Copy the Application ID and the newly created secret value in a notepad, we'll need them later
 
 ![](medias/app-values.png)
+
+7. Back to ActiveDirectory blade -> Enterprise applications -> find you app -> copy the "object id" property in a notepad, we'll need it later
 
 ## 2. Create a KeyVault to store secrets
 
@@ -114,11 +116,11 @@ Wouldn't it be great if the ARM template could provision the Storage Account and
 ```json
 {
     "type": "Microsoft.KeyVault/vaults/secrets",
-    "name": "[concat(parameters('keyVaultName'), '/Keys-Storage-ConnectionString')]",
+    "name": "[concat(parameters('keyVaultName'), '/ConnectionStrings--ApplicationStorage')]",
     "apiVersion": "2016-10-01",
     "location": "[resourceGroup().location]",
     "properties": {
-        "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
+        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
     },
     "resources": [],
     "dependsOn": []
@@ -148,7 +150,13 @@ public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
         .UseStartup<Startup>();
 ```
 
-5.3 Open `appsettings.json` and remove `Keys:Storage:ConnectionString` as it will not be loaded from your key vault.
+5.3 Open `appsettings.json` and remove 
+```json
+"ConnectionStrings": {
+    "ApplicationStorage": "DefaultEndpointsProtocol=https;AccountName=stgnzjquoqzu3sbs;AccountKey=JoPA4L7YY8abPoGHypGu2MLtR+dIk+39Pm14QWRjiuGm2fUMQopMy2dEpL98ESv8NomfDjY+wQlovfLcYgIv0w==;EndpointSuffix=core.windows.net"
+  },
+  ``` 
+as it will now be loaded from your key vault.
 While you're there add the following keys to your `appsetting.json`
 
 
