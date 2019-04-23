@@ -41,9 +41,11 @@ In order to access different azure services our app will need an identity.
 
 ![](medias/create-key.png)
 
-6. Copy the Application ID, object Id and the newly created key value in a notepad, we'll need them later
+6. Copy the Application ID and the newly created secret value in a notepad, we'll need them later
 
 ![](medias/app-values.png)
+
+7. Back to ActiveDirectory blade -> Enterprise applications -> find you app -> copy the "object id" property in a notepad, we'll need it later
 
 ## 2. Create a KeyVault to store secrets
 
