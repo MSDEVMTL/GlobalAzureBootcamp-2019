@@ -319,11 +319,18 @@ You can now click the *Save & queue* button to start the build.
 
 ## Create a New Azure Release Pipeline
 
-In the Azure DevOps portal, click on the Pipeline icon in the left menu-bar, and select Release. Click *New Release pipeline* option. This time you will need to create two artifacts, one for each build pipeline.
+In the Azure DevOps portal, click on the Pipeline icon in the left menu-bar, and select Release. Click *New Release pipeline* option. This time you will need to create two artifacts, one for each build pipeline. Don't forget to enable the continuous deployment trigger by clicking on the lightning bolt.
 
 ![TwoArtifacts][TwoArtifacts]
 
-> !! IN PROGRESS !! 
+Like we did during Lab 1 when we created our first release pipeline, click on the *1 job, 0 tasks* link. Two tasks are required for this deployment. 
+- The first one is a *Azure Resource Group Deployment*, and use the ARM template published by the first build. 
+
+- The second task is an *Azure Function*. This new task is in preview, this is prefect for our demo purposes. However, in a case of a production deployment I would suggest to use *Azure App Service Deploy* instead. Both will work perfectly, it's just a question of "SLAs".
+  - As App type, select **Function App on Windows**. The code is in .Net Core, therefore it could run without any issue on a Linux Function but we compiled it using Windows.
+  - Select the App Name of your Function (ex: gab2019-FuncApp)
+
+Save it. You can trigger manually un Release or do a change in the code and commit-push it.
 
 ## Time to test our work
 
