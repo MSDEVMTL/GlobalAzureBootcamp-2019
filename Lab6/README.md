@@ -351,14 +351,14 @@ Last step, click the **Deploy** button... et voila.
 
 ## Time to test our work
 
+Using the Azure Portal or the Azure Storage Explorer, try to upload different images. Note that you may need to delete manually the previous file if you want to use them in your test. The Azure Function will only get triggered on *New* images.
+
+Check what is left of assets that were dogs.
+
+If you have time, try to move into another container the "non-dog" images, instead of deleting them.
 
 
-1. Use provided assets to add all images in the container (storage explorer) (**Provide assets**)
-2. check what is left of assets that were dogs
-3. *Extra credit*: move non-dog assets to another container using the available function overload
-
-
-## Reference
+## References
 
 - [Automate resource deployment for your function app in Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/functions-infrastructure-as-code?WT.mc_id=globalazure-github-frbouche)
 - [Azure Functions binding expression patterns](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-expressions-patterns?WT.mc_id=globalazure-github-frbouche)
