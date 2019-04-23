@@ -16,6 +16,14 @@ If you have a version equal or greater to 2.1 your are fine. Otherwise we invite
 
 Once the installer is downloaded follow the instruction in run it.  When the install is complete re-execute the comment to validate that you have a version equal or greater to 2.1
 
+# Docker Community Edition (CE) 
+
+This year on the Global Azure Bootcamp, the focus is on accessibility and portability. We couldn't pass the container technology and the most popular right now is Docker. We strongly suggest to install Docker on your laptop. However, if for some reason you couldn't, only a part of the [Lab 3](../Lab3/README.md) won't works. Everything else should be good.
+
+To Install Docker go on the [official website](https://docs.docker.com/install/) and follow the instruction for your OS.
+
+![DockerCE][DockerCE]
+
 # The Tools
 
 ## Visual Studio Code
@@ -114,6 +122,14 @@ For the GLobal Azure Bootcamp, you will need an Azure DevOps account. It's free!
 
 ![azureDevOps][azureDevOps]
 
+
+# Azure Subscription
+
+For the GLobal Azure Bootcamp, you will need an Azure Subscription. If you don't have one already you can enable this one time deal. 
+
+[Get an Azure Free Trial](https://azure.microsoft.com/en-us/free/?wt.mc_id=globalzure-github-frbouche)
+
+
 ## GitHub (optional)
 
 GitHub is a development platform inspired by the way you work. From open source to business, you can host and review code, manage projects, and build software.  During the Global Azure Bottcamp you could host your code in a GitHub Repository if you prefer it to Azure DevOps. 
@@ -127,6 +143,7 @@ Contact our volunteers:
 
 - Frank Boucher : Twitter [@fboucheros](https://twitter.com/fboucheros)
 - Alain Vezina : Twitter [@avezina](https://twitter.com/avezina)
+
 
 [Next Lab](../Lab1/README.md)
 
@@ -143,3 +160,6 @@ Contact our volunteers:
 [freeAzure]: medias/freeAzure.png
 [azureDevOps]: medias/azureDevOps.png
 [dotnetcore]: medias/dotnetcore.png
+[DockerCE]: medias/DockerCE.png
+
+
