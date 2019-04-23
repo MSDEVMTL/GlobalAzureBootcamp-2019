@@ -98,25 +98,25 @@ In the web app resource / parameters section of the ARM template (gab2019.json),
     "siteConfig": {
         "appSettings": [
         {
-        "name": "ComputerVision:Endpoint",
-        "value": "[reference(variables('csVisionName'), '2017-04-18').endpoint]"
+           "name": "ComputerVision:Endpoint",
+           "value": "[reference(variables('csVisionName'), '2017-04-18').endpoint]"
         },
         {
-        "name": "ComputerVision:ApiKey",
-        "value": "[listKeys(variables('csVisionName'), '2017-04-18').key1]"
+           "name": "ComputerVision:ApiKey",
+           "value": "[listKeys(variables('csVisionName'), '2017-04-18').key1]"
         }]
     },
     "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
 },
 ```
 
-The site config will add app settings to the web application in azure
+The site config will add app settings to the web application in Azure.
 
-Cognitive Services endpoint and key will be set into our MVC Web App (just like we do with the storage account)
+The Cognitive Services endpoint and key will be set into our MVC Web App (just like we do with the storage account)
 
 **4 - Add output variables**
 
-In the output section of the template, we will add outputs to make it easier to get the keys and connection strings we will need to run our app locally. Replace the `outputs` section with the code below:
+In the output section of the template, we will add outputs to make it easier to get the keys and the connection string we will need to run our app locally. Replace the `outputs` section with the code below:
 
 ```json
 "outputs": {
@@ -175,9 +175,9 @@ We, however, will need the config information to run the web application locally
 
 ### Getting config info from deployment
 
-Since we added output variables to the ARM template, this can make it easier to get the info for Cognitive Services and Azure Storage.
+Since we added output variables to the ARM template, it makes it easier to get the information we need for Cognitive Services and Azure Storage.
 
-To reach the output values;
+To find the output values;
 
 -   navigate to the Azure portal
 -   locate your resource group
@@ -347,7 +347,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 ```
 
-Create an interface that will be used for the dependency injection called `BlobStorageManager`. Copy the following code into this interface
+Create an interface that will be used for the dependency injection called `IBlobStorageManager`. Copy the following code into this interface
 
 ```csharp
 IEnumerable<IListBlobItem> GetFiles(string containerName);
@@ -356,7 +356,7 @@ IEnumerable<IListBlobItem> GetFiles(string containerName);
 Make sure to inherit from this interface. Your class definition should look like
 
 ```csharp
-public class BlobStorageManager : IBlogStorageManager
+public class BlobStorageManager : IBlobStorageManager
 ```
 
 #### ImageAnalyzer
@@ -402,7 +402,7 @@ using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 ```
 
-Create an interface that will be used for the dependency injection called `IBlobStorageManager`. Copy the following code into this interface
+Create an interface that will be used for the dependency injection called `IImageAnalyzer`. Copy the following code into this interface
 
 ```csharp
 Task<ImageAnalysis> AnalyzeAsync(string imageUrl);
@@ -423,7 +423,7 @@ In your `Startup` class, under the `ConfigureServices` method, add the following
 services.AddOptions<StorageAccountOptions>()
     .Configure(options => options.ConnectionString = Configuration.GetConnectionString("ApplicationStorage"))
     .ValidateDataAnnotations();
-services.AddSingleton<IBlogStorageManager, BlobStorageManager>();
+services.AddSingleton<IBlobStorageManager, BlobStorageManager>();
 
 // Computer Vision
 services.AddOptions<ComputerVisionOptions>()
@@ -452,7 +452,7 @@ In the controller folder, create a class named `AnalyzerController`. This is the
 In that class, copy the following code:
 
 ```csharp
-private readonly IBlogStorageManager _blobStorageManager;
+private readonly IBlobStorageManager _blobStorageManager;
 private readonly IImageAnalyzer _imageAnalyzer;
 
 public AnalyzerController(IBlogStorageManager blobStorageManager, IImageAnalyzer imageAnalyzer)

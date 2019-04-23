@@ -8,10 +8,10 @@ namespace GABDemo.Controllers
 {
     public class AnalyzerController : Controller
     {
-        private readonly IBlogStorageManager _blobStorageManager;
+        private readonly IBlobStorageManager _blobStorageManager;
         private readonly IImageAnalyzer _imageAnalyzer;
 
-        public AnalyzerController(IBlogStorageManager blobStorageManager, IImageAnalyzer imageAnalyzer)
+        public AnalyzerController(IBlobStorageManager blobStorageManager, IImageAnalyzer imageAnalyzer)
         {
             _blobStorageManager = blobStorageManager ?? throw new ArgumentNullException(nameof(blobStorageManager));
             _imageAnalyzer = imageAnalyzer ?? throw new ArgumentNullException(nameof(imageAnalyzer));

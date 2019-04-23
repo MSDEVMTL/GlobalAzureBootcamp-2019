@@ -6,7 +6,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace GABDemo.Services
 {
-    public class BlobStorageManager : IBlogStorageManager
+    public class BlobStorageManager : IBlobStorageManager
     {
         private readonly CloudStorageAccount _storageAccount;
 

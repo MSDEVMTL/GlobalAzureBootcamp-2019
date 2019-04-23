@@ -37,7 +37,7 @@ namespace GABDemo
             services.AddOptions<StorageAccountOptions>()
                 .Configure(options => options.ConnectionString = Configuration.GetConnectionString("ApplicationStorage"))
                 .ValidateDataAnnotations();
-            services.AddSingleton<IBlogStorageManager, BlobStorageManager>();
+            services.AddSingleton<IBlobStorageManager, BlobStorageManager>();
 
             // Computer Vision
             services.AddOptions<ComputerVisionOptions>()
