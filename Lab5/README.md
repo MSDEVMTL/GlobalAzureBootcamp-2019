@@ -455,7 +455,7 @@ In that class, copy the following code:
 private readonly IBlobStorageManager _blobStorageManager;
 private readonly IImageAnalyzer _imageAnalyzer;
 
-public AnalyzerController(IBlogStorageManager blobStorageManager, IImageAnalyzer imageAnalyzer)
+public AnalyzerController(IBlobStorageManager blobStorageManager, IImageAnalyzer imageAnalyzer)
 {
     _blobStorageManager = blobStorageManager ?? throw new ArgumentNullException(nameof(blobStorageManager));
     _imageAnalyzer = imageAnalyzer ?? throw new ArgumentNullException(nameof(imageAnalyzer));
