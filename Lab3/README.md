@@ -243,7 +243,7 @@ To stop the container using Docker Explorer, you can:
 To deploy our application and run it in the Cloud, we will use both Docker and the Azure CLI (version 2.0.55 or later recommended).
 What we will do is:
 
-1. Create an Azure Resource Group to create our resources into. It helps keep our stuff organized, and it is easier to clean up this way.
+1. Create or use an existing Azure Resource Group. Resource Groups help keep our stuff organized, and it is easier to clean up this way.
 1. Create a private image registry (we could have used Docker Hub as well, but the event is named Azure Bootcamp; and our images will be closer to our running containers, helping with latency in a real-world scenario).
 1. Push our Docker image in our private registry
 1. Deploy a container, based on our Docker image, to an Azure Container Instance.
@@ -251,19 +251,19 @@ What we will do is:
 To do that:
 
 1. Open a terminal
-1. Create a resource group:
+1. Create a resource group (if not already done):
 
     ```bash
     # Create a resource group in Toronto
-    az group create --name GAB2019Group --location canadacentral
+    az group create --name gabdemogroup --location canadacentral
     # Create a resource group in Québec
-    az group create --name GAB2019Group --location canadaeast
+    az group create --name gabdemogroup --location canadaeast
     ```
 
 1. Create a container registry (to push our Docker image into). The `<acrName>` must be unique Azure-wide (not just your account). For example, I named mine `GAB2019ContainerRegistry`.
 
     ```bash
-    az acr create --resource-group GAB2019Group --name <acrName> --sku Basic --admin-enabled true
+    az acr create --resource-group gabdemogroup --name <acrName> --sku Basic --admin-enabled true
     ```
 
     > Take note of the registry `name` you entered here. Throughout the rest of this quickstart `<acrName>` is a placeholder for the container registry name.
@@ -301,19 +301,18 @@ To do that:
 1. Create a container in Azure. The `dns-name-label` must be unique Azure-wide. For example, I named mine: `gab-2019-container-demo`.
 
     ```bash
-    az container create --resource-group GAB2019Group --name gab2019container --image <acrLoginServer>/gabdemo:v1 --dns-name-label <dns-name-label> --ports 80
+    az container create --resource-group gabdemogroup --name gab2019container --image <acrLoginServer>/gabdemo:v1 --dns-name-label <dns-name-label> --ports 80
     # Enter your admin Azure Container Registry username and password (copied a few steps ago).
     ```
 
 1. From there, we can list our running containers:
 
     ```bash
-    az container show --resource-group GAB2019Group --name gab2019container --query "{FQDN:ipAddress.fqdn,ProvisioningState:provisioningState}" --out table
+    az container show --resource-group gabdemogroup --name gab2019container --query "{FQDN:ipAddress.fqdn,ProvisioningState:provisioningState}" --out table
     ```
 
 1. Copy the FQDN (that should look like `gab-2019-container-demo.canadacentral.azurecontainer.io`).
 1. Using a browser, navigate to that URI, ex.: `http://gab-2019-container-demo.canadacentral.azurecontainer.io/` and you should see your container running in the Cloud!
-
 
 ## Reference
 
