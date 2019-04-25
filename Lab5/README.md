@@ -146,26 +146,9 @@ At this point the ARM template for lab 5 is ready.
 
 Now that we have an ARM template that includes Cognitive Services, we want to deploy it.
 
-In [Lab 2](../Lab2/README.md) we saw a few methods to deploy the initial components of the ARM template, we will revisit the Azure CLI for this lab.
+In [Lab 2](../Lab2/README.md) we saw a few methods to deploy the initial components of the ARM template. We will thus use the CI/CD approach to deploy our new resource.
 
-### Azure CLI - incremental mode
-
-Azure CLI allows for two different deployment modes; "Complete" and "Incremental".
-
-The Incremental mode tells Azure to add the missing components while leaving the existing ones alone (components that exist in Azure but not in the template will also be kept).
-
-The script below will deploy the ARM template resources.
-
-```powershell
-az group deployment create \
---name Gab2019Deployment1 \
---mode Incremental \
---resource-group GAB2019RG \
---template-file gab2019.json \
---parameters GAB2019.parameters.json
-```
-
-Once done, the Cognitive Services resource would be deployed and the keys should be configured in the web application.
+Commit your changes to your git repository. Once that is done, the CI/CD will take over and deploy the new resource.
 
 ## Getting config info for the web app
 
