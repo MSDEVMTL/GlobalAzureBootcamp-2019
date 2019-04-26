@@ -221,7 +221,7 @@ private static bool IsDog(ImageAnalysis image)
 
 ## Preparation for a New Azure Pipeline
 
-Often when Azure function are used in a solution we want them to have their onw life cycle. It could be because they are use with a legacy application that doesn't really changes, or it cold be because we want to be able to deployment separately.  
+Often when Azure function are used in a solution we want them to have their onw life cycle. It could be because they are use with a legacy application that doesn't really changes, or it could be because we want to be able to deployment separately.  
 
 You can close this instance of VSCode, or just return in the other instance (the one open at the root `c:\Dev\gab2019`).
 
