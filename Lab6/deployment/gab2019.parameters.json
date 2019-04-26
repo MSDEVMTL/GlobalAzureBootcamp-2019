@@ -2,15 +2,11 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "appSvcPlanName": {
-      "value": "gab2019-appplan"
-    },
-    "webAppName": {
-      "value": "gab2019-mvc"
-    },
-    "csVisionName": {
-      "value": "gab2019-vision"
-    },
-    // 1.1 FUNCTION CREATION HERE
+      "appSvcPlanName": {
+          "value": "gabdemoplan"
+      },
+      "webAppName": {
+          "value": "gabdemomtlslap"
+      }
   }
 }

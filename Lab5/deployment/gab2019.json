@@ -14,7 +14,6 @@
         "description": "The name of your Web App."
       }
     }
-  }
   },
   "variables": {
     "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
@@ -22,6 +21,17 @@
     "csVisionName": "[concat('vision', variables('suffix'))]"
   },
   "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageName')]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2018-07-01",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2",
+      "properties": {}
+    },
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2018-02-01",
@@ -52,11 +62,11 @@
           "name": "connectionstrings",
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
           ],
           "properties": {
             "ApplicationStorage": {
-              "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+              "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
               "type": "Custom"
             }
           }
@@ -75,29 +85,18 @@
       }
     },
     {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('storageAccountName')]",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2018-07-01",
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "StorageV2",
-      "properties": {}
-    },
-    {
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2016-02-01-preview",
       "name": "[variables('csVisionName')]",
       "location": "[resourceGroup().location]",
       "sku": {
-        "name": "F0"
+          "name": "F0"
       },
       "kind": "ComputerVision",
       "dependsOn": [],
       "properties": {},
       "scale": null
-  }
+    }
   ],
   "outputs": {
     "CognitiveServices-endpoint": {
@@ -110,7 +109,7 @@
     },
     "Storage-connectionString": {
       "type": "string",
-      "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+      "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
     }
   }
 }
