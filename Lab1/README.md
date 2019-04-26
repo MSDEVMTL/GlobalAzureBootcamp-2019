@@ -206,6 +206,7 @@ Once the deployment is done, refresh your web browser where the web page was sho
 ## End
 
 [Previous Lab](../Lab0/README.md)
+|
 [Next Lab](../Lab2/README.md)
 
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
