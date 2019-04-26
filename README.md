@@ -38,7 +38,7 @@ Time        | Duration | Tittle                                      | Descripti
 11h45-12h30 | 45 mins  | [Lab 4 - Containers 2](./Lab4/README.md)    | Create a new CI/CD pipeline to automate the container creation and deployment 
 12h30-13h15 | 45 mins  | Lunch                                       | Lunch
 13h15-14h00 | 45 mins  | [Lab 5 - AI](./Lab5/README.md)              | Add an Azure Cognitive Services Vision to the application to validate an image
-14h00-14h45 | 45 mins  | [Lab 6 - Serverless](./Lab7/readme.md)      | Create an Azure Functions (blob trigger) to process all images in a blob storage and use the Vision API for filtering
+14h00-14h45 | 45 mins  | [Lab 6 - Serverless](./Lab6/README.md)      | Create an Azure Functions (blob trigger) to process all images in a blob storage and use the Vision API for filtering
 14h45-15h30 | 45 mins  | [Lab 7 - Security](./Lab7/README.md)        | Moving all the keys and sensible information to a KeyVault
 15h30-16h00 | 30 mins  | Ending                                      | Questions/ Networking/ Giveaway
 
@@ -53,7 +53,7 @@ All Platforms (Windows, MacOS, Linux)
 
 ## What you will need before the bootcamp?
 
-Before the bootcamp, we encourage you to make sure you have all the requirement software so you can concentrate on learning and not running installations.  Make sure you get all the source code and install all the required software.  See **[Lab 0)](./Lab0/README.md)**.
+Before the bootcamp, we encourage you to make sure you have all the requirement software so you can concentrate on learning and not running installations.  Make sure you get all the source code and install all the required software.  See **[Lab 0](./Lab0/README.md)**.
 
 ### Azure Subscription
 If you don't own an Azure subscription already, you can create your free account today. It comes with 200$ credit, so you can experience almost everything without spending a dime. 
