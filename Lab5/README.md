@@ -130,7 +130,7 @@ In the output section of the template, we will add outputs to make it easier to 
     },
     "Storage-connectionString": {
         "type": "string",
-        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+        "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
     }
 }
 ```
@@ -699,6 +699,7 @@ To get your storage key;
 # End
 
 [Previous Lab](../Lab4/README.md)
+|
 [Next Lab](../Lab6/README.md)
 
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png 'Global Azure Bootcamp 2019'

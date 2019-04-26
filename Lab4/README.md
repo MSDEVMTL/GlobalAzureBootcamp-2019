@@ -119,6 +119,7 @@ az container list --resource-group GAB2019Group --output table
 
 ## End
 [Previous Lab](../Lab3/README.md)
+|
 [Next Lab](../Lab5/README.md)
 
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"

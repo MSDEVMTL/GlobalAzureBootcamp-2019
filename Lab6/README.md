@@ -365,6 +365,7 @@ If you have time, try to move into another container the "non-dog" images, inste
 
 ## End
 [Previous Lab](../Lab5/README.md)
+|
 [Next Lab](../Lab7/README.md)
 
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
