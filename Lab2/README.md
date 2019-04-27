@@ -289,7 +289,8 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: drop
-```
+
+*  Set your template location```
 
 
 2. Commit your change to the git repository using the following command. This will add to your repository, your two newly created files.
@@ -317,6 +318,7 @@ git push
     *  Set the location of your resource `East US`
     *  Set your template location
     ![Set your template location](./medias/SelectTemplate.PNG)
+    *  Set your template parameters location
 
 6. Save your pipeline and create a new release
 
