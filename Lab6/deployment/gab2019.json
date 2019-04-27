@@ -13,19 +13,26 @@
       "metadata": {
         "description": "The name of your Web App."
       }
-    },
-    "csVisionName": {
-      "type": "string",
-      "metadata": {
-        "description": "The  name of the Computer Vision API"
-      }
-    },
-    // 1.2.1 FUNCTION PARAMETER HERE
+    }
   },
   "variables": {
-    "storageAccountName": "[concat('gab2019', uniquestring(resourceGroup().id))]"
+    "suffix": "[uniqueString(resourceGroup().id, resourceGroup().location)]",
+    "storageName": "[concat('stg', variables('suffix'))]",
+    "csVisionName": "[concat('vision', variables('suffix'))]",
+    "funcAppName": "[concat(parameters('webAppName'), '-funcApp')]"
   },
   "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageName')]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2018-07-01",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2",
+      "properties": {}
+    },
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2018-02-01",
@@ -40,11 +47,11 @@
           "appSettings": [
           {
             "name": "ComputerVision:Endpoint",
-            "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+            "value": "[reference(variables('csVisionName'), '2017-04-18').endpoint]"
           },
           {
             "name": "ComputerVision:ApiKey",
-            "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+            "value": "[listKeys(variables('csVisionName'), '2017-04-18').key1]"
           }]
         },
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]"
@@ -56,11 +63,11 @@
           "name": "connectionstrings",
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]",
-            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
           ],
           "properties": {
             "ApplicationStorage": {
-              "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+              "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
               "type": "Custom"
             }
           }
@@ -79,43 +86,84 @@
       }
     },
     {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('storageAccountName')]",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2018-07-01",
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "StorageV2",
-      "properties": {}
-    },
-    {
       "type": "Microsoft.CognitiveServices/accounts",
       "apiVersion": "2016-02-01-preview",
-      "name": "[parameters('csVisionName')]",
+      "name": "[variables('csVisionName')]",
       "location": "[resourceGroup().location]",
       "sku": {
-        "name": "F0"
+          "name": "F0"
       },
       "kind": "ComputerVision",
       "dependsOn": [],
       "properties": {},
       "scale": null
     },
-    // 1.2.2 FUNCTION CREATION HERE
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[variables('funcAppName')]",
+      "type": "Microsoft.Web/sites",
+      "kind": "functionapp",
+      "location": "[resourceGroup().location]",
+      "properties": {
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]",
+          "siteConfig": {
+            "alwaysOn": false,
+            "appSettings": [
+                { "name": "FUNCTIONS_EXTENSION_VERSION", "value": "~2" }
+            ]
+          }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
+      ],
+      "resources": [
+          {
+            "apiVersion": "2015-08-01",
+            "name": "appsettings",
+            "type": "config",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]",
+              "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
+            ],
+            "properties": {
+              "FUNCTIONS_EXTENSION_VERSION":"~2",
+              "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'), ';AccountKey=', listKeys(variables('storageName'),'2015-05-01-preview').key1)]",
+              "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'), ';AccountKey=', listKeys(variables('storageName'),'2015-05-01-preview').key1)]",
+              "ComputerVision:Endpoint":"[reference(variables('csVisionName'), '2017-04-18').endpoint]",
+              "ComputerVision:ApiKey":"[listKeys(variables('csVisionName'), '2017-04-18').key1]"
+            }
+          },
+          {
+          "apiVersion": "2018-02-01",
+          "type": "config",
+          "name": "connectionstrings",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]",
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
+          ],
+          "properties": {
+            "AzureWebJobsStorage": {
+              "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+              "type": "Custom"
+            }
+          }
+        }
+      ]
+    }
   ],
   "outputs": {
     "CognitiveServices-endpoint": {
       "type": "string",
-      "value": "[reference(parameters('csVisionName'), '2017-04-18').endpoint]"
+      "value": "[reference(variables('csVisionName'), '2017-04-18').endpoint]"
     },
     "CognitiveServices-key1": {
       "type": "string",
-      "value": "[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+      "value": "[listKeys(variables('csVisionName'), '2017-04-18').key1]"
     },
     "Storage-connectionString": {
       "type": "string",
-      "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+      "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
     }
   }
 }

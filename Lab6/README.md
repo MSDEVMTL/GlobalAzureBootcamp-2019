@@ -29,14 +29,15 @@ Just like we did in Lab 5, open the existing [ARM template](../Lab2/deployment/g
 
 In the array of variable add a new variable named `funcAppName`: 
 
+``` json
     "funcAppName": "[concat(parameters('webAppName'), '-funcApp')]"
+```
 
 This will reuse the name received in parameter `webAppName` and add `-funcApp` to it. We will use this as the Function App name.
 
 Now let's add the Function App. Under the resources array in the ARM template add the following snippet we will explain it after:
 
 ``` json
-
 {
   "apiVersion": "2015-08-01",
   "name": "[variables('funcAppName')]",
@@ -54,7 +55,7 @@ Now let's add the Function App. Under the resources array in the ARM template ad
   },
   "dependsOn": [
     "[resourceId('Microsoft.Web/serverfarms/', parameters('appSvcPlanName'))]",
-    "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+    "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
   ],
   "resources": [
       {
@@ -63,14 +64,14 @@ Now let's add the Function App. Under the resources array in the ARM template ad
         "type": "config",
         "dependsOn": [
           "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]",
-          "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+          "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
         ],
         "properties": {
           "FUNCTIONS_EXTENSION_VERSION":"~2",
-          "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]",
-          "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('StorageAccountName'),'2015-05-01-preview').key1)]",
-          "ComputerVision:Endpoint":"[reference(parameters('csVisionName'), '2017-04-18').endpoint]",
-          "ComputerVision:ApiKey":"[listKeys(parameters('csVisionName'), '2017-04-18').key1]"
+          "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'), ';AccountKey=', listKeys(variables('storageName'),'2015-05-01-preview').key1)]",
+          "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageName'), ';AccountKey=', listKeys(variables('storageName'),'2015-05-01-preview').key1)]",
+          "ComputerVision:Endpoint":"[reference(variables('csVisionName'), '2017-04-18').endpoint]",
+          "ComputerVision:ApiKey":"[listKeys(variables('csVisionName'), '2017-04-18').key1]"
         }
       },
       {
@@ -79,11 +80,11 @@ Now let's add the Function App. Under the resources array in the ARM template ad
       "name": "connectionstrings",
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]",
-        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
       ],
       "properties": {
         "AzureWebJobsStorage": {
-          "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+          "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
           "type": "Custom"
         }
       }
@@ -92,12 +93,12 @@ Now let's add the Function App. Under the resources array in the ARM template ad
 }
 ```
 
-Now let's explain what we just added. 
+Now let's explain what we just added.
 
 - The first section defines our Azure Function name, type, and a few basic properties. 
 - The second section `dependsOn` specify that the Function need to be created after the storage account and the service plan.
 - In the last section we define a list of `resources` contained inside the Function: `appsettings`, `connectionstrings`. Those resources are very important since they will keep the information like the connection to the ComputerVision Service, and Storage.
-  
+
 # Create the Azure Function App
 
 From the windows explorer create a new sub-folder `gab2019-FuncApp`. For example in Lab 1 if you created a folder `C:\dev\gab2019\` it will look like this.
@@ -190,19 +191,19 @@ Now let's replace the code of the main method `Run`.
 ``` csharp
 [FunctionName("DogDetector")]
 public static async Task Run([BlobTrigger("images/{name}", Connection = "AzureWebJobsStorage")]CloudBlockBlob myBlob, string name, ILogger log)
-{        
+{
     var config = new ConfigurationBuilder()
         .AddEnvironmentVariables()
         .Build();
     var visionAPI =  new ComputerVisionClient(new ApiKeyServiceClientCredentials(config["ComputerVision:ApiKey"])) { Endpoint = config["ComputerVision:Endpoint"] };
     var path = $"{myBlob.Uri.ToString()}{myBlob.GetSharedAccessSignature(sasConstraints)}";
-    
+
     var results = await visionAPI.AnalyzeImageAsync(path, Features);
     if(IsDog(results))
     {
         return;
     }
-    
+
     await myBlob.DeleteIfExistsAsync();
 }
 ```
@@ -240,7 +241,7 @@ pool:
   - msbuild
   - visualstudio
   - vstest
-  
+
 steps:
 - task: NuGetToolInstaller@0
   displayName: 'Use NuGet 4.4.1'
@@ -365,6 +366,7 @@ If you have time, try to move into another container the "non-dog" images, inste
 
 ## End
 [Previous Lab](../Lab5/README.md)
+|
 [Next Lab](../Lab7/README.md)
 
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"

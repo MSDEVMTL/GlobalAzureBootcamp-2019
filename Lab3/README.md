@@ -323,7 +323,7 @@ To do that:
 ## End
 
 [Previous Lab](../Lab2/README.md)
-
+|
 [Next Lab](../Lab4/README.md)
 
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png 'Global Azure Bootcamp 2019'

@@ -114,9 +114,9 @@ Make sure to have your account up and ready before the bootcamp.
 
 ![freeAzure][freeAzure]
 
-## [Azure DevOps]
+## Azure DevOps
 
-For the GLobal Azure Bootcamp, you will need an Azure DevOps account. It's free! Get 10 free parallel jobs and unlimited minutes for your open source projects with Pipelines.
+For the Global Azure Bootcamp, you will need an Azure DevOps account. It's free! Get 10 free parallel jobs and unlimited minutes for your open source projects with Pipelines.
 
 [Create your free Azure DevOps account today!](https://azure.microsoft.com/en-ca/services/devops?WT.mc_id=globalazure-github-frbouche)
 

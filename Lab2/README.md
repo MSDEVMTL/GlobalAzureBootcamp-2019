@@ -690,6 +690,7 @@ If you want to know more on the syntax or the advantage of using Azure Resource 
 ## End
 
 [Previous Lab](../Lab1/README.md)
+|
 [Next Lab](../Lab3/README.md)
 
 [gablogo]: ../medias/GlobalAzureBootcamp2019.png "Global Azure Bootcamp 2019"
