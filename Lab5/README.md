@@ -16,7 +16,6 @@ To do this, we will add Azure Cognitive Services (Vision) to our project. The we
 - [Add Azure components](#add-azure-components)
   - [Modify the ARM template to add the Computer Vision service](#modify-the-arm-template-to-add-the-computer-vision-service)
   - [Deploy the ARM templates to Azure](#deploy-the-arm-templates-to-azure)
-    - [Azure CLI - incremental mode](#azure-cli---incremental-mode)
   - [Getting config info for the web app](#getting-config-info-for-the-web-app)
     - [Getting config info from deployment](#getting-config-info-from-deployment)
 - [Upload the dog image into your storage account](#upload-the-dog-image-into-your-storage-account)
