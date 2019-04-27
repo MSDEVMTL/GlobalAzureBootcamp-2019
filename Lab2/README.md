@@ -138,7 +138,7 @@ Now that we know a bit more on these ARM templates, let see how we can use them 
 
 ## Part 1 - Create our first ARM template
 
-1. Under your solution folder, add a new folder `Deployment`.  This is where all your deployment scripts will be located.
+1. Under your solution folder, add a new folder `deployment`.  This is where all your deployment scripts will be located.
 
 ```txt
   C:\dev\gab2019\deployment
