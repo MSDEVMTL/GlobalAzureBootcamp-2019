@@ -97,7 +97,7 @@ In the web app resource / parameters section of the ARM template (gab2019.json),
     "siteConfig": {
         "appSettings": [
         {
-           "name": "ComputerVision:Endpoint",
+           "name": "ComputerVision:ApiEndpoint",
            "value": "[reference(variables('csVisionName'), '2017-04-18').endpoint]"
         },
         {
@@ -324,9 +324,9 @@ The namespaces for this class should have:
 ```csharp
 using System;
 using System.Collections.Generic;
+using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Blob;
 using Microsoft.Extensions.Options;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 ```
 
 Create an interface that will be used for the dependency injection called `IBlobStorageManager`. Copy the following code into this interface
