@@ -45,7 +45,7 @@
         "siteConfig": {
           "appSettings": [
           {
-            "name": "ComputerVision:Endpoint",
+            "name": "ComputerVision:ApiEndpoint",
             "value": "[reference(variables('csVisionName'), '2017-04-18').endpoint]"
           },
           {
