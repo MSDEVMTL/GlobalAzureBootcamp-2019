@@ -199,7 +199,7 @@ To do the same in the Azure Portal;
 
 # Let's add computer vision to our web application
 
-Azure components are now deployed and test data is ready. It s now time to add Computer Vision functionality to the web appication.
+Azure components are now deployed and test data is ready. It s now time to add Computer Vision functionality to the web application.
 
 ## Adding the Computer Vision API library to the application
 
